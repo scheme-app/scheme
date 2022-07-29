@@ -18,14 +18,12 @@ export const authOptions: NextAuthOptions = {
     jwt: async ({ token, user }) => {
       if (user) {
         token.type = user?.type;
+        token.userId = token.sub;
       }
 
       return token;
     },
-    session: async ({ session, user, token }) => {
-      console.log("session", session);
-      console.log("token", token);
-
+    session: async ({ session, token }) => {
       session.user = {
         id: token.sub!,
         name: token.name!,
