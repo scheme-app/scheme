@@ -60,10 +60,10 @@ model Field {
     name String
     type FieldType
 
-    Model       Model?       @relation(fields: [modelId], references: [id])
+    parentModel Model?       @relation(fields: [parentModelId], references: [id])
     nestedModel NestedModel? @relation(fields: [nestedModelId], references: [id])
 
-    modelId       String?
+    parentModelId String?
     nestedModelId String?
 }
 
