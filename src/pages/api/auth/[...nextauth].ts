@@ -19,17 +19,22 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.type = user?.type;
       }
+
       return token;
     },
-    // session: async ({ session, user, token }) => {
-    //   session.userData = {
-    //     id: user.id,
-    //     name: user.name,
-    //     email: user.email,
-    //     type: user.type,
-    //   };
-    //   return session;
-    // },
+    session: async ({ session, user, token }) => {
+      console.log("session", session);
+      console.log("token", token);
+
+      session.user = {
+        id: token.sub!,
+        name: token.name!,
+        email: token.email!,
+        type: token.type! as "USER" | "ADMIN",
+      };
+
+      return session;
+    },
   },
 };
 

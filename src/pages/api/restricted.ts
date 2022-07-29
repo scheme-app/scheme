@@ -7,6 +7,8 @@ import { authOptions as nextAuthOptions } from "./auth/[...nextauth]";
 const restricted = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerSession(req, res, nextAuthOptions);
 
+  console.log("session in restricted", session);
+
   if (session) {
     res.send({
       content:

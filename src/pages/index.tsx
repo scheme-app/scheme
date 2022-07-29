@@ -7,6 +7,7 @@ const Home: NextPage = () => {
   return (
     <>
       <h1>{session?.user?.name}</h1>
+      {console.log(session)}
       <h1>Hello</h1>
     </>
   );
