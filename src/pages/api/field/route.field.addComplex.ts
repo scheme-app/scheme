@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../utils/prisma";
 import { getToken } from "next-auth/jwt";
-import { array, optional, z } from "zod";
+import { z } from "zod";
 
 const ArgTypes = z.object({
   fieldName: z.string(),
