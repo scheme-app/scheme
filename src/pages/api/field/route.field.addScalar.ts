@@ -7,6 +7,8 @@ const ArgTypes = z.object({
   modelId: z.string().cuid(),
   name: z.string(),
   type: z.enum(["STRING", "INT", "BOOLEAN", "COMPLEX"]),
+  optional: z.boolean(),
+  array: z.boolean(),
 });
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -18,7 +20,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
-  const { modelId, name, type }: z.infer<typeof ArgTypes> = req.body;
+  const { modelId, name, type, optional, array }: z.infer<typeof ArgTypes> =
+    req.body;
 
   const model = await prisma.model.findUnique({
     where: {
@@ -75,6 +78,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           id: modelId,
         },
       },
+      optional: optional,
+      array: array,
     },
   });
 

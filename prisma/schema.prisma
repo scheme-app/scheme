@@ -56,9 +56,11 @@ model Route {
 }
 
 model Field {
-    id   String    @id @default(cuid())
-    name String
-    type FieldType
+    id       String    @id @default(cuid())
+    name     String
+    type     FieldType
+    optional Boolean   @default(false)
+    array    Boolean   @default(false)
 
     parentModel Model?       @relation(fields: [parentModelId], references: [id])
     nestedModel NestedModel? @relation(fields: [nestedModelId], references: [id])
