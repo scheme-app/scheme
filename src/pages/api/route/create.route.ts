@@ -8,6 +8,9 @@ const ArgTypes = z.object({
   projectId: z.string().cuid(),
   name: z.string(),
   type: z.enum(["GET", "POST"]),
+  authorization: z
+    .enum(["NONE", "API_KEY", "BEARER", "BASIC", "DIGEST", "OAUTH1", "OAUTH2"])
+    .optional(),
   folderId: z.string().cuid().optional(),
 });
 
@@ -20,8 +23,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
-  const { projectId, name, type, folderId }: z.infer<typeof ArgTypes> =
-    req.body;
+  const {
+    projectId,
+    name,
+    type,
+    authorization,
+    folderId,
+  }: z.infer<typeof ArgTypes> = req.body;
 
   const project = await prisma.project.findUnique({
     where: {
@@ -74,12 +82,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       },
       models: {
-        create: [
-          { name: "Arguments", type: "ARGUMENT" },
-          { name: "Response", type: "RESPONSE" },
-        ],
+        create: [{ type: "ARGUMENT" }, { type: "RESPONSE" }],
       },
-      authorization: AuthorizationType.NONE,
+      authorization: authorization || AuthorizationType.NONE,
     },
   });
 

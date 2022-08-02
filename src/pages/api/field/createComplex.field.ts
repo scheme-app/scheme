@@ -5,9 +5,10 @@ import { z } from "zod";
 
 const ArgTypes = z.object({
   fieldName: z.string(),
-  modelId: z.string().cuid(),
-  optional: z.boolean(),
-  array: z.boolean(),
+  parentModelId: z.string().cuid(),
+  routeId: z.string().cuid(),
+  optional: z.boolean().optional().default(false),
+  array: z.boolean().optional().default(false),
 });
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -19,16 +20,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
-  const { fieldName, modelId, optional, array }: z.infer<typeof ArgTypes> =
-    req.body;
+  const {
+    fieldName,
+    parentModelId,
+    routeId,
+    optional,
+    array,
+  }: z.infer<typeof ArgTypes> = req.body;
 
   const model = await prisma.model.findUnique({
     where: {
-      id: modelId,
+      id: parentModelId,
     },
     select: {
       route: {
         select: {
+          id: true,
           project: {
             select: {
               ownerId: true,
@@ -68,13 +75,28 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
+  if (routeId !== model.route.id) {
+    return res.status(400).send({
+      error: "Route does not belong to this model.",
+    });
+  }
+
   const createdField = await prisma.field.create({
     data: {
       name: fieldName,
       type: "COMPLEX",
       parentModel: {
         connect: {
-          id: modelId,
+          id: parentModelId,
+        },
+      },
+      nestedModel: {
+        create: {
+          parentRoute: {
+            connect: {
+              id: routeId,
+            },
+          },
         },
       },
       optional: optional,
@@ -88,7 +110,32 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
-  res.status(200).send(createdField);
+  const savedNestedField = await prisma.route.update({
+    where: {
+      id: routeId,
+    },
+    data: {
+      nestedModels: {
+        connect: {
+          id: createdField.nestedModelId!,
+        },
+      },
+    },
+  });
+
+  if (!savedNestedField) {
+    await prisma.field.delete({
+      where: {
+        id: createdField.nestedModelId!,
+      },
+    });
+
+    res.status(500).send({
+      error: "Error saving nested field.",
+    });
+  }
+
+  return res.status(200).send(createdField && savedNestedField);
 };
 
 export default handler;

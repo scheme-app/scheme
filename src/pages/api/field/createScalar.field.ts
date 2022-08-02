@@ -7,8 +7,8 @@ const ArgTypes = z.object({
   modelId: z.string().cuid(),
   name: z.string(),
   type: z.enum(["STRING", "INT", "BOOLEAN", "COMPLEX"]),
-  optional: z.boolean(),
-  array: z.boolean(),
+  optional: z.boolean().optional().default(false),
+  array: z.boolean().optional().default(false),
 });
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
