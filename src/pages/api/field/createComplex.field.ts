@@ -4,7 +4,7 @@ import { getToken } from "next-auth/jwt";
 import { z } from "zod";
 
 const ArgTypes = z.object({
-  fieldName: z.string(),
+  fieldName: z.string().min(1).max(255),
   parentModelId: z.string().cuid(),
   routeId: z.string().cuid(),
   optional: z.boolean().optional().default(false),

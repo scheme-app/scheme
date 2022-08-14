@@ -6,7 +6,7 @@ import { z } from "zod";
 
 const ArgTypes = z.object({
   projectId: z.string().cuid(),
-  name: z.string(),
+  name: z.string().min(1).max(255),
   type: z.enum(["GET", "POST"]),
   authorization: z
     .enum(["NONE", "API_KEY", "BEARER", "BASIC", "DIGEST", "OAUTH1", "OAUTH2"])
@@ -85,6 +85,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         create: [{ type: "ARGUMENT" }, { type: "RESPONSE" }],
       },
       authorization: authorization || AuthorizationType.NONE,
+    },
+    include: {
+      models: true,
     },
   });
 

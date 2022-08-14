@@ -4,8 +4,8 @@ import { getToken } from "next-auth/jwt";
 import { z } from "zod";
 
 const ArgTypes = z.object({
-  modelId: z.string().cuid(),
-  name: z.string(),
+  modelId: z.string().cuid().optional(),
+  name: z.string().min(1).max(255),
   type: z.enum(["STRING", "INT", "BOOLEAN", "COMPLEX"]),
   optional: z.boolean().optional().default(false),
   array: z.boolean().optional().default(false),
