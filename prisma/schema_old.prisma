@@ -1,0 +1,163 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = "postgresql://abhinav@localhost:5432/abhinav"
+}
+
+model User {
+    id            String    @id @default(cuid())
+    name          String?
+    email         String?   @unique
+    emailVerified DateTime?
+    image         String?
+    type          UserType  @default(USER)
+    projects      Project[]
+
+    accounts Account[]
+    sessions Session[]
+}
+
+model Project {
+    id   String @id @default(cuid())
+    name String
+
+    owner   User?    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+    folders Folder[]
+    routes  Route[]
+
+    ownerId String
+}
+
+model Folder {
+    id   String @id @default(cuid())
+    name String
+
+    project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+    routes  Route[]
+
+    projectId String
+}
+
+model Route {
+    id   String    @id @default(cuid())
+    name String
+    type RouteType
+
+    authorization AuthorizationType @default(NONE)
+    project       Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+    folder        Folder?           @relation(fields: [folderId], references: [id], onDelete: Cascade)
+    models        Model[]
+    nestedModels  NestedModel[]
+
+    projectId String
+    folderId  String?
+}
+
+model Field {
+    id       String    @id @default(cuid())
+    name     String
+    type     FieldType
+    optional Boolean   @default(false)
+    array    Boolean   @default(false)
+
+    parentModel  Model?        @relation(fields: [parentModelId], references: [id], onDelete: Cascade)
+    nestedModels NestedModel[]
+
+    parentModelId String?
+}
+
+model Model {
+    id   String    @id @default(cuid())
+    type ModelType
+
+    fields Field[]
+    route  Route?  @relation(fields: [routeId], references: [id], onDelete: Cascade)
+
+    routeId String?
+}
+
+model NestedModel {
+    id   String          @id @default(cuid())
+    type NestedModelType
+
+    fields      Field[]
+    parentRoute Route   @relation(fields: [parentRouteId], references: [id], onDelete: Cascade)
+
+    parentRouteId String
+}
+
+enum UserType {
+    USER
+    ADMIN
+}
+
+enum RouteType {
+    GET
+    POST
+}
+
+enum AuthorizationType {
+    NONE
+    API_KEY
+    BEARER
+    BASIC
+    DIGEST
+    OAUTH1
+    OAUTH2
+}
+
+enum FieldType {
+    STRING
+    INT
+    BOOLEAN
+    COMPLEX
+}
+
+enum ModelType {
+    ARGUMENT
+    RESPONSE
+}
+
+enum NestedModelType {
+    PARENT
+    CHILD
+}
+
+// NEXT AUTH REQUIRED MODELS
+
+model Account {
+    id                String  @id @default(cuid())
+    userId            String
+    type              String
+    provider          String
+    providerAccountId String
+    refresh_token     String?
+    access_token      String?
+    expires_at        Int?
+    token_type        String?
+    scope             String?
+    id_token          String?
+    session_state     String?
+    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+}
+
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique
+    userId       String
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+    identifier String
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
+}

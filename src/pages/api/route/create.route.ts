@@ -10,7 +10,8 @@ const ArgTypes = z.object({
   type: z.enum(["GET", "POST"]),
   authorization: z
     .enum(["NONE", "API_KEY", "BEARER", "BASIC", "DIGEST", "OAUTH1", "OAUTH2"])
-    .optional(),
+    .optional()
+    .default("NONE"),
   folderId: z.string().cuid().optional(),
 });
 
@@ -82,7 +83,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       },
       models: {
-        create: [{ type: "ARGUMENT" }, { type: "RESPONSE" }],
+        create: [
+          { name: "Arguments", type: "PARENT" },
+          { name: "Response", type: "PARENT" },
+        ],
       },
       authorization: authorization || AuthorizationType.NONE,
     },
