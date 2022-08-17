@@ -18,17 +18,17 @@ const Tags: FC<TagsPropTypes> = ({ array, optional }) => {
   return (
     <div className="flex flex-row">
       {array && (
-        <div className="bg-[#F2F2F2] rounded-lg mr-2 px-3.5 flex items-center justify-center">
-          <h1 className="text-[#969696] text-xl">{"[ ]"}</h1>
+        <div className="mr-2 flex items-center justify-center rounded-md bg-[#F2F2F2] px-3">
+          <h1 className="text-xl text-[#969696]">{"[ ]"}</h1>
         </div>
       )}
       {optional && (
-        <div className="bg-[#F2F2F2] rounded-lg px-4 flex items-center justify-center">
-          <h1 className="text-[#969696] text-xl">{"?"}</h1>
+        <div className="flex items-center justify-center rounded-md bg-[#F2F2F2] px-4">
+          <h1 className="text-xl text-[#969696]">{"?"}</h1>
         </div>
       )}
       {(array || optional) && (
-        <div className="bg-[#E4E4E4] w-[0.1rem] rounded-full mx-4"></div>
+        <div className="mx-4 w-[0.1rem] rounded-full bg-[#E4E4E4]"></div>
       )}
     </div>
   );
@@ -43,18 +43,18 @@ const Field: FC<FieldPropTypes> = ({ name, type, array, optional }) => {
   };
 
   return (
-    <div className="flex flex-row items-center mt-4 border-[#E4E4E4] border-[1.5px] py-2 px-2 rounded-xl w-3/5 relative">
-      <div className="bg-[#F2F2F2] py-2 px-4 rounded-lg mr-12">
-        <p className="text-xl font-light tracking-wider text-[#747474] flex items-center justify-center">
+    <div className="relative mt-4 flex w-3/5 flex-row items-center rounded-xl border-[1.5px] border-[#E4E4E4] py-2 px-1.5">
+      <div className="mr-12 rounded-md bg-[#F2F2F2] py-2 px-4">
+        <p className="flex items-center justify-center text-lg font-light tracking-wider text-[#747474]">
           {formattedType[type]}
         </p>
       </div>
-      <div>
-        <p className="text-xl font-light">{name}</p>
+      <div className="w-2/5">
+        <p className="truncate text-xl font-light">{name}</p>
       </div>
-      <div className="flex flex-row object-right absolute right-0">
+      <div className="absolute right-0 flex flex-row">
         <Tags array={array} optional={optional} />
-        <div className="bg-[#F2F2F2] rounded-lg mr-2 p-2 flex items-center justify-center">
+        <div className="mr-2 flex items-center justify-center rounded-md bg-[#F2F2F2] p-1.5">
           <BiPencil className="h-7 w-7 text-[#969696]" />
         </div>
       </div>
