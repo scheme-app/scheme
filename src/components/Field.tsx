@@ -1,10 +1,9 @@
 import { FC } from "react";
 import { BiPencil } from "react-icons/bi";
-import { MdLockOutline } from "react-icons/md";
 
 type FieldPropTypes = {
   name: string;
-  type: "STRING" | "INT" | "BOOLEAN" | "AUTH";
+  type: "STRING" | "INT" | "BOOLEAN";
   array: boolean;
   optional: boolean;
 };
@@ -35,15 +34,14 @@ const Tags: FC<TagsPropTypes> = ({ array, optional }) => {
 };
 
 const Field: FC<FieldPropTypes> = ({ name, type, array, optional }) => {
-  let formattedType = {
+  const formattedType = {
     STRING: "ABC",
     INT: "123",
     BOOLEAN: "T/F",
-    AUTH: <MdLockOutline className="h-7 w-7" />,
   };
 
   return (
-    <div className="relative mt-4 flex w-3/5 flex-row items-center rounded-xl border-[1.5px] border-[#E4E4E4] py-2 px-1.5">
+    <div className="relative mt-4 flex w-[55%] flex-row items-center rounded-xl border-[1.5px] border-[#E4E4E4] py-1.5 px-1.5">
       <div className="mr-12 rounded-md bg-[#F2F2F2] py-2 px-4">
         <p className="flex items-center justify-center text-lg font-light tracking-wider text-[#747474]">
           {formattedType[type]}

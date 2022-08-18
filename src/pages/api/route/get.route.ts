@@ -15,10 +15,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       id: routeId,
     },
     include: {
-      models: true,
-      nestedModels: {
+      models: {
         include: {
-          fields: true,
+          fields: {
+            include: { models: true },
+          },
         },
       },
     },
