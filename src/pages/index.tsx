@@ -39,7 +39,7 @@ const Home: NextPage = () => {
           <div className="ml-20">
             <RouteHeader name={data.name} type={data.type} />
             <ScrollArea.Root className="mt-8">
-              <ScrollArea.Viewport className="h-[40rem]">
+              <ScrollArea.Viewport className="h-[40rem] w-full">
                 <div className="flex flex-col">
                   <h1 className="text-xl font-light">Authorization</h1>
                   <AuthorizationField authorization={data.authorization} />
