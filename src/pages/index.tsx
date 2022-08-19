@@ -39,7 +39,7 @@ const Home: NextPage = () => {
           <div className="ml-20">
             <RouteHeader name={data.name} type={data.type} />
             <ScrollArea.Root className="mt-8">
-              <ScrollArea.Viewport className="h-[40rem] w-full">
+              <ScrollArea.Viewport className="h-[39rem] w-full">
                 <div className="flex flex-col">
                   <h1 className="text-xl font-light">Authorization</h1>
                   <AuthorizationField authorization={data.authorization} />
@@ -48,17 +48,20 @@ const Home: NextPage = () => {
                   <h1 className="text-xl font-light">Arguments</h1>
                   {data.models[0].fields.map(
                     ({
+                      id,
                       name,
                       type,
                       array,
                       optional,
                     }: {
+                      id: string;
                       name: string;
                       type: "STRING" | "INT" | "BOOLEAN";
                       array: boolean;
                       optional: boolean;
                     }) => (
                       <Field
+                        id={id}
                         name={name}
                         type={type}
                         array={array}
@@ -71,17 +74,20 @@ const Home: NextPage = () => {
                   <h1 className="text-xl font-light">Response</h1>
                   {data.models[1].fields.map(
                     ({
+                      id,
                       name,
                       type,
                       array,
                       optional,
                     }: {
+                      id: string;
                       name: string;
                       type: "STRING" | "INT" | "BOOLEAN";
                       array: boolean;
                       optional: boolean;
                     }) => (
                       <Field
+                        id={id}
                         name={name}
                         type={type}
                         array={array}

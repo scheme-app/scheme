@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
-import { Formik, Form } from "formik";
+import { Formik, Form, Field } from "formik";
 import PopoverOptions from "../components/PopoverOptions";
+import Button from "../components/Button";
 
 const Testing: NextPage = () => {
   return (
@@ -26,7 +27,7 @@ const Testing: NextPage = () => {
           <Form>
             <div
               role="group"
-              className="flex flex-col rounded-lg border-[1.5px] border-[#E4E4E4] p-3"
+              className="flex flex-col rounded-2xl border-[1.5px] border-[#E4E4E4] px-6 pt-4 pb-6"
             >
               <div className="flex flex-row gap-x-4">
                 <PopoverOptions
@@ -55,16 +56,32 @@ const Testing: NextPage = () => {
                   ]}
                 />
               </div>
+              <div className="mt-4">
+                <h1 className="mb-2">Name</h1>
+                <Field
+                  name="name"
+                  autocomplete="off"
+                  placeholder="userId"
+                  className="w-3/4 rounded-lg border-[1.5px] border-[#E4E4E4] py-1.5 px-3 text-lg font-light"
+                />
+              </div>
+              <div className="mt-4 flex flex-row gap-x-4">
+                <Button
+                  name="Save"
+                  type="submit"
+                  onClick={() => {
+                    values.submit = true;
+                  }}
+                />
+                <Button
+                  name="Cancel"
+                  type="button"
+                  onClick={() => {
+                    values.submit = true;
+                  }}
+                />
+              </div>
             </div>
-            <div>Picked: {values.type}</div>
-            <button
-              type="submit"
-              onClick={() => {
-                values.submit = true;
-              }}
-            >
-              Submit
-            </button>
           </Form>
         )}
       </Formik>
