@@ -8,11 +8,19 @@ import axios from "axios";
 
 type EditFieldPopoverPropTypes = {
   fieldId: string;
+  name: string;
+  type: "STRING" | "INT" | "BOOLEAN";
+  array: boolean;
+  optional: boolean;
   setEditFieldPopover: (show: boolean) => void;
 };
 
 const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
   fieldId,
+  name,
+  type,
+  array,
+  optional,
   setEditFieldPopover,
 }) => {
   const ref = useRef(null);
@@ -24,6 +32,7 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
 
   const updateField = useMutation(
     (data: {
+      fieldId: string;
       type: "STRING" | "INT" | "BOOLEAN";
       array: boolean;
       optional: boolean;
@@ -38,13 +47,24 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
     }
   );
 
+  const deleteField = useMutation(
+    (data: { fieldId: string }) => {
+      return axios.post("http://localhost:3000/api/field/delete.field", data);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["route"]);
+      },
+    }
+  );
+
   return (
     <Formik
       initialValues={{
-        type: "" as "STRING" | "INT" | "BOOLEAN",
-        array: false,
-        optional: false,
-        name: "",
+        type: type,
+        array: array,
+        optional: optional,
+        name: name,
         submit: false,
       }}
       onSubmit={(values) => {
@@ -53,15 +73,13 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
         }
         values.submit = false;
 
-        const data = {
+        updateField.mutate({
           fieldId: fieldId,
           name: values.name,
           type: values.type,
           array: values.array,
           optional: values.optional,
-        };
-
-        updateField.mutate(data);
+        });
       }}
     >
       {({ values }) => (
@@ -80,6 +98,7 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
                   { name: "123", value: "INT" },
                   { name: "T/F", value: "BOOLEAN" },
                 ]}
+                defaultValue={values.type}
               />
               <PopoverOptions
                 fieldAlias="Array"
@@ -88,6 +107,7 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
                   { name: "Yes", value: true },
                   { name: "No", value: false },
                 ]}
+                defaultValue={values.array}
               />
               <PopoverOptions
                 fieldAlias="Optional"
@@ -96,6 +116,7 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
                   { name: "Yes", value: true },
                   { name: "No", value: false },
                 ]}
+                defaultValue={values.optional}
               />
             </div>
             <div className="mt-4">
@@ -103,7 +124,7 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
               <Field
                 name="name"
                 autoComplete="off"
-                placeholder="userId"
+                placeholder="field name"
                 className="rounded-lg border-[1.5px] border-[#E4E4E4] py-1.5 px-3 text-lg font-light focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
               />
             </div>
@@ -116,9 +137,10 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
                 }}
               />
               <Button
-                name="Cancel"
+                name="Delete"
                 type="button"
                 onClick={() => {
+                  deleteField.mutate({ fieldId });
                   setEditFieldPopover(false);
                 }}
               />

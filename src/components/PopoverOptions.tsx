@@ -49,15 +49,17 @@ type PopoverOptionsPropTypes = {
     name: string;
     value: string | boolean;
   }>;
+  defaultValue: string | boolean;
 };
 
 const PopoverOptions: FC<PopoverOptionsPropTypes> = ({
   fieldAlias,
   fieldName,
   options,
+  defaultValue,
 }) => {
   const [field, meta, helpers] = useField(fieldName);
-  const [active, setActive] = useState<string | boolean>("");
+  const [active, setActive] = useState<string | boolean>(defaultValue);
 
   const { setValue } = helpers;
 
