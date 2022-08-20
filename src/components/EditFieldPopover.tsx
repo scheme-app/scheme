@@ -3,6 +3,8 @@ import { Formik, Form, Field } from "formik";
 import PopoverOptions from "./PopoverOptions";
 import Button from "./Button";
 import { useClickAway } from "react-use";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
 type EditFieldPopoverPropTypes = {
   fieldId: string;
@@ -18,6 +20,24 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
     setEditFieldPopover(false);
   });
 
+  const queryClient = useQueryClient();
+
+  const updateField = useMutation(
+    (data: {
+      type: "STRING" | "INT" | "BOOLEAN";
+      array: boolean;
+      optional: boolean;
+      name: string;
+    }) => {
+      return axios.post("http://localhost:3000/api/field/edit.field", data);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["route"]);
+      },
+    }
+  );
+
   return (
     <Formik
       initialValues={{
@@ -27,13 +47,21 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
         name: "",
         submit: false,
       }}
-      onSubmit={async (values) => {
+      onSubmit={(values) => {
         if (!values.submit) {
           return;
         }
         values.submit = false;
-        await new Promise((r) => setTimeout(r, 500));
-        alert(JSON.stringify(values, null, 2));
+
+        const data = {
+          fieldId: fieldId,
+          name: values.name,
+          type: values.type,
+          array: values.array,
+          optional: values.optional,
+        };
+
+        updateField.mutate(data);
       }}
     >
       {({ values }) => (
@@ -74,9 +102,9 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
               <h1 className="mb-2">Name</h1>
               <Field
                 name="name"
-                autocomplete="off"
+                autoComplete="off"
                 placeholder="userId"
-                className="rounded-lg border-[1.5px] border-[#E4E4E4] py-1.5 px-3 text-lg font-light"
+                className="rounded-lg border-[1.5px] border-[#E4E4E4] py-1.5 px-3 text-lg font-light focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
               />
             </div>
             <div className="mt-4 flex flex-row gap-x-4">

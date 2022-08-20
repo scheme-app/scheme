@@ -5,7 +5,7 @@ import { z } from "zod";
 const ArgTypes = z.object({
   parentModelId: z.string().cuid(),
   name: z.string().min(1),
-  type: z.enum(["STRING", "INT", "BOOLEAN", "COMPLEX"]),
+  type: z.enum(["STRING", "INT", "BOOLEAN"]),
   optional: z.boolean().optional().default(false),
   array: z.boolean().optional().default(false),
 });
