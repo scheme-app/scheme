@@ -93,8 +93,7 @@ enum AuthorizationType {
   BEARER
   BASIC
   DIGEST
-  OAUTH1
-  OAUTH2
+  OAUTH
 }
 
 enum FieldType {

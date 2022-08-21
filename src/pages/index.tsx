@@ -5,20 +5,35 @@ import { useQuery } from "@tanstack/react-query";
 import ParentModel from "../components/ParentModel";
 import Authorization from "../components/Authorization";
 import Layout from "../components/Layout";
-
-const getRoute = async () => {
-  const response = await fetch(
-    `http://localhost:3000/api/route/get.route?routeId=cl6tndaop0043rhlp64js7s6k`,
-    {
-      method: "GET",
-    }
-  );
-
-  return response.json();
-};
+import { useContext } from "react";
+import RouteContext from "../context/Route.context";
 
 const Home: NextPage = () => {
-  const { data, status } = useQuery(["route"], getRoute);
+  const { routeId } = useContext(RouteContext);
+
+  if (!routeId) {
+    return (
+      <Layout>
+        <div className="flex h-screen items-center justify-center">
+          <h1 className="mb-36 text-lg">select a route to view</h1>
+        </div>
+      </Layout>
+    );
+  }
+
+  const getRoute = async () => {
+    console.log("getting route");
+    const response = await fetch(
+      `http://localhost:3000/api/route/get.route?routeId=${routeId}`,
+      {
+        method: "GET",
+      }
+    );
+
+    return response.json();
+  };
+
+  const { data, status } = useQuery([routeId], getRoute);
 
   if (status === "loading") {
     return <div>Loading...</div>;

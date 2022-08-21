@@ -1,10 +1,11 @@
-import { FC, useRef } from "react";
+import { FC, useRef, useContext } from "react";
 import { Formik, Form, Field } from "formik";
 import PopoverOptions from "./PopoverOptions";
 import Button from "./Button";
 import { useClickAway } from "react-use";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import RouteContext from "../context/Route.context";
 
 type EditFieldPopoverPropTypes = {
   fieldId: string;
@@ -30,6 +31,8 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
 
   const queryClient = useQueryClient();
 
+  const { routeId } = useContext(RouteContext);
+
   const updateField = useMutation(
     (data: {
       fieldId: string;
@@ -42,7 +45,7 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["route"]);
+        queryClient.invalidateQueries([routeId]);
       },
     }
   );
@@ -53,7 +56,7 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["route"]);
+        queryClient.invalidateQueries([routeId]);
       },
     }
   );
@@ -89,7 +92,7 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
             ref={ref}
             className="mt-4 mb-6 flex flex-col rounded-2xl border-[1.5px] border-[#E4E4E4] bg-white px-6 pt-4 pb-6 shadow-sm"
           >
-            <div className="flex flex-row flex-wrap gap-x-4">
+            <div className="flex flex-row flex-wrap gap-x-10">
               <PopoverOptions
                 fieldAlias="Type"
                 fieldName="type"

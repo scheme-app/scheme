@@ -1,8 +1,13 @@
 import type { NextPage } from "next";
-import CreateFieldPopover from "../components/CreateFieldPopover";
+import Folder from "../components/Folder";
+import SampleRoutes from "../components/SampleRoutes";
 
 const Testing: NextPage = () => {
-  return <CreateFieldPopover />;
+  return (
+    // <div className="flex h-screen items-center justify-center">
+    <Folder name="Testing" routes={SampleRoutes} />
+    // </div>
+  );
 };
 
 export default Testing;

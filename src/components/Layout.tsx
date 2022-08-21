@@ -1,10 +1,60 @@
 import { FC, ReactNode } from "react";
+import * as ScrollArea from "@radix-ui/react-scroll-area";
+import Folder from "../components/Folder";
+import { useQuery } from "@tanstack/react-query";
+import Route from "./Route";
 
 const Layout: FC<{ children: ReactNode }> = ({ children }) => {
+  const getProject = async () => {
+    const response = await fetch(
+      `http://localhost:3000/api/project/get.project?projectId=cl6tnc57v0025rhlpu8pnnhrd`,
+      {
+        method: "GET",
+      }
+    );
+
+    return response.json();
+  };
+
+  const { data, status } = useQuery(["cl6tnc57v0025rhlpu8pnnhrd"], getProject);
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="flex h-screen overflow-hidden">
-      <div className="w-1/4 flex-col items-center justify-center border-r-[1.5px] border-[#E4E4E4]">
-        <h1>Side Bar</h1>
+      <div className="w-1/4 flex-col items-center justify-center border-r-[1.5px] border-[#E4E4E4] p-8 pr-12 pb-24">
+        <h1 className="mb-8 text-2xl font-medium">Scheme</h1>
+        <ScrollArea.Root>
+          <ScrollArea.Viewport className="h-[48rem] w-full">
+            {data.folders.map((folder: any) => (
+              <Folder
+                key={folder.id}
+                name={folder.name}
+                routes={folder.routes.map((route: any) => {
+                  return {
+                    id: route.id,
+                    name: route.name,
+                    type: route.type,
+                  };
+                })}
+              />
+            ))}
+            {data.routes.map((route: any) => (
+              <Route
+                key={route.id}
+                id={route.id}
+                name={route.name}
+                type={route.type}
+              />
+            ))}
+            <ScrollArea.Scrollbar orientation="vertical">
+              <ScrollArea.Thumb />
+            </ScrollArea.Scrollbar>
+            <ScrollArea.Corner />
+          </ScrollArea.Viewport>
+        </ScrollArea.Root>
       </div>
       <div className="h-screen w-full flex-col justify-center p-8 px-24">
         <div className="flex flex-row gap-x-2">

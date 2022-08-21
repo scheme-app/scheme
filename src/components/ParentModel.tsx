@@ -1,7 +1,9 @@
-import { FC, useState } from "react";
+import { FC, useState, useRef, useEffect } from "react";
 import Field from "./Field";
 import CreateFieldPopover from "./CreateFieldPopover";
 import ComplexField from "./ComplexField";
+import autoAnimate from "@formkit/auto-animate";
+import { HiOutlinePlusSm } from "react-icons/hi";
 
 type ParentModelPropTypes = {
   id: string;
@@ -18,8 +20,17 @@ type ParentModelPropTypes = {
 const ParentModel: FC<ParentModelPropTypes> = ({ id, name, fields }) => {
   const [showCreateFieldPopover, setShowCreateFieldPopover] = useState(false);
 
+  const parent = useRef(null);
+  useEffect(() => {
+    parent.current &&
+      autoAnimate(parent.current, {
+        duration: 250,
+        easing: "ease-in-out",
+      });
+  }, [parent]);
+
   return (
-    <div className="mt-8 flex flex-col">
+    <div className="mt-8 flex flex-col" ref={parent}>
       <h1 className="text-xl font-light">{name}</h1>
 
       {fields.map(({ id, name, type, array, optional }) => {
@@ -44,14 +55,18 @@ const ParentModel: FC<ParentModelPropTypes> = ({ id, name, fields }) => {
           );
         }
       })}
+
       {!showCreateFieldPopover && (
         <button
-          className="mt-8"
+          className="mt-6 w-min"
           onClick={() => {
             setShowCreateFieldPopover(!showCreateFieldPopover);
           }}
         >
-          Create Field
+          <div className="flex flex-row items-center gap-x-1 text-[#969696]">
+            <HiOutlinePlusSm className="h-5 w-5" />
+            <h1 className="w-max">Add Field</h1>
+          </div>
         </button>
       )}
 

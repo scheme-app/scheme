@@ -9,7 +9,7 @@ const ArgTypes = z.object({
   name: z.string().min(1).max(255),
   type: z.enum(["GET", "POST"]),
   authorization: z
-    .enum(["NONE", "API_KEY", "BEARER", "BASIC", "DIGEST", "OAUTH1", "OAUTH2"])
+    .enum(["NONE", "API_KEY", "BEARER", "BASIC", "DIGEST", "OAUTH"])
     .optional()
     .default("NONE"),
   folderId: z.string().cuid().optional(),

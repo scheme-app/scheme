@@ -40,7 +40,7 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["route"]);
+        queryClient.invalidateQueries([routeId]);
       },
     }
   );
@@ -61,13 +61,13 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["route"]);
+        queryClient.invalidateQueries([routeId]);
       },
     }
   );
 
   return (
-    <div className="w-[55%]">
+    <div className="w-[60%]">
       <Formik
         initialValues={{
           type: "STRING" as "STRING" | "INT" | "BOOLEAN" | "COMPLEX",
@@ -110,7 +110,7 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
               role="group"
               className="mt-4 mb-6 flex flex-col rounded-2xl border-[1.5px] border-[#E4E4E4] bg-white px-6 pt-4 pb-6 shadow-sm"
             >
-              <div className="flex flex-row flex-wrap gap-x-4">
+              <div className="flex flex-row flex-wrap gap-x-8">
                 <PopoverOptions
                   fieldAlias="Type"
                   fieldName="type"

@@ -2,14 +2,7 @@ import { FC } from "react";
 import AuthorizationField from "./AuthorizationField";
 
 type AuthorizationPropTypes = {
-  authorization:
-    | "NONE"
-    | "BEARER"
-    | "API_KEY"
-    | "BASIC"
-    | "DIGEST"
-    | "OAUTH1"
-    | "OAUTH2";
+  authorization: "NONE" | "BEARER" | "API_KEY" | "BASIC" | "DIGEST" | "OAUTH";
 };
 
 const Authorization: FC<AuthorizationPropTypes> = ({ authorization }) => {
