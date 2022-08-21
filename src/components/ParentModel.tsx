@@ -37,6 +37,7 @@ const ParentModel: FC<ParentModelPropTypes> = ({ id, name, fields }) => {
         if (type !== "COMPLEX") {
           return (
             <Field
+              key={id}
               id={id}
               name={name}
               type={type}

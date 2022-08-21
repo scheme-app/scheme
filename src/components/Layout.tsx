@@ -3,6 +3,8 @@ import * as ScrollArea from "@radix-ui/react-scroll-area";
 import Folder from "../components/Folder";
 import { useQuery } from "@tanstack/react-query";
 import Route from "./Route";
+import { useNetworkState } from "react-use";
+import { TbWifiOff } from "react-icons/tb";
 
 const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   const getProject = async () => {
@@ -17,6 +19,8 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   const { data, status } = useQuery(["cl6tnc57v0025rhlpu8pnnhrd"], getProject);
+
+  const { online } = useNetworkState();
 
   if (status === "loading") {
     return <div>Loading...</div>;
@@ -65,9 +69,17 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
         </div>
         <div className="ml-20">{children}</div>
       </div>
-      <div className="absolute bottom-0 right-0 mr-8 mb-8 flex flex-row items-center gap-x-2 rounded-lg bg-green-300/20 py-1 px-2.5">
-        <div className="h-1.5 w-1.5 rounded-full bg-green-400"></div>
-        <h1 className="text-sm text-green-400">Pre-Alpha</h1>
+      <div className="absolute bottom-0 right-0 mr-8 mb-8 flex flex-row gap-x-2">
+        {!online && (
+          <div className="flex flex-row items-center gap-x-2 rounded-lg bg-red-300/20 px-1.5">
+            <TbWifiOff className=" h-5 w-5 text-red-400" />
+            <h1 className="text-sm text-red-400">Offline</h1>
+          </div>
+        )}
+        <div className="flex flex-row items-center gap-x-2 rounded-lg bg-green-300/20 py-1 px-2.5">
+          <div className="h-1.5 w-1.5 rounded-full bg-green-400"></div>
+          <h1 className="text-sm text-green-400">Pre-Alpha</h1>
+        </div>
       </div>
     </div>
   );
