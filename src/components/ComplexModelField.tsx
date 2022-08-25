@@ -1,10 +1,12 @@
-import { FC, useState } from "react";
-// import { BiPencil } from "react-icons/bi";
-import { BsArrowsAngleExpand } from "react-icons/bs";
+import { FC, useState, useRef, useEffect } from "react";
+import { BiPencil } from "react-icons/bi";
+import EditFieldPopover from "./EditFieldPopover";
+import autoAnimate from "@formkit/auto-animate";
 
 type FieldPropTypes = {
   id: string;
   name: string;
+  type: "STRING" | "INT" | "BOOLEAN";
   array: boolean;
   optional: boolean;
 };
@@ -34,13 +36,36 @@ const Tags: FC<TagsPropTypes> = ({ array, optional }) => {
   );
 };
 
-const ComplexField: FC<FieldPropTypes> = ({ id, name, array, optional }) => {
+const ComplexModelField: FC<FieldPropTypes> = ({
+  id,
+  name,
+  type,
+  array,
+  optional,
+}) => {
+  const [showEditFieldPopover, setShowEditFieldPopover] = useState(false);
+
+  const parent = useRef(null);
+  useEffect(() => {
+    parent.current &&
+      autoAnimate(parent.current, {
+        duration: 200,
+        easing: "ease-in-out",
+      });
+  }, [parent]);
+
+  const formattedType = {
+    STRING: "ABC",
+    INT: "123",
+    BOOLEAN: "T/F",
+  };
+
   return (
-    <div className="w-[60%]">
+    <div ref={parent}>
       <div className="relative mt-4 flex flex-row items-center rounded-xl border-[1.5px] border-[#E4E4E4] p-1.5">
         <div className="mr-12 rounded-md bg-[#F2F2F2] py-2 px-4">
           <p className="flex items-center justify-center text-lg font-light tracking-wider text-[#747474]">
-            {"{ }"}
+            {formattedType[type]}
           </p>
         </div>
         <div className="w-2/5">
@@ -49,15 +74,27 @@ const ComplexField: FC<FieldPropTypes> = ({ id, name, array, optional }) => {
         <div className="absolute right-0 flex flex-row">
           <Tags array={array} optional={optional} />
           <button
-            className="mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-[#F2F2F2]"
-            onClick={() => {}}
+            className="mr-2 flex items-center justify-center rounded-md bg-[#F2F2F2] p-1.5"
+            onClick={() => {
+              setShowEditFieldPopover(!showEditFieldPopover);
+            }}
           >
-            <BsArrowsAngleExpand className=" h-5 w-5 text-[#969696]" />
+            <BiPencil className="h-7 w-7 text-[#969696]" />
           </button>
         </div>
       </div>
+      {showEditFieldPopover && (
+        <EditFieldPopover
+          fieldId={id}
+          name={name}
+          type={type}
+          array={array}
+          optional={optional}
+          setEditFieldPopover={setShowEditFieldPopover}
+        />
+      )}
     </div>
   );
 };
 
-export default ComplexField;
+export default ComplexModelField;

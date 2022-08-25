@@ -22,7 +22,6 @@ const Home: NextPage = () => {
   }
 
   const getRoute = async () => {
-    console.log("getting route");
     const response = await fetch(
       `http://localhost:3000/api/route/get.route?routeId=${routeId}`,
       {
@@ -41,7 +40,7 @@ const Home: NextPage = () => {
 
   return (
     <Layout>
-      <RouteHeader name={data.name} type={data.type} />
+      <RouteHeader name={data.name} type={data.type} folder={data.folder} />
       <ScrollArea.Root className="mt-8">
         <ScrollArea.Viewport className="h-[38rem] w-full">
           <Authorization authorization={data.authorization} />

@@ -73,6 +73,7 @@ const PopoverOptions: FC<PopoverOptionsPropTypes> = ({
               return (
                 <div className="flex flex-row">
                   <PopoverOption
+                    key={option.name}
                     name={option.name}
                     value={option.value}
                     active={active}

@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../utils/prisma";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { routeId }: { routeId?: string } = req.query;
+  const { routeId, folderId, ...data } = req.body;
 
   if (!routeId) {
     return res.status(400).send({
@@ -14,21 +14,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     where: {
       id: routeId,
     },
-    include: {
-      models: {
-        include: {
-          fields: {
-            include: { models: true },
-          },
-        },
-      },
-      folder: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-    },
   });
 
   if (!route) {
@@ -37,7 +22,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
-  return res.status(200).send(route);
+  const updatedRoute = await prisma.route.update({
+    where: {
+      id: routeId,
+    },
+    data: {
+      ...data,
+      ...(folderId && {
+        folder: {
+          connect: {
+            id: folderId,
+          },
+        },
+      }),
+    },
+  });
+
+  return res.status(200).send(updatedRoute);
 };
 
 export default handler;

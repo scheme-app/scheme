@@ -1,7 +1,7 @@
 import { FC, useContext, useEffect } from "react";
 import RouteContext from "../context/Route.context";
 import { useQueryClient } from "@tanstack/react-query";
-import { TbFileDescription } from "react-icons/tb";
+import { BsFileEarmarkCode } from "react-icons/bs";
 
 type RoutePropTypes = {
   id: string;
@@ -61,7 +61,7 @@ const Route: FC<RoutePropTypes> = ({ id, name, type }) => {
         }}
       >
         <div className="flex flex-row items-center">
-          <TbFileDescription className="mr-6 h-6 w-6 text-[#969696]" />
+          <BsFileEarmarkCode className="mr-6 h-6 w-6 text-[#969696]" />
           <div className="flex justify-start">
             <h1 className="text-md">{name}</h1>
           </div>
