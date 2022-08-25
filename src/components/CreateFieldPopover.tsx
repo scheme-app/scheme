@@ -118,7 +118,7 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
                     { name: "ABC", value: "STRING" },
                     { name: "123", value: "INT" },
                     { name: "T/F", value: "BOOLEAN" },
-                    { name: "{ }", value: "COMPLEX" },
+                    // { name: "{ }", value: "COMPLEX" },
                   ]}
                   defaultValue={values.type}
                 />
