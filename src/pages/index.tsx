@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { useEffect } from "react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import RouteHeader from "../components/RouteHeader";
 import { useQuery } from "@tanstack/react-query";
@@ -9,9 +10,22 @@ import { useContext } from "react";
 import RouteContext from "../context/Route.context";
 import ProjectContext from "../context/Project.context";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session === null) {
+      router.push("/login");
+    }
+
+    if (session && session.user.onboarded === false) {
+      router.push("/newUser");
+    }
+  });
 
   const { project, setProject } = useContext(ProjectContext);
 

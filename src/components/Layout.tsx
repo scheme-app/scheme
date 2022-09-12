@@ -29,16 +29,6 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
 
   const router = useRouter();
 
-  useEffect(() => {
-    if (session === null) {
-      router.push("/api/auth/signin");
-    }
-
-    if (session?.user.onboarded === false) {
-      router.push("/newUser");
-    }
-  });
-
   const { project, setProject } = useContext(ProjectContext);
   const { routeId, setRouteId } = useContext(RouteContext);
 
@@ -104,7 +94,6 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      {/* <h1>data: {JSON.stringify(data)}</h1> */}
       <div className="w-1/4 flex-col items-center justify-center border-r-[1.5px] border-[#E4E4E4] p-8 pr-12 pb-24">
         <h1 className="mb-8 text-2xl font-medium">Scheme</h1>
         <ScrollArea.Root>
@@ -374,10 +363,10 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
             <h1 className="text-sm text-red-400">Offline</h1>
           </div>
         )}
-        <div className="flex flex-row items-center gap-x-2 rounded-lg bg-green-300/20 py-1 px-2.5">
+        {/* <div className="flex flex-row items-center gap-x-2 rounded-lg bg-green-300/20 py-1 px-2.5">
           <div className="h-1.5 w-1.5 rounded-full bg-green-400"></div>
           <h1 className="text-sm text-green-400">Pre-Alpha</h1>
-        </div>
+        </div> */}
       </div>
     </div>
   );

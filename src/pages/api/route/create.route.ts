@@ -80,6 +80,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const route = await prisma.route.findMany({
     where: {
       folderId: folderId,
+      projectId: projectId,
       name: name,
     },
   });

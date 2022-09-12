@@ -12,17 +12,27 @@ const NewUser: NextPage = () => {
   const router = useRouter();
 
   const onboardUser = useMutation(
-    (data: { name: string; username: string; projectName: string }) => {
+    ({
+      name,
+      username,
+      projectName,
+    }: {
+      name: string;
+      username: string;
+      projectName: string;
+    }) => {
       return axios.post("http://localhost:3000/api/user/onboard.user", {
         userId: session!.user.id,
-        ...data,
+        name: name,
+        username: username,
+        projectName: projectName,
       });
     }
   );
 
   useEffect(() => {
     if (session === null) {
-      router.push("/api/auth/signin");
+      router.push("/login");
     }
 
     if (session?.user.onboarded === true) {
@@ -32,6 +42,7 @@ const NewUser: NextPage = () => {
 
   return (
     <>
+      <h1>{JSON.stringify(session)}</h1>
       <div className="flex h-screen items-center pl-[24rem]">
         <div className="flex flex-col">
           <div className="flex flex-col gap-y-4">
@@ -60,13 +71,17 @@ const NewUser: NextPage = () => {
                 }
                 values.submit = false;
 
+                console.log("submitting...");
+
                 onboardUser.mutate({
                   name: values.name,
                   username: values.username,
                   projectName: values.projectName,
                 });
 
-                router.push("/#");
+                console.log("submitted");
+
+                // router.push("/");
               }}
             >
               {({ values }) => (

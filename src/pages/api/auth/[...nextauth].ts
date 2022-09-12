@@ -14,9 +14,13 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
+  // pages: {
+  //   signIn: "/login",
+  // },
   callbacks: {
     jwt: async ({ token, user }) => {
       if (user) {
+        console.log("next-aut user", user);
         token.type = user?.type;
         token.userId = token.sub;
         token.username = user?.username as string;
