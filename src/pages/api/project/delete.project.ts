@@ -2,7 +2,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../utils/prisma";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { projectId }: { projectId?: string } = req.query;
+  const { projectId } = req.body;
+
+  console.log("projectId", projectId);
 
   if (!projectId) {
     return res.status(400).send({
@@ -12,24 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const project = await prisma.project.findUnique({
     where: {
-      id: projectId,
-    },
-    include: {
-      folders: {
-        include: {
-          routes: true,
-          _count: {
-            select: {
-              routes: true,
-            },
-          },
-        },
-      },
-      routes: {
-        where: {
-          folderId: null,
-        },
-      },
+      id: projectId as string,
     },
   });
 
@@ -39,7 +24,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
-  return res.status(200).send(project);
+  const deletedProject = await prisma.project.delete({
+    where: {
+      id: projectId as string,
+    },
+  });
+
+  if (!deletedProject) {
+    return res.status(500).send({
+      error: "Failed to delete project",
+    });
+  }
+
+  return res.status(200).send(deletedProject);
 };
 
 export default handler;

@@ -10,14 +10,25 @@ datasource db {
 model User {
   id            String    @id @default(cuid())
   name          String?
+  username      String?   @unique
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  onboarded     Boolean   @default(false)
   type          UserType  @default(USER)
   projects      Project[]
+  tokens        Token[]
 
   accounts Account[]
   sessions Session[]
+}
+
+model Token {
+  id   String @id @default(cuid())
+  name String
+  user User   @relation(fields: [userId], references: [id])
+
+  userId String
 }
 
 model Project {

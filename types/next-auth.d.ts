@@ -7,9 +7,15 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string;
+      username: string;
       name: string;
       email: string;
       type: "USER" | "ADMIN";
+      projects: Array<{
+        id: string;
+        name: string;
+      }>;
+      onboarded: boolean;
     } & DefaultSession["user"];
   }
 }
@@ -19,5 +25,7 @@ declare module "next-auth/jwt" {
   interface JWT {
     /** OpenID ID Token */
     userId?: string;
+    username?: string;
+    onboarded: boolean;
   }
 }

@@ -1,5 +1,6 @@
 import { FC, useState, useRef, useContext } from "react";
 import RouteContext from "../context/Route.context";
+import ProjectContext from "../context/Project.context";
 import PopoverOptions from "./PopoverOptions";
 import Button from "./Button";
 import { Formik, Form, Field } from "formik";
@@ -37,9 +38,20 @@ type FolderPropTypes = {
   setShowFolderSelector: (value: boolean) => void;
 };
 
-const projectId = "cl6tnc57v0025rhlpu8pnnhrd";
+// const projectId = "cl6tnc57v0025rhlpu8pnnhrd";
 
-const getFolders = async () => {
+// const getFolders = async () => {
+//   const response = await fetch(
+//     `http://localhost:3000/api/folder/get.folders?projectId=${projectId}`,
+//     {
+//       method: "GET",
+//     }
+//   );
+
+//   return response.json();
+// };
+
+const getFolders = async (projectId: { projectId: string }) => {
   const response = await fetch(
     `http://localhost:3000/api/folder/get.folders?projectId=${projectId}`,
     {
@@ -75,7 +87,11 @@ const FolderSelector: FC<FolderSelectorPropTypes> = ({
   valuesFolder,
   setShowFolderSelector,
 }) => {
-  const { data, status } = useQuery(["folders"], getFolders);
+  const { project } = useContext(ProjectContext);
+  const { data, status }: { data: any; status: any } = useQuery(
+    ["folders"],
+    getFolders({ projectId: project.id }) as any
+  );
 
   const ref = useRef(null);
   useClickAway(ref, () => {
@@ -124,11 +140,15 @@ const EditRoutePopover: FC<EditRoutePopoverPropTypes> = ({
     setEditRoutePopover(false);
   });
 
-  const { routeId } = useContext(RouteContext);
+  const { routeId, setRouteId } = useContext(RouteContext);
+  const { project } = useContext(ProjectContext);
 
   const queryClient = useQueryClient();
 
-  queryClient.prefetchQuery(["folders"], getFolders);
+  queryClient.prefetchQuery(
+    ["folders"],
+    getFolders({ projectId: project.id }) as any
+  );
 
   const updateRoute = useMutation(
     (data: {
@@ -142,7 +162,21 @@ const EditRoutePopover: FC<EditRoutePopoverPropTypes> = ({
     {
       onSuccess: () => {
         queryClient.invalidateQueries([routeId]);
-        queryClient.invalidateQueries(["cl6tnc57v0025rhlpu8pnnhrd"]);
+        queryClient.invalidateQueries([project.id]);
+      },
+    }
+  );
+
+  const deleteRoute = useMutation(
+    (routeId: string) => {
+      return axios.post("http://localhost:3000/api/route/delete.route", {
+        routeId: routeId,
+      });
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries([project.id]);
+        setRouteId("");
       },
     }
   );
@@ -247,6 +281,7 @@ const EditRoutePopover: FC<EditRoutePopoverPropTypes> = ({
                   name="Delete"
                   type="button"
                   onClick={() => {
+                    deleteRoute.mutate(routeId);
                     // deleteField.mutate({ fieldId });
                     // setEditRoutePopover(false);
                   }}

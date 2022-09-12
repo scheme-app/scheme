@@ -17,11 +17,35 @@ const ArgTypes = z.object({
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const token = await getToken({ req });
+  const { integrationToken } = req.body;
 
-  if (!token) {
+  if (!token && !integrationToken) {
     return res.status(401).send({
       error: "You must be sign in to view the protected content on this page.",
     });
+  }
+
+  let userId: string | undefined = "";
+
+  if (integrationToken) {
+    const token = await prisma.token.findUnique({
+      where: {
+        id: integrationToken,
+      },
+      select: {
+        user: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+
+    userId = token?.user.id;
+  }
+
+  if (token) {
+    userId = token.userId;
   }
 
   const {
@@ -47,7 +71,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
-  if (project.ownerId !== token.userId) {
+  if (project.ownerId !== userId) {
     return res.status(403).send({
       error: "You are not authorized to add a route to this project.",
     });
