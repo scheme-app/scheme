@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { FaGoogle } from "react-icons/fa";
 import { getProviders, signIn } from "next-auth/react";
+import Image from "next/future/image";
+import schemeGradient from "../../public/scheme-gradient.svg";
 
 const Login = ({ providers }: { providers: any }) => {
   const { data: session } = useSession();
@@ -28,7 +30,7 @@ const Login = ({ providers }: { providers: any }) => {
 
   return (
     <>
-      <div className="flex h-screen items-center pl-[24rem]">
+      <div className="flex h-screen flex-row items-center justify-center gap-x-48 pl-12">
         <div className="flex flex-col">
           <div className="flex flex-col gap-y-4">
             <div className="flex flex-col gap-y-1">
@@ -38,8 +40,8 @@ const Login = ({ providers }: { providers: any }) => {
               <h1 className="text-3xl font-light">for developers & teams</h1>
             </div>
             <h1 className="w-[26rem] text-sm text-[#969696]">
-              A barebones service to map out and document your service's API
-              enpoints for internal and external use.
+              A barebones service to map out and document your service&apos;s
+              API enpoints for internal and external use.
             </h1>
           </div>
           <div className="mt-8">
@@ -56,6 +58,9 @@ const Login = ({ providers }: { providers: any }) => {
               By continuing, you agree to our Terms of Use and Privacy Policy
             </h1>
           </div>
+        </div>
+        <div>
+          <Image src={schemeGradient} />
         </div>
       </div>
     </>

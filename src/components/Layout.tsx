@@ -237,7 +237,10 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
                 <ScrollArea.Viewport className="flex flex-col rounded-lg border-[1px] border-[#E4E4E4] bg-white py-2 px-2 shadow-md">
                   {session?.user.projects.map(
                     (project: { id: string; name: string }) => (
-                      <DropdownMenu.Item className="outline-none">
+                      <DropdownMenu.Item
+                        className="outline-none"
+                        key={project.id}
+                      >
                         <button
                           className="flex w-full flex-row items-center gap-x-4 rounded-lg p-2 hover:bg-[#F2F2F2]"
                           onClick={() => {
@@ -325,7 +328,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
                 // colors={["#A4AB80", "#7C8569", "#52493A", "#E8E0AE", "#968F4B"]}
                 colors={["#E1EDD1", "#AAB69B", "#7C8569", "#E8E0AE", "#A4AB80"]}
               />
-              <h1 className="text-md text-black">{session?.user.name}</h1>
+              {/* <h1 className="text-md text-black">{session?.user.name}</h1> */}
               <DropdownMenu.Trigger className="outline-none">
                 <HiChevronDown className="text-[#969696]" />
               </DropdownMenu.Trigger>

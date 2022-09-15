@@ -86,6 +86,7 @@ const PopoverOptions: FC<PopoverOptionsPropTypes> = ({
             }
             return (
               <PopoverOption
+                key={option.name}
                 name={option.name}
                 value={option.value}
                 active={active}

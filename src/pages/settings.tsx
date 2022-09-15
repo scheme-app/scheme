@@ -53,8 +53,8 @@ const Settings: NextPage = () => {
                 <h1 className="text-3xl font-light">for developers & teams</h1>
               </div>
               <h1 className="w-[26rem] text-sm text-[#969696]">
-                A barebones service to map out and document your service's API
-                enpoints for internal and external use.
+                A barebones service to map out and document your service&apos;s
+                API enpoints for internal and external use.
               </h1>
             </div>
             <div className="mt-16">
@@ -102,7 +102,7 @@ const Settings: NextPage = () => {
 
             {data &&
               data.map((token: { id: string; name: string }) => (
-                <div className="flex flex-row gap-x-20">
+                <div className="flex flex-row gap-x-20" key={token.id}>
                   <div className="flex flex-col gap-y-6">
                     <h1 className="text-sm text-[#969696]">{token.name}</h1>
                   </div>
