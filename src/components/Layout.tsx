@@ -23,8 +23,6 @@ import axios from "axios";
 import { FiLogOut } from "react-icons/fi";
 import { BsPerson } from "react-icons/bs";
 import { signOut } from "next-auth/react";
-import { unstable_getServerSession } from "next-auth/next";
-import { authOptions } from "../pages/api/auth/[...nextauth]";
 
 const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   const { data: session } = useSession();
