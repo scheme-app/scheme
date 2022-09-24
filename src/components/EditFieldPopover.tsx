@@ -90,7 +90,7 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
           <div
             role="group"
             ref={ref}
-            className="mx-1 mt-4 mb-6 flex flex-col rounded-2xl border-[1.5px] border-[#E4E4E4] bg-white px-6 pt-4 pb-4 shadow-sm"
+            className="mx-1 mt-4 mb-6 flex flex-col rounded-2xl border-[1px] border-[#E4E4E4] bg-white px-6 pt-4 pb-4 shadow-sm"
           >
             <div className="flex flex-row flex-wrap gap-x-4">
               <PopoverOptions
@@ -128,7 +128,7 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
                 name="name"
                 autoComplete="off"
                 placeholder="field name"
-                className="text-md w-[60%] rounded-lg border-[1.5px] border-[#E4E4E4] py-1.5 px-3 font-light text-[#969696] focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
+                className="text-md w-[60%] rounded-lg border-[1px] border-[#E4E4E4] py-1.5 px-3 font-light text-[#969696] focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
               />
             </div>
             {/* <div className="mt-6 flex flex-row gap-x-4">
