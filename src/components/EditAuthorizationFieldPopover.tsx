@@ -80,7 +80,7 @@ const EditAuthorizationFieldPopover: FC<
             <div
               role="group"
               ref={ref}
-              className="mx-1 mt-4 flex flex-col rounded-2xl border-[1px] border-[#E4E4E4] bg-white px-6 pt-4 pb-4 shadow-sm"
+              className="mx-1 mt-4 mb-6 flex flex-col rounded-2xl border-[1px] border-[#E4E4E4] bg-white px-6 pt-4 pb-4 shadow-sm"
             >
               <div className="flex flex-row flex-wrap gap-x-4">
                 <PopoverOptions
