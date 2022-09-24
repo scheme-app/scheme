@@ -15,17 +15,17 @@ const Login = ({ providers }: { providers: any }) => {
   const router = useRouter();
 
   // useEffect(() => {
-  // if (session !== null) {
-  //   router.push("/api/auth/signout");
-  // }
-  // if (session?.user.onboarded === false) {
-  //   router.push("/newUser");
-  // } else if (session?.user.onboarded === true) {
-  //   router.push("/");
-  // }
-  // if (session !== null) {
-  //   router.push("/");
-  // }
+  //   // if (session !== null) {
+  //   //   router.push("/api/auth/signout");
+  //   // }
+  //   if (session?.user.onboarded === false) {
+  //     router.push("/newUser");
+  //   } else if (session?.user.onboarded === true) {
+  //     router.push("/");
+  //   }
+  //   // if (session !== null) {
+  //   //   router.push("/");
+  //   // }
   // });
 
   // if (session) {
@@ -34,14 +34,24 @@ const Login = ({ providers }: { providers: any }) => {
   //   }
   // }
 
+  // useEffect(() => {
+  //   // alert(JSON.stringify(session));
+  //   if (session) {
+  //     if (session?.user.onboarded === false) {
+  //       router.push("/newUser");
+  //     }
+  //   }
+  // });
+
   useEffect(() => {
-    // alert(JSON.stringify(session));
     if (session) {
       if (session?.user.onboarded === false) {
         router.push("/newUser");
+      } else if (session?.user.onboarded === true) {
+        router.push("/");
       }
     }
-  }, []);
+  });
 
   const provider = Object.values(providers)[0];
 

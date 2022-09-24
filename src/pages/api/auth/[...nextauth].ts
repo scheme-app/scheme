@@ -15,8 +15,8 @@ export const authOptions: NextAuthOptions = {
     strategy: "database",
   },
   pages: {
-    signIn: "/login",
-    newUser: "/newUser",
+    // signIn: "/login",
+    // newUser: "/newUser",
   },
   callbacks: {
     //JWT sessions not used because of prisma DB adapter
@@ -72,11 +72,11 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     // signIn: async ({ user, account, profile, email, credentials }) => {
-    //   if (user.onboarded === false) {
-    //     return "/newUser";
+    //   if (user.onboarded) {
+    //     return true;
     //   }
 
-    //   return true;
+    //   return "/newUser";
     // },
     // signIn: async ({ user, account, profile, email, credentials }) => {
     //   console.log("userId", user.id);

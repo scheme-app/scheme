@@ -23,6 +23,8 @@ import axios from "axios";
 import { FiLogOut } from "react-icons/fi";
 import { BsPerson } from "react-icons/bs";
 import { signOut } from "next-auth/react";
+import { unstable_getServerSession } from "next-auth/next";
+import { authOptions } from "../pages/api/auth/[...nextauth]";
 
 const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   const { data: session } = useSession();
@@ -234,7 +236,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
           <DropdownMenu.Portal>
             <DropdownMenu.Content className="mr-36 mb-6">
               <ScrollArea.Root>
-                <ScrollArea.Viewport className="flex flex-col rounded-lg border-[1px] border-[#E4E4E4] bg-white py-2 px-2 shadow-md">
+                {/* <ScrollArea.Viewport className="flex flex-col rounded-lg border-[1px] border-[#E4E4E4] bg-white py-2 px-2 shadow-md">
                   {session?.user.projects.map(
                     (project: { id: string; name: string }) => (
                       <DropdownMenu.Item
@@ -276,7 +278,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
                     <HiOutlinePlusSm className="h-5 w-5 text-[#969696]" />
                     <h1 className="text-md text-[#969696]">New Project</h1>
                   </button>
-                </ScrollArea.Viewport>
+                </ScrollArea.Viewport> */}
                 <ScrollArea.Scrollbar orientation="vertical">
                   <ScrollArea.Thumb />
                 </ScrollArea.Scrollbar>
@@ -374,5 +376,17 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
     </div>
   );
 };
+
+// export async function getServerSideProps(context: any) {
+//   return {
+//     props: {
+//       session: await unstable_getServerSession(
+//         context.req,
+//         context.res,
+//         authOptions
+//       ),
+//     },
+//   };
+// }
 
 export default Layout;
