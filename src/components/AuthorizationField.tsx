@@ -61,7 +61,7 @@ const AuthorizationField: FC<AuthorizationFieldPropTypes> = ({
               setShowEditFieldPopover(!showEditFieldPopover);
             }}
           >
-            <h1 className="text-md text-[#969696]">edit</h1>
+            <h1 className="text-md font-light text-[#969696]">edit</h1>
           </button>
         </div>
       </div>

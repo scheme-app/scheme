@@ -9,7 +9,7 @@ type AuthorizationPropTypes = {
 const Authorization: FC<AuthorizationPropTypes> = ({ authorization }) => {
   return (
     <div className="flex flex-col">
-      <h1 className="text-lg font-light text-[#747474]">Headers</h1>
+      <h1 className="text-md font-light text-[#747474]">Headers</h1>
       <Separator.Root
         decorative
         orientation="horizontal"
