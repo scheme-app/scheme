@@ -57,7 +57,7 @@ const Field: FC<FieldPropTypes> = ({ id, name, type, array, optional }) => {
   return (
     <div ref={parent}>
       <div className="relative mx-1 my-2 flex flex-row items-center">
-        <div className="mr-12 rounded-md bg-[#F2F2F2] py-1.5 px-4">
+        <div className="mr-12 rounded-md bg-[#F2F2F2] py-1.5 px-3">
           <p className="text-md flex items-center justify-center font-light tracking-wider text-[#747474]">
             {formattedType[type]}
           </p>

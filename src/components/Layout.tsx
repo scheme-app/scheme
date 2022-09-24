@@ -110,14 +110,18 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <div className="w-1/4 flex-col items-center justify-center border-r-[1.5px] border-[#E4E4E4] p-8 pr-12 pb-24">
+      <div className="w-1/4 flex-col items-center justify-center border-r-[1px] border-[#E4E4E4] p-8 pr-12 pb-24">
         <h1 className="mb-8 text-2xl font-medium">Scheme</h1>
         <ScrollArea.Root>
           <ScrollArea.Viewport className="h-[40rem] w-full">
             <div className="mb-3 flex flex-row items-center justify-between">
-              <h1 className="text-lg">Folders</h1>
-              <button className="flex h-6 w-6 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] hover:bg-[#F2F2F2]">
+              <h1 className="text-[1rem]">Folders</h1>
+              {/* <button className="flex h-6 w-6 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] hover:bg-[#F2F2F2]">
                 <h1 className="mb-0.5 text-xl text-[#969696]">+</h1>
+              </button> */}
+              <button className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] outline-none ring-0 hover:bg-[#F2F2F2]">
+                {/* <h1 className="mb-0.5 text-xl text-[#969696]">+</h1> */}
+                <HiOutlinePlusSm className="h-5 w-5 text-[#969696]" />
               </button>
             </div>
             {data.folders &&
@@ -135,11 +139,12 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
                 />
               ))}
             <div className="mt-6 mb-2 flex flex-row items-center justify-between">
-              <h1 className="text-lg">Routes</h1>
+              <h1 className="text-[1rem]">Routes</h1>
               <Popover.Root>
                 <Popover.Trigger>
-                  <button className="flex h-6 w-6 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] outline-none hover:bg-[#F2F2F2]">
-                    <h1 className="mb-0.5 text-xl text-[#969696]">+</h1>
+                  <button className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] outline-none ring-0 hover:bg-[#F2F2F2]">
+                    {/* <h1 className="mb-0.5 text-xl text-[#969696]">+</h1> */}
+                    <HiOutlinePlusSm className="h-5 w-5 text-[#969696]" />
                   </button>
                 </Popover.Trigger>
                 <Popover.Portal className="">
@@ -370,7 +375,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
             </DropdownMenu.Content>
           </DropdownMenu.Root>
         </div>
-        <div className="relative ml-20" ref={parent}>
+        <div className="relative ml-8" ref={parent}>
           {children}
         </div>
       </div>

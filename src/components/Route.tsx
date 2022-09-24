@@ -12,7 +12,7 @@ type RoutePropTypes = {
 const PostTag: FC = () => {
   return (
     <div className="flex h-5 items-center rounded-[0.25rem] bg-[#FBF3EE] px-1">
-      <h1 className="text-sm font-medium tracking-wide text-[#D6B29D]">POST</h1>
+      <h1 className="text-xs font-medium tracking-wide text-[#D6B29D]">POST</h1>
     </div>
   );
 };
@@ -20,7 +20,7 @@ const PostTag: FC = () => {
 const GetTag: FC = () => {
   return (
     <div className="flex h-5 items-center rounded-[0.25rem] bg-[#EBF7F7] px-1">
-      <h1 className="text-sm font-medium tracking-wide text-[#86B0B1]">GET</h1>
+      <h1 className="text-xs font-medium tracking-wide text-[#86B0B1]">GET</h1>
     </div>
   );
 };
@@ -61,9 +61,9 @@ const Route: FC<RoutePropTypes> = ({ id, name, type }) => {
         }}
       >
         <div className="flex flex-row items-center">
-          <BsFileEarmarkCode className="mr-6 h-6 w-6 text-[#969696]" />
+          <BsFileEarmarkCode className="mr-4 h-5 w-5 text-[#969696]" />
           <div className="flex justify-start">
-            <h1 className="text-md">{name}</h1>
+            <h1 className="text-sm">{name}</h1>
           </div>
           <div className="absolute right-0">
             {type === "GET" ? <GetTag /> : <PostTag />}

@@ -40,7 +40,7 @@ const ParentModel: FC<ParentModelPropTypes> = ({ id, name, fields }) => {
               <Separator.Root
                 decorative
                 orientation="horizontal"
-                className="h-[1.3px] bg-[#E4E4E4]"
+                className="h-[1px] bg-[#E4E4E4]"
               />
               <Field
                 key={id}

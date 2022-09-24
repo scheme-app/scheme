@@ -70,11 +70,11 @@ const Folder: FC<PropTypes> = ({ name, routes }) => {
         }}
       >
         {isOpen ? (
-          <BsFolder2Open className="mr-6 h-6 w-6 text-[#969696]" />
+          <BsFolder2Open className="mr-4 h-5 w-5 text-[#969696]" />
         ) : (
-          <BsFolder className="mr-6 h-6 w-6 text-[#969696]" />
+          <BsFolder className="mr-4 h-5 w-5 text-[#969696]" />
         )}
-        <h1 className="text-md">{name}</h1>
+        <h1 className="text-sm">{name}</h1>
       </button>
       <div className="ml-4" ref={parent}>
         {isOpen && (
@@ -89,9 +89,9 @@ const Folder: FC<PropTypes> = ({ name, routes }) => {
             ))}
             <Popover.Root>
               <Popover.Trigger className="outline-none ring-0">
-                <button className="mt-2 mb-4 flex flex-row items-center gap-x-2">
-                  <HiOutlinePlusSm className="h-5 w-5 text-[#969696]" />
-                  <h1 className="text-md text-[#969696]">Add Route</h1>
+                <button className="mt-2 mb-4 flex flex-row items-center gap-x-1">
+                  <HiOutlinePlusSm className="h-4 w-4 text-[#969696]" />
+                  <h1 className="text-sm text-[#969696]">Add Route</h1>
                 </button>
               </Popover.Trigger>
               <Popover.Portal>

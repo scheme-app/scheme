@@ -67,7 +67,7 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
   );
 
   return (
-    <div className="w-[60%]">
+    <div>
       <Formik
         initialValues={{
           type: "STRING" as "STRING" | "INT" | "BOOLEAN" | "COMPLEX",
@@ -108,9 +108,9 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
           <Form>
             <div
               role="group"
-              className="mt-4 mb-6 flex flex-col rounded-2xl border-[1.5px] border-[#E4E4E4] bg-white px-6 pt-4 pb-6 shadow-sm"
+              className="mx-1 mt-4 mb-6 flex flex-col rounded-2xl border-[1.5px] border-[#E4E4E4] bg-white px-6 pt-4 pb-4 shadow-sm"
             >
-              <div className="flex flex-row flex-wrap gap-x-8">
+              <div className="flex flex-row flex-wrap gap-x-4">
                 <PopoverOptions
                   fieldAlias="Type"
                   fieldName="type"
@@ -141,16 +141,25 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
                   defaultValue={values.optional}
                 />
               </div>
-              <div className="mt-4">
+              {/* <div className="mt-4">
                 <h1 className="mb-2">Name</h1>
                 <Field
                   name="name"
                   autoComplete="off"
                   placeholder="field name"
-                  className="rounded-lg border-[1.5px] border-[#E4E4E4] py-1.5 px-3 text-lg font-light focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
+                  className="rounded-lg border-[1px] border-[#E4E4E4] py-1.5 px-3 text-lg font-light focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
+                />
+              </div> */}
+              <div className="mt-4">
+                <h1 className="mb-2 text-sm">Name</h1>
+                <Field
+                  name="name"
+                  autoComplete="off"
+                  placeholder="field name"
+                  className="text-md w-[60%] rounded-lg border-[1.5px] border-[#E4E4E4] py-1.5 px-3 font-light text-[#969696] focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
                 />
               </div>
-              <div className="mt-4 flex flex-row gap-x-4">
+              {/* <div className="mt-4 flex flex-row gap-x-4">
                 <Button
                   name="Save"
                   type="submit"
@@ -164,7 +173,32 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
                   onClick={() => {
                     setCreateFieldPopover(false);
                   }}
+                />*/}
+
+              <div className="mt-6 flex flex-row gap-x-2">
+                <Button
+                  name="Save"
+                  type="submit"
+                  onClick={() => {
+                    values.submit = true;
+                  }}
                 />
+                {/* <Button
+                  name="Cancel"
+                  type="button"
+                  onClick={() => {
+                    setAuthorizationFieldPopover(false);
+                  }}
+                />*/}
+                <button
+                  className="text-md px-2 py-1 font-light text-[#969696] hover:text-black"
+                  type="button"
+                  onClick={() => {
+                    setCreateFieldPopover(false);
+                  }}
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </Form>

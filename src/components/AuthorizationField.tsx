@@ -4,6 +4,9 @@ import { MdLockOutline } from "react-icons/md";
 import { MdLockOpen } from "react-icons/md";
 import EditAuthorizationFieldPopover from "../components/EditAuthorizationFieldPopover";
 import autoAnimate from "@formkit/auto-animate";
+import Image from "next/future/image";
+import lock from "../../public/lock.svg";
+import openLock from "../../public/openLock.svg";
 
 type AuthorizationFieldPropTypes = {
   authorization: "NONE" | "BEARER" | "API_KEY" | "BASIC" | "DIGEST" | "OAUTH";
@@ -35,11 +38,13 @@ const AuthorizationField: FC<AuthorizationFieldPropTypes> = ({
   return (
     <div ref={parent}>
       <div className="relative mx-1 mt-2 flex flex-row items-center">
-        <div className="mr-12 flex items-center rounded-md bg-[#F2F2F2] py-1.5 px-4">
+        <div className="mr-12 flex items-center rounded-md bg-[#F2F2F2] py-2 px-4">
           {authorization === "NONE" ? (
-            <MdLockOpen className="h-6 w-6 text-[#747474]" />
+            // <MdLockOpen className="h-6 w-6 text-[#747474]" />
+            <Image src={openLock} width={14} height={14} />
           ) : (
-            <MdLockOutline className="h-6 w-6 text-[#747474]" />
+            // <MdLockOutline className="h-6 w-6 text-[#747474]" />
+            <Image src={lock} width={14} height={14} />
           )}
         </div>
         <div className="w-2/5">
