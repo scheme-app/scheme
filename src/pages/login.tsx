@@ -6,30 +6,48 @@ import { FaGoogle } from "react-icons/fa";
 import { getProviders, signIn } from "next-auth/react";
 import Image from "next/future/image";
 import schemeGradient from "../../public/scheme-gradient.svg";
+import { unstable_getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 const Login = ({ providers }: { providers: any }) => {
   const { data: session } = useSession();
 
   const router = useRouter();
 
+  // useEffect(() => {
+  // if (session !== null) {
+  //   router.push("/api/auth/signout");
+  // }
+  // if (session?.user.onboarded === false) {
+  //   router.push("/newUser");
+  // } else if (session?.user.onboarded === true) {
+  //   router.push("/");
+  // }
+  // if (session !== null) {
+  //   router.push("/");
+  // }
+  // });
+
+  // if (session) {
+  //   if (session.user.onboarded === false) {
+  //     router.push("/newUser");
+  //   }
+  // }
+
   useEffect(() => {
-    // if (session !== null) {
-    //   router.push("/api/auth/signout");
-    // }
-    if (session?.user.onboarded === false) {
-      router.push("/newUser");
-    } else if (session?.user.onboarded === true) {
-      router.push("/");
+    // alert(JSON.stringify(session));
+    if (session) {
+      if (session?.user.onboarded === false) {
+        router.push("/newUser");
+      }
     }
-    // if (session !== null) {
-    //   router.push("/");
-    // }
-  });
+  }, []);
 
   const provider = Object.values(providers)[0];
 
   return (
     <>
+      <h1>session: {JSON.stringify(session)}</h1>
       <div className="flex h-screen flex-row items-center justify-center gap-x-48 pl-12">
         <div className="flex flex-col">
           <div className="flex flex-col gap-y-4">
@@ -67,10 +85,17 @@ const Login = ({ providers }: { providers: any }) => {
   );
 };
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context: any) {
   const providers = await getProviders();
   return {
-    props: { providers },
+    props: {
+      providers,
+      session: await unstable_getServerSession(
+        context.req,
+        context.res,
+        authOptions
+      ),
+    },
   };
 }
 

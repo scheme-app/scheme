@@ -15,15 +15,15 @@ const Settings: NextPage = () => {
 
   const router = useRouter();
 
-  useEffect(() => {
-    if (session === null) {
-      router.push("/api/auth/signin");
-    }
+  // useEffect(() => {
+  //   if (session === null) {
+  //     router.push("/api/auth/signin");
+  //   }
 
-    if (session?.user.onboarded === false) {
-      router.push("/newUser");
-    }
-  });
+  //   if (session?.user.onboarded === false) {
+  //     router.push("/newUser");
+  //   }
+  // });
 
   const getTokens = async () => {
     const response = await fetch(

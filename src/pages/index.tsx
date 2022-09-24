@@ -18,20 +18,19 @@ const Home: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (session === null) {
-      router.push("/login");
-    }
-
-    if (session && session.user.onboarded === false) {
-      router.push("/newUser");
-    }
+    // if (session === null) {
+    //   router.push("/login");
+    // }
+    // if (session && session.user.onboarded === false) {
+    //   router.push("/newUser");
+    // }
   });
 
   const { project, setProject } = useContext(ProjectContext);
 
-  if (project.id === "" && session?.user?.projects[0]?.id) {
-    setProject(session?.user?.projects[0]);
-  }
+  // if (project.id === "" && session?.user?.projects[0]?.id) {
+  //   setProject(session?.user?.projects[0]);
+  // }
 
   const { routeId } = useContext(RouteContext);
 
