@@ -55,7 +55,7 @@ const Field: FC<FieldPropTypes> = ({ id, name, type, array, optional }) => {
   };
 
   return (
-    <div className="w-[60%]" ref={parent}>
+    <div ref={parent}>
       <div className="relative mt-4 flex flex-row items-center rounded-xl border-[1.5px] border-[#E4E4E4] p-1.5">
         <div className="mr-12 rounded-md bg-[#F2F2F2] py-2 px-4">
           <p className="flex items-center justify-center text-lg font-light tracking-wider text-[#747474]">

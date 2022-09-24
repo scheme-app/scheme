@@ -80,14 +80,14 @@ const Home: NextPage = () => {
               <h1 className="mb-36 text-lg">select a route to view</h1>
             </div>
           ) : (
-            <>
+            <div className="w-[60%]">
               <RouteHeader
                 name={data.name}
                 type={data.type}
                 folder={data.folder}
               />
               <ScrollArea.Root className="mt-8">
-                <ScrollArea.Viewport className="h-[38rem] w-full">
+                <ScrollArea.Viewport className="h-[40rem] w-full">
                   <Authorization authorization={data.authorization} />
                   <ParentModel
                     name="Arguments"
@@ -105,7 +105,7 @@ const Home: NextPage = () => {
                   <ScrollArea.Corner />
                 </ScrollArea.Viewport>
               </ScrollArea.Root>
-            </>
+            </div>
           )}
         </Layout>
       </>

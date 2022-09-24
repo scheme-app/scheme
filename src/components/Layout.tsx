@@ -325,7 +325,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
           </div>
         </DropdownMenu.Root>
       </div>
-      <div className="h-screen w-full flex-col justify-center p-8 px-24">
+      <div className="h-screen w-full flex-col justify-center px-24 pt-8">
         <div className="flex w-full flex-row justify-between">
           <div></div>
           {/* <div className="flex flex-row gap-x-2">

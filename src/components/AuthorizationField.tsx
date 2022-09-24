@@ -33,7 +33,7 @@ const AuthorizationField: FC<AuthorizationFieldPropTypes> = ({
   }, [parent]);
 
   return (
-    <div className="w-[60%]" ref={parent}>
+    <div ref={parent}>
       <div className="relative mt-4 flex flex-row items-center rounded-xl border-[1.5px] border-[#E4E4E4] py-1.5 px-1.5">
         <div className="mr-12 flex items-center rounded-md bg-[#F2F2F2] py-2 px-4">
           {authorization === "NONE" ? (
