@@ -31,8 +31,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
-  console.log("user", user);
-
   return res.status(200).send(user);
 };
 

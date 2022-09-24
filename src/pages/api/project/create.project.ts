@@ -72,8 +72,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
-  console.log("createdProject", createdProject);
-
   return res.status(200).send(createdProject);
 };
 

@@ -34,6 +34,22 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   const { project, setProject } = useContext(ProjectContext);
   const { routeId, setRouteId } = useContext(RouteContext);
 
+  const getProjects = async () => {
+    const response = await fetch(
+      `http://localhost:3000/api/project/get.projects?userId=${session?.user.id}`,
+      {
+        method: "GET",
+      }
+    );
+
+    return response.json();
+  };
+
+  const { data: projectData, status: projectStatus } = useQuery(
+    ["projects"],
+    getProjects
+  );
+
   const getProject = async () => {
     const response = await fetch(
       `http://localhost:3000/api/project/get.project?projectId=${project.id}`,
@@ -236,9 +252,9 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
           <DropdownMenu.Portal>
             <DropdownMenu.Content className="mr-36 mb-6">
               <ScrollArea.Root>
-                {/* <ScrollArea.Viewport className="flex flex-col rounded-lg border-[1px] border-[#E4E4E4] bg-white py-2 px-2 shadow-md">
-                  {session?.user.projects.map(
-                    (project: { id: string; name: string }) => (
+                <ScrollArea.Viewport className="flex h-48 flex-col rounded-lg border-[1px] border-[#E4E4E4] bg-white py-2 px-2 shadow-md">
+                  {projectData &&
+                    projectData.map((project: { id: string; name: string }) => (
                       <DropdownMenu.Item
                         className="outline-none"
                         key={project.id}
@@ -272,13 +288,12 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
                           <h1 className="text-[#969696]">{project.name}</h1>
                         </button>
                       </DropdownMenu.Item>
-                    )
-                  )}
+                    ))}
                   <button className="flex w-full flex-row items-center gap-x-2 rounded-lg p-2 hover:bg-[#F2F2F2]">
                     <HiOutlinePlusSm className="h-5 w-5 text-[#969696]" />
                     <h1 className="text-md text-[#969696]">New Project</h1>
                   </button>
-                </ScrollArea.Viewport> */}
+                </ScrollArea.Viewport>
                 <ScrollArea.Scrollbar orientation="vertical">
                   <ScrollArea.Thumb />
                 </ScrollArea.Scrollbar>

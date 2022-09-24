@@ -45,14 +45,14 @@ const Home: NextPage = () => {
     return response.json();
   };
 
-  // const { data: projectData, status: projectStatus } = useQuery(
-  //   ["projects"],
-  //   getProjects
-  // );
+  const { data: projectData, status: projectStatus } = useQuery(
+    ["projects"],
+    getProjects
+  );
 
-  // if (project.id === "" && projectData?.projects[0]?.id) {
-  //   setProject(projectData?.projects[0]);
-  // }
+  if (project.id === "" && projectData) {
+    setProject(projectData[0]);
+  }
 
   const { routeId } = useContext(RouteContext);
 
@@ -74,8 +74,6 @@ const Home: NextPage = () => {
   return (
     session && (
       <>
-        {/* <h1>{JSON.stringify(session)}</h1> */}
-        {/* <h1>{JSON.stringify(projectData)}</h1> */}
         <Layout>
           {routeId === "" ? (
             <div className="flex h-screen items-center justify-center">
