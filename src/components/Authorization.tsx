@@ -13,7 +13,7 @@ const Authorization: FC<AuthorizationPropTypes> = ({ authorization }) => {
       <Separator.Root
         decorative
         orientation="horizontal"
-        className="my-2 h-[1.3px] bg-[#E4E4E4]"
+        className="my-2 h-[1px] bg-[#E4E4E4]"
       />
       <AuthorizationField authorization={authorization} />
     </div>

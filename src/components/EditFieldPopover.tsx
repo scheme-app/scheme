@@ -128,7 +128,7 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
                 name="name"
                 autoComplete="off"
                 placeholder="field name"
-                className="text-md w-[60%] rounded-lg border-[1px] border-[#E4E4E4] py-1.5 px-3 font-light text-[#969696] focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
+                className="text-md h-[2.65rem] w-[60%] rounded-lg border-[1px] border-[#E4E4E4] py-1.5 px-3 font-light text-[#969696] focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
               />
             </div>
             {/* <div className="mt-6 flex flex-row gap-x-4">

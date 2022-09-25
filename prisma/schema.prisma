@@ -79,11 +79,12 @@ model Model {
 }
 
 model Field {
-  id       String    @id @default(cuid())
+  id       String      @id @default(cuid())
   name     String
   type     FieldType
-  optional Boolean   @default(false)
-  array    Boolean   @default(false)
+  format   FieldFormat @default(NONE)
+  optional Boolean     @default(false)
+  array    Boolean     @default(false)
 
   models Model[]
 }
@@ -112,6 +113,19 @@ enum FieldType {
   INT
   BOOLEAN
   COMPLEX
+}
+
+enum FieldFormat {
+  NONE
+  INT32
+  INT64
+  FLOAT
+  DOUBLE
+  BYTE
+  BINARY
+  DATE
+  DATE_TIME
+  PASSWORD
 }
 
 enum ModelType {

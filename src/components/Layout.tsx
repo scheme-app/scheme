@@ -110,7 +110,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <div className="w-1/4 flex-col items-center justify-center border-r-[1px] border-[#E4E4E4] p-8 pr-12">
+      <div className="w-1/8 relative flex-col items-center justify-center border-r-[1px] border-[#E4E4E4] p-8 pr-12">
         <h1 className="mb-8 text-2xl font-medium">Scheme</h1>
         <ScrollArea.Root>
           <ScrollArea.Viewport className="h-[42rem] w-full">
@@ -141,13 +141,18 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
             <div className="mt-6 mb-2 flex flex-row items-center justify-between">
               <h1 className="text-[1rem]">Routes</h1>
               <Popover.Root>
-                <Popover.Trigger>
-                  <button className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] outline-none ring-0 hover:bg-[#F2F2F2]">
-                    {/* <h1 className="mb-0.5 text-xl text-[#969696]">+</h1> */}
-                    <HiOutlinePlusSm className="h-5 w-5 text-[#969696]" />
-                  </button>
-                </Popover.Trigger>
-                <Popover.Portal className="">
+                {/* <Popover.Trigger> */}
+                <button
+                  className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] outline-none ring-0 hover:bg-[#F2F2F2]"
+                  onClick={() => {
+                    setRouteId("");
+                  }}
+                >
+                  {/* <h1 className="mb-0.5 text-xl text-[#969696]">+</h1> */}
+                  <HiOutlinePlusSm className="h-5 w-5 text-[#969696]" />
+                </button>
+                {/* </Popover.Trigger> */}
+                {/* <Popover.Portal className="">
                   <Popover.Content className="ml-60 outline-none">
                     <Formik
                       initialValues={{
@@ -233,7 +238,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
                       )}
                     </Formik>
                   </Popover.Content>
-                </Popover.Portal>
+                </Popover.Portal> */}
               </Popover.Root>
             </div>
             {data.routes &&
@@ -318,7 +323,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
               </ScrollArea.Root>
             </DropdownMenu.Content>
           </DropdownMenu.Portal>
-          <div className="mt-8 flex w-full flex-row items-center justify-between rounded-lg border-[1.5px] border-[#E4E4E4] py-2 px-3">
+          <div className="fixed bottom-8 flex w-60 flex-row items-center justify-between rounded-lg border-[1.5px] border-[#E4E4E4] bg-white py-2 px-3">
             {/* <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#F2F2F2]">
               <h1 className="font-semibold">
                 {(() => {
@@ -374,23 +379,23 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
                 <HiChevronDown className="text-[#969696]" />
               </DropdownMenu.Trigger>
             </div>
-            <DropdownMenu.Content className="mr-24 mt-4 w-36 rounded-lg border-[1px] border-[#E4E4E4] bg-white py-2 px-2 shadow-md">
+            <DropdownMenu.Content className="mr-24 mt-4 w-36 rounded-lg border-[1px] border-[#E4E4E4] bg-white py-1.5 px-1.5 shadow-md">
               <DropdownMenu.Item
-                className="flex flex-row items-center justify-between rounded-md px-2 py-1 outline-none hover:bg-[#F2F2F2]"
+                className="flex flex-row items-center justify-between rounded-md px-2 py-1.5 outline-none hover:bg-[#F2F2F2]"
                 onClick={() => {
                   router.push("/settings");
                 }}
               >
-                <h1 className="text-[#969696]">Settings</h1>
+                <h1 className="text-sm text-[#969696]">Settings</h1>
                 <BsPerson className="text-[#969696]" />
               </DropdownMenu.Item>
               <DropdownMenu.Item
-                className="flex flex-row items-center justify-between rounded-md px-2 py-1 outline-none hover:bg-[#F2F2F2]"
+                className="flex flex-row items-center justify-between rounded-md px-2 py-1.5 outline-none hover:bg-[#F2F2F2]"
                 onClick={() => {
                   signOut();
                 }}
               >
-                <h1 className="text-[#969696]">Logout</h1>
+                <h1 className="text-sm text-[#969696]">Logout</h1>
                 <FiLogOut className="text-[#969696]" />
               </DropdownMenu.Item>
             </DropdownMenu.Content>

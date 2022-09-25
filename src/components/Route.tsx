@@ -11,7 +11,7 @@ type RoutePropTypes = {
 
 const PostTag: FC = () => {
   return (
-    <div className="flex h-5 items-center rounded-[0.25rem] bg-[#FBF3EE] px-1">
+    <div className="flex items-center rounded-[0.25rem] bg-[#FBF3EE] px-1">
       <h1 className="text-xs font-medium tracking-wide text-[#D6B29D]">POST</h1>
     </div>
   );
@@ -19,7 +19,7 @@ const PostTag: FC = () => {
 
 const GetTag: FC = () => {
   return (
-    <div className="flex h-5 items-center rounded-[0.25rem] bg-[#EBF7F7] px-1">
+    <div className="flex items-center rounded-[0.25rem] bg-[#EBF7F7] px-1">
       <h1 className="text-xs font-medium tracking-wide text-[#86B0B1]">GET</h1>
     </div>
   );

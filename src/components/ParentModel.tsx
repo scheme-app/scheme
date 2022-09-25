@@ -33,6 +33,13 @@ const ParentModel: FC<ParentModelPropTypes> = ({ id, name, fields }) => {
   return (
     <div className="mt-8 flex flex-col" ref={parent}>
       <h1 className="text-md mb-2 font-light text-[#747474]">{name}</h1>
+      {fields.length === 0 && (
+        <Separator.Root
+          decorative
+          orientation="horizontal"
+          className="h-[1px] bg-[#E4E4E4]"
+        />
+      )}
       {fields.map(({ id, name, type, array, optional }) => {
         if (type !== "COMPLEX") {
           return (

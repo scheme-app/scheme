@@ -6,6 +6,7 @@ import { useClickAway } from "react-use";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import RouteContext from "../context/Route.context";
+import type { FieldFormat, FieldType } from "@prisma/client";
 
 type CreateFieldPopoverPropTypes = {
   parentModelId: string;
@@ -70,7 +71,8 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
     <div>
       <Formik
         initialValues={{
-          type: "STRING" as "STRING" | "INT" | "BOOLEAN" | "COMPLEX",
+          type: "STRING" as FieldType,
+          format: "NONE" as FieldFormat,
           array: false,
           optional: false,
           name: "",
@@ -122,6 +124,44 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
                   ]}
                   defaultValue={values.type}
                 />
+                {/* <PopoverOptions
+                  fieldAlias="Array"
+                  fieldName="array"
+                  options={[
+                    { name: "Yes", value: true },
+                    { name: "No", value: false },
+                  ]}
+                  defaultValue={values.array}
+                />
+                <PopoverOptions
+                  fieldAlias="Optional"
+                  fieldName="optional"
+                  options={[
+                    { name: "Yes", value: true },
+                    { name: "No", value: false },
+                  ]}
+                  defaultValue={values.optional}
+                /> */}
+              </div>
+              {/* <div className="mt-4">
+                <h1 className="mb-2">Name</h1>
+                <Field
+                  name="name"
+                  autoComplete="off"
+                  placeholder="field name"
+                  className="rounded-lg border-[1px] border-[#E4E4E4] py-1.5 px-3 text-lg font-light focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
+                />
+              </div> */}
+              <div className="mt-4 flex flex-row gap-x-4">
+                <div className="h-full">
+                  <h1 className="mb-2 text-sm">Name</h1>
+                  <Field
+                    name="name"
+                    autoComplete="off"
+                    placeholder="field name"
+                    className="text-md h-[2.65rem] rounded-lg border-[1px] border-[#E4E4E4] py-1.5 px-3 font-light text-[#969696] focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
+                  />
+                </div>
                 <PopoverOptions
                   fieldAlias="Array"
                   fieldName="array"
@@ -139,24 +179,6 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
                     { name: "No", value: false },
                   ]}
                   defaultValue={values.optional}
-                />
-              </div>
-              {/* <div className="mt-4">
-                <h1 className="mb-2">Name</h1>
-                <Field
-                  name="name"
-                  autoComplete="off"
-                  placeholder="field name"
-                  className="rounded-lg border-[1px] border-[#E4E4E4] py-1.5 px-3 text-lg font-light focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
-                />
-              </div> */}
-              <div className="mt-4">
-                <h1 className="mb-2 text-sm">Name</h1>
-                <Field
-                  name="name"
-                  autoComplete="off"
-                  placeholder="field name"
-                  className="text-md w-[60%] rounded-lg border-[1px] border-[#E4E4E4] py-1.5 px-3 font-light text-[#969696] focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
                 />
               </div>
               {/* <div className="mt-4 flex flex-row gap-x-4">
