@@ -34,15 +34,15 @@ const NewUser: NextPage = () => {
     }
   );
 
-  useEffect(() => {
-    if (session === null) {
-      router.push("/login");
-    }
+  // useEffect(() => {
+  //   if (session === null) {
+  //     router.push("/login");
+  //   }
 
-    if (session?.user.onboarded === true) {
-      router.push("/");
-    }
-  });
+  //   if (session?.user.onboarded === true) {
+  //     router.push("/");
+  //   }
+  // });
 
   return (
     session && (
@@ -84,6 +84,12 @@ const NewUser: NextPage = () => {
                     },
                     {
                       onSuccess: () => {
+                        // while (router.isReady === false) {}
+                        // if (router.isReady === true) {
+                        //   // router.push("/", undefined, { shallow: false });
+                        //   router.push("/");
+                        // }
+
                         router.push("/");
                       },
                     }
@@ -162,13 +168,36 @@ const NewUser: NextPage = () => {
 };
 
 export async function getServerSideProps(context: any) {
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/login",
+      },
+    };
+  }
+
+  if (session.user.onboarded === true) {
+    return {
+      redirect: {
+        destination: "/",
+      },
+    };
+  }
+
   return {
     props: {
-      session: await unstable_getServerSession(
-        context.req,
-        context.res,
-        authOptions
-      ),
+      // session: await unstable_getServerSession(
+      //   context.req,
+      //   context.res,
+      //   authOptions
+      // ),
+      session: session,
     },
   };
 }

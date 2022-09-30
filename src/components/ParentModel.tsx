@@ -5,6 +5,7 @@ import ComplexField from "./ComplexField";
 import autoAnimate from "@formkit/auto-animate";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import * as Separator from "@radix-ui/react-separator";
+import { FieldFormat } from "@prisma/client";
 
 type ParentModelPropTypes = {
   id: string;
@@ -15,6 +16,7 @@ type ParentModelPropTypes = {
     type: "STRING" | "INT" | "BOOLEAN" | "COMPLEX";
     array: boolean;
     optional: boolean;
+    format: FieldFormat;
   }>;
 };
 
@@ -40,7 +42,7 @@ const ParentModel: FC<ParentModelPropTypes> = ({ id, name, fields }) => {
           className="h-[1px] bg-[#E4E4E4]"
         />
       )}
-      {fields.map(({ id, name, type, array, optional }) => {
+      {fields.map(({ id, name, type, array, optional, format }) => {
         if (type !== "COMPLEX") {
           return (
             <>
@@ -56,6 +58,7 @@ const ParentModel: FC<ParentModelPropTypes> = ({ id, name, fields }) => {
                 type={type}
                 array={array}
                 optional={optional}
+                format={format}
               />
             </>
           );

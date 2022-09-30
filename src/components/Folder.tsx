@@ -62,7 +62,7 @@ const Folder: FC<PropTypes> = ({ name, routes }) => {
   }, [parent]);
 
   return (
-    <div className={`${isOpen ? "mb-2" : ""}`}>
+    <div className={`${isOpen ? "mb-2" : ""} px-2.5`}>
       <button
         className="mb-2 flex flex-row"
         onClick={() => {

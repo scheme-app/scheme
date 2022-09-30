@@ -38,7 +38,7 @@ const AuthorizationField: FC<AuthorizationFieldPropTypes> = ({
   return (
     <div ref={parent}>
       <div className="relative mx-1 mt-2 flex flex-row items-center">
-        <div className="mr-12 flex items-center rounded-md bg-[#F2F2F2] py-2 px-4">
+        <div className="mr-12 flex items-center rounded-md bg-[#F2F2F2] py-1.5 px-4">
           {authorization === "NONE" ? (
             // <MdLockOpen className="h-6 w-6 text-[#747474]" />
             <Image src={openLock} width={14} height={14} />
@@ -66,7 +66,7 @@ const AuthorizationField: FC<AuthorizationFieldPropTypes> = ({
               setShowEditFieldPopover(!showEditFieldPopover);
             }}
           >
-            <h1 className="text-md font-light text-[#969696]">edit</h1>
+            <h1 className="text-sm font-light text-[#969696]">edit</h1>
           </button>
         </div>
       </div>

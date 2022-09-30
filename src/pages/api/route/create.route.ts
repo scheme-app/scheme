@@ -106,6 +106,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           },
         },
       }),
+      owner: {
+        connect: {
+          id: userId,
+        },
+      },
       project: {
         connect: {
           id: projectId,

@@ -8,9 +8,10 @@ import Image from "next/future/image";
 import schemeGradient from "../../public/scheme-gradient.svg";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
+import { redirect } from "next/dist/server/api-utils";
 
 const Login = ({ providers }: { providers: any }) => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const router = useRouter();
 
@@ -43,15 +44,15 @@ const Login = ({ providers }: { providers: any }) => {
   //   }
   // });
 
-  useEffect(() => {
-    if (session) {
-      if (session?.user.onboarded === false) {
-        router.push("/newUser");
-      } else if (session?.user.onboarded === true) {
-        router.push("/");
-      }
-    }
-  });
+  // useEffect(() => {
+  //   if (session) {
+  //     if (session?.user.onboarded === false) {
+  //       router.push("/newUser");
+  //     } else if (session?.user.onboarded === true) {
+  //       router.push("/");
+  //     }
+  //   }
+  // }, [status]);
 
   const provider = Object.values(providers)[0];
 
@@ -97,14 +98,37 @@ const Login = ({ providers }: { providers: any }) => {
 
 export async function getServerSideProps(context: any) {
   const providers = await getProviders();
+
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
+
+  if (session?.user.onboarded === false) {
+    return {
+      redirect: {
+        destination: "/newUser",
+      },
+    };
+  }
+  if (session?.user.onboarded === true) {
+    return {
+      redirect: {
+        destination: "/",
+      },
+    };
+  }
+
   return {
     props: {
       providers,
-      session: await unstable_getServerSession(
-        context.req,
-        context.res,
-        authOptions
-      ),
+      // session: await unstable_getServerSession(
+      //   context.req,
+      //   context.res,
+      //   authOptions
+      // ),
+      session: session,
     },
   };
 }

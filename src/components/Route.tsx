@@ -11,7 +11,7 @@ type RoutePropTypes = {
 
 const PostTag: FC = () => {
   return (
-    <div className="flex items-center rounded-[0.25rem] bg-[#FBF3EE] px-1">
+    <div className="flex items-center rounded-[0.25rem] bg-[#FBF3EE] px-1 py-0.5">
       <h1 className="text-xs font-medium tracking-wide text-[#D6B29D]">POST</h1>
     </div>
   );
@@ -19,18 +19,16 @@ const PostTag: FC = () => {
 
 const GetTag: FC = () => {
   return (
-    <div className="flex items-center rounded-[0.25rem] bg-[#EBF7F7] px-1">
+    <div className="flex items-center rounded-[0.25rem] bg-[#ebf7f7] px-1 py-0.5">
       <h1 className="text-xs font-medium tracking-wide text-[#86B0B1]">GET</h1>
     </div>
   );
 };
 
 const Route: FC<RoutePropTypes> = ({ id, name, type }) => {
-  const { setRouteId } = useContext(RouteContext);
+  const { routeId, setRouteId } = useContext(RouteContext);
 
   const queryClient = useQueryClient();
-
-  const { routeId } = useContext(RouteContext);
 
   const getRoute = async () => {
     console.log("getting route");
@@ -52,7 +50,11 @@ const Route: FC<RoutePropTypes> = ({ id, name, type }) => {
   }, []);
 
   return (
-    <div className="relative flex flex-col pr-16">
+    <div
+      className={`relative flex flex-col rounded-md pl-2 pr-16 ${
+        routeId === id ? "bg-[#F2F2F2]" : ""
+      }`}
+    >
       <button
         className="py-2"
         onClick={() => {
@@ -65,7 +67,7 @@ const Route: FC<RoutePropTypes> = ({ id, name, type }) => {
           <div className="flex justify-start">
             <h1 className="text-sm">{name}</h1>
           </div>
-          <div className="absolute right-0">
+          <div className="absolute right-0 pr-2">
             {type === "GET" ? <GetTag /> : <PostTag />}
           </div>
         </div>

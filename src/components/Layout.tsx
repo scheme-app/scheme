@@ -23,6 +23,8 @@ import axios from "axios";
 import { FiLogOut } from "react-icons/fi";
 import { BsPerson } from "react-icons/bs";
 import { signOut } from "next-auth/react";
+import SchemeHeaderIcon from "../../public/scheme-header-icon.svg";
+import Image from "next/future/image";
 
 const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   const { data: session } = useSession();
@@ -111,7 +113,10 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <div className="flex h-screen overflow-hidden">
       <div className="w-1/8 relative flex-col items-center justify-center border-r-[1px] border-[#E4E4E4] p-8 pr-12">
-        <h1 className="mb-8 text-2xl font-medium">Scheme</h1>
+        <div className="mb-8 flex flex-row items-center gap-x-4">
+          <Image src={SchemeHeaderIcon} />
+          <h1 className="text-xl">Scheme</h1>
+        </div>
         <ScrollArea.Root>
           <ScrollArea.Viewport className="h-[42rem] w-full">
             <div className="mb-3 flex flex-row items-center justify-between">
@@ -148,97 +153,8 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
                     setRouteId("");
                   }}
                 >
-                  {/* <h1 className="mb-0.5 text-xl text-[#969696]">+</h1> */}
                   <HiOutlinePlusSm className="h-5 w-5 text-[#969696]" />
                 </button>
-                {/* </Popover.Trigger> */}
-                {/* <Popover.Portal className="">
-                  <Popover.Content className="ml-60 outline-none">
-                    <Formik
-                      initialValues={{
-                        name: "",
-                        type: "GET" as "GET" | "POST",
-                        authorization: "NONE" as
-                          | "NONE"
-                          | "API_KEY"
-                          | "BEARER"
-                          | "BASIC"
-                          | "DIGEST"
-                          | "OAUTH",
-                        submit: false,
-                      }}
-                      onSubmit={(values) => {
-                        if (!values.submit) {
-                          return;
-                        }
-                        values.submit = false;
-
-                        createRoute.mutate({
-                          name: values.name,
-                          type: values.type,
-                          authorization: values.authorization,
-                        });
-                      }}
-                    >
-                      {({ values }) => (
-                        <Form>
-                          <div
-                            role="group"
-                            className="mt-2 mb-6 flex flex-col rounded-2xl border-[1.5px] border-[#E4E4E4] bg-white px-6 pt-4 pb-6 shadow-sm"
-                          >
-                            <div className="flex flex-row items-center gap-x-8">
-                              <div>
-                                <h1 className="mb-2">Name</h1>
-                                <Field
-                                  name="name"
-                                  autoComplete="off"
-                                  placeholder="Route name"
-                                  className="rounded-lg border-[1.5px] border-[#E4E4E4] py-1.5 px-3 text-lg font-light focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
-                                />
-                              </div>
-                              <PopoverOptions
-                                fieldAlias="Type"
-                                fieldName="type"
-                                options={[
-                                  { name: "GET", value: "GET" },
-                                  { name: "POST", value: "POST" },
-                                ]}
-                                defaultValue={values.type}
-                              />
-                            </div>
-                            <div className="mt-4">
-                              <PopoverOptions
-                                fieldAlias="Authorization"
-                                fieldName="authorization"
-                                options={[
-                                  { name: "None", value: "NONE" },
-                                  { name: "API Key", value: "API_KEY" },
-                                  { name: "Bearer", value: "BEARER" },
-                                  { name: "Basic", value: "BASIC" },
-                                  { name: "Digest", value: "DIGEST" },
-                                  { name: "OAuth", value: "OAUTH" },
-                                ]}
-                                defaultValue={values.authorization}
-                              />
-                            </div>
-                            <div className="mt-8 flex flex-row gap-x-4">
-                              <Button
-                                name="Create"
-                                type="submit"
-                                onClick={() => {
-                                  values.submit = true;
-                                }}
-                              />
-                              <Popover.Close>
-                                <Button name="Cancel" type="button" />
-                              </Popover.Close>
-                            </div>
-                          </div>
-                        </Form>
-                      )}
-                    </Formik>
-                  </Popover.Content>
-                </Popover.Portal> */}
               </Popover.Root>
             </div>
             {data.routes &&
@@ -354,7 +270,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
           </div>
         </DropdownMenu.Root>
       </div>
-      <div className="h-screen w-full flex-col justify-center px-24 pt-8">
+      <div className="h-screen w-full flex-col justify-center pl-24 pr-12 pt-8">
         <div className="flex w-full flex-row justify-between">
           <div></div>
           {/* <div className="flex flex-row gap-x-2">
@@ -379,7 +295,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
                 <HiChevronDown className="text-[#969696]" />
               </DropdownMenu.Trigger>
             </div>
-            <DropdownMenu.Content className="mr-24 mt-4 w-36 rounded-lg border-[1px] border-[#E4E4E4] bg-white py-1.5 px-1.5 shadow-md">
+            <DropdownMenu.Content className="mr-12 mt-4 w-36 rounded-lg border-[1px] border-[#E4E4E4] bg-white py-1.5 px-1.5 shadow-md">
               <DropdownMenu.Item
                 className="flex flex-row items-center justify-between rounded-md px-2 py-1.5 outline-none hover:bg-[#F2F2F2]"
                 onClick={() => {
@@ -401,7 +317,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
             </DropdownMenu.Content>
           </DropdownMenu.Root>
         </div>
-        <div className="relative ml-8" ref={parent}>
+        <div className="" ref={parent}>
           {children}
         </div>
       </div>

@@ -43,7 +43,7 @@ const RouteHeader: FC<PropTypes> = ({ name, type, folder }) => {
 
   return (
     <>
-      <div className="mt-20 flex flex-row items-center justify-between">
+      <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-x-4">
           <h1 className="text-4xl font-[325]">{name}</h1>
           {type === "GET" ? <GetTag /> : <PostTag />}
