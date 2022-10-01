@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../utils/prisma";
-import { getToken } from "next-auth/jwt";
+// import { getToken } from "next-auth/jwt";
+import { unstable_getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]";
 import { AuthorizationType } from "@prisma/client";
 import { z } from "zod";
 
@@ -16,10 +18,12 @@ const ArgTypes = z.object({
 });
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const token = await getToken({ req });
+  // const token = await getToken({ req });
+  const session = await unstable_getServerSession(req, res, authOptions);
   const { integrationToken } = req.body;
 
-  if (!token && !integrationToken) {
+  // if (!token && !integrationToken) {
+  if (!session && !integrationToken) {
     return res.status(401).send({
       error: "You must be sign in to view the protected content on this page.",
     });
@@ -44,8 +48,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     userId = token?.user.id;
   }
 
-  if (token) {
-    userId = token.userId;
+  if (session) {
+    userId = session.user.id;
   }
 
   const {
@@ -80,6 +84,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const route = await prisma.route.findMany({
     where: {
       folderId: folderId,
+      projectId: projectId,
       name: name,
     },
   });
@@ -101,6 +106,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           },
         },
       }),
+      owner: {
+        connect: {
+          id: userId,
+        },
+      },
       project: {
         connect: {
           id: projectId,

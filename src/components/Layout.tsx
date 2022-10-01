@@ -23,24 +23,32 @@ import axios from "axios";
 import { FiLogOut } from "react-icons/fi";
 import { BsPerson } from "react-icons/bs";
 import { signOut } from "next-auth/react";
+import SchemeHeaderIcon from "../../public/scheme-header-icon.svg";
+import Image from "next/future/image";
 
 const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   const { data: session } = useSession();
 
   const router = useRouter();
 
-  useEffect(() => {
-    if (session === null) {
-      router.push("/api/auth/signin");
-    }
-
-    if (session?.user.onboarded === false) {
-      router.push("/newUser");
-    }
-  });
-
   const { project, setProject } = useContext(ProjectContext);
   const { routeId, setRouteId } = useContext(RouteContext);
+
+  const getProjects = async () => {
+    const response = await fetch(
+      `http://localhost:3000/api/project/get.projects?userId=${session?.user.id}`,
+      {
+        method: "GET",
+      }
+    );
+
+    return response.json();
+  };
+
+  const { data: projectData, status: projectStatus } = useQuery(
+    ["projects"],
+    getProjects
+  );
 
   const getProject = async () => {
     const response = await fetch(
@@ -104,15 +112,21 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      {/* <h1>data: {JSON.stringify(data)}</h1> */}
-      <div className="w-1/4 flex-col items-center justify-center border-r-[1.5px] border-[#E4E4E4] p-8 pr-12 pb-24">
-        <h1 className="mb-8 text-2xl font-medium">Scheme</h1>
+      <div className="w-1/8 relative flex-col items-center justify-center border-r-[1px] border-[#E4E4E4] p-8 pr-12">
+        <div className="mb-8 flex flex-row items-center gap-x-4">
+          <Image src={SchemeHeaderIcon} />
+          <h1 className="text-xl">Scheme</h1>
+        </div>
         <ScrollArea.Root>
-          <ScrollArea.Viewport className="h-[40rem] w-full">
+          <ScrollArea.Viewport className="h-[42rem] w-full">
             <div className="mb-3 flex flex-row items-center justify-between">
-              <h1 className="text-lg">Folders</h1>
-              <button className="flex h-6 w-6 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] hover:bg-[#F2F2F2]">
+              <h1 className="text-[1rem]">Folders</h1>
+              {/* <button className="flex h-6 w-6 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] hover:bg-[#F2F2F2]">
                 <h1 className="mb-0.5 text-xl text-[#969696]">+</h1>
+              </button> */}
+              <button className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] outline-none ring-0 hover:bg-[#F2F2F2]">
+                {/* <h1 className="mb-0.5 text-xl text-[#969696]">+</h1> */}
+                <HiOutlinePlusSm className="h-5 w-5 text-[#969696]" />
               </button>
             </div>
             {data.folders &&
@@ -130,100 +144,17 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
                 />
               ))}
             <div className="mt-6 mb-2 flex flex-row items-center justify-between">
-              <h1 className="text-lg">Routes</h1>
+              <h1 className="text-[1rem]">Routes</h1>
               <Popover.Root>
-                <Popover.Trigger>
-                  <button className="flex h-6 w-6 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] outline-none hover:bg-[#F2F2F2]">
-                    <h1 className="mb-0.5 text-xl text-[#969696]">+</h1>
-                  </button>
-                </Popover.Trigger>
-                <Popover.Portal className="">
-                  <Popover.Content className="ml-60 outline-none">
-                    <Formik
-                      initialValues={{
-                        name: "",
-                        type: "GET" as "GET" | "POST",
-                        authorization: "NONE" as
-                          | "NONE"
-                          | "API_KEY"
-                          | "BEARER"
-                          | "BASIC"
-                          | "DIGEST"
-                          | "OAUTH",
-                        submit: false,
-                      }}
-                      onSubmit={(values) => {
-                        if (!values.submit) {
-                          return;
-                        }
-                        values.submit = false;
-
-                        createRoute.mutate({
-                          name: values.name,
-                          type: values.type,
-                          authorization: values.authorization,
-                        });
-                      }}
-                    >
-                      {({ values }) => (
-                        <Form>
-                          <div
-                            role="group"
-                            className="mt-2 mb-6 flex flex-col rounded-2xl border-[1.5px] border-[#E4E4E4] bg-white px-6 pt-4 pb-6 shadow-sm"
-                          >
-                            <div className="flex flex-row items-center gap-x-8">
-                              <div>
-                                <h1 className="mb-2">Name</h1>
-                                <Field
-                                  name="name"
-                                  autoComplete="off"
-                                  placeholder="Route name"
-                                  className="rounded-lg border-[1.5px] border-[#E4E4E4] py-1.5 px-3 text-lg font-light focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
-                                />
-                              </div>
-                              <PopoverOptions
-                                fieldAlias="Type"
-                                fieldName="type"
-                                options={[
-                                  { name: "GET", value: "GET" },
-                                  { name: "POST", value: "POST" },
-                                ]}
-                                defaultValue={values.type}
-                              />
-                            </div>
-                            <div className="mt-4">
-                              <PopoverOptions
-                                fieldAlias="Authorization"
-                                fieldName="authorization"
-                                options={[
-                                  { name: "None", value: "NONE" },
-                                  { name: "API Key", value: "API_KEY" },
-                                  { name: "Bearer", value: "BEARER" },
-                                  { name: "Basic", value: "BASIC" },
-                                  { name: "Digest", value: "DIGEST" },
-                                  { name: "OAuth", value: "OAUTH" },
-                                ]}
-                                defaultValue={values.authorization}
-                              />
-                            </div>
-                            <div className="mt-8 flex flex-row gap-x-4">
-                              <Button
-                                name="Create"
-                                type="submit"
-                                onClick={() => {
-                                  values.submit = true;
-                                }}
-                              />
-                              <Popover.Close>
-                                <Button name="Cancel" type="button" />
-                              </Popover.Close>
-                            </div>
-                          </div>
-                        </Form>
-                      )}
-                    </Formik>
-                  </Popover.Content>
-                </Popover.Portal>
+                {/* <Popover.Trigger> */}
+                <button
+                  className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] outline-none ring-0 hover:bg-[#F2F2F2]"
+                  onClick={() => {
+                    setRouteId("");
+                  }}
+                >
+                  <HiOutlinePlusSm className="h-5 w-5 text-[#969696]" />
+                </button>
               </Popover.Root>
             </div>
             {data.routes &&
@@ -245,10 +176,13 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
           <DropdownMenu.Portal>
             <DropdownMenu.Content className="mr-36 mb-6">
               <ScrollArea.Root>
-                <ScrollArea.Viewport className="flex flex-col rounded-lg border-[1px] border-[#E4E4E4] bg-white py-2 px-2 shadow-md">
-                  {session?.user.projects.map(
-                    (project: { id: string; name: string }) => (
-                      <DropdownMenu.Item className="outline-none">
+                <ScrollArea.Viewport className="flex h-36 flex-col rounded-lg border-[1px] border-[#E4E4E4] bg-white py-2 px-2 shadow-md">
+                  {projectData &&
+                    projectData.map((project: { id: string; name: string }) => (
+                      <DropdownMenu.Item
+                        className="outline-none"
+                        key={project.id}
+                      >
                         <button
                           className="flex w-full flex-row items-center gap-x-4 rounded-lg p-2 hover:bg-[#F2F2F2]"
                           onClick={() => {
@@ -259,7 +193,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
                             });
                           }}
                         >
-                          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#F2F2F2]">
+                          {/* <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#F2F2F2]">
                             <h1 className="font-semibold">
                               {(() => {
                                 const tokenized = project.name.split(" ");
@@ -274,15 +208,28 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
                                 }
                               })()}
                             </h1>
-                          </div>
-                          <h1 className="text-[#969696]">{project.name}</h1>
+                          </div> */}
+                          <Avatar
+                            size={25}
+                            name={project.id}
+                            variant="marble"
+                            colors={[
+                              "#E1EDD1",
+                              "#AAB69B",
+                              "#7C8569",
+                              "#E8E0AE",
+                              "#A4AB80",
+                            ]}
+                          />
+                          <h1 className="text-sm text-[#969696]">
+                            {project.name}
+                          </h1>
                         </button>
                       </DropdownMenu.Item>
-                    )
-                  )}
+                    ))}
                   <button className="flex w-full flex-row items-center gap-x-2 rounded-lg p-2 hover:bg-[#F2F2F2]">
-                    <HiOutlinePlusSm className="h-5 w-5 text-[#969696]" />
-                    <h1 className="text-md text-[#969696]">New Project</h1>
+                    <HiOutlinePlusSm className="h-4 w-4 text-[#969696]" />
+                    <h1 className="text-sm text-[#969696]">New Project</h1>
                   </button>
                 </ScrollArea.Viewport>
                 <ScrollArea.Scrollbar orientation="vertical">
@@ -292,8 +239,8 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
               </ScrollArea.Root>
             </DropdownMenu.Content>
           </DropdownMenu.Portal>
-          <div className="mt-6 flex w-full flex-row items-center justify-between rounded-lg border-[1px] border-[#E4E4E4] py-1.5 px-1.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#F2F2F2]">
+          <div className="fixed bottom-8 flex w-60 flex-row items-center justify-between rounded-lg border-[1.5px] border-[#E4E4E4] bg-white py-2 px-3">
+            {/* <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#F2F2F2]">
               <h1 className="font-semibold">
                 {(() => {
                   const tokenized = project.name.split(" ");
@@ -308,15 +255,22 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
                   }
                 })()}
               </h1>
-            </div>
-            <h1 className="text-[#969696]">{project.name}</h1>
+            </div> */}
+            <Avatar
+              size={25}
+              name={project.id}
+              variant="marble"
+              // colors={["#A4AB80", "#7C8569", "#52493A", "#E8E0AE", "#968F4B"]}
+              colors={["#E1EDD1", "#AAB69B", "#7C8569", "#E8E0AE", "#A4AB80"]}
+            />
+            <h1 className="text-sm text-black">{project.name}</h1>
             <DropdownMenu.Trigger className="flex items-center justify-center outline-none">
-              <HiChevronDown />
+              <HiChevronDown className="text-[#747474]" />
             </DropdownMenu.Trigger>
           </div>
         </DropdownMenu.Root>
       </div>
-      <div className="h-screen w-full flex-col justify-center p-8 px-24">
+      <div className="h-screen w-full flex-col justify-center pl-24 pr-12 pt-8">
         <div className="flex w-full flex-row justify-between">
           <div></div>
           {/* <div className="flex flex-row gap-x-2">
@@ -336,34 +290,34 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
                 // colors={["#A4AB80", "#7C8569", "#52493A", "#E8E0AE", "#968F4B"]}
                 colors={["#E1EDD1", "#AAB69B", "#7C8569", "#E8E0AE", "#A4AB80"]}
               />
-              <h1 className="text-md text-black">{session?.user.name}</h1>
+              {/* <h1 className="text-md text-black">{session?.user.name}</h1> */}
               <DropdownMenu.Trigger className="outline-none">
                 <HiChevronDown className="text-[#969696]" />
               </DropdownMenu.Trigger>
             </div>
-            <DropdownMenu.Content className="mr-24 mt-4 w-36 rounded-lg border-[1px] border-[#E4E4E4] bg-white py-2 px-2 shadow-md">
+            <DropdownMenu.Content className="mr-12 mt-4 w-36 rounded-lg border-[1px] border-[#E4E4E4] bg-white py-1.5 px-1.5 shadow-md">
               <DropdownMenu.Item
-                className="flex flex-row items-center justify-between rounded-md px-2 py-1 outline-none hover:bg-[#F2F2F2]"
+                className="flex flex-row items-center justify-between rounded-md px-2 py-1.5 outline-none hover:bg-[#F2F2F2]"
                 onClick={() => {
                   router.push("/settings");
                 }}
               >
-                <h1 className="text-[#969696]">Settings</h1>
+                <h1 className="text-sm text-[#969696]">Settings</h1>
                 <BsPerson className="text-[#969696]" />
               </DropdownMenu.Item>
               <DropdownMenu.Item
-                className="flex flex-row items-center justify-between rounded-md px-2 py-1 outline-none hover:bg-[#F2F2F2]"
+                className="flex flex-row items-center justify-between rounded-md px-2 py-1.5 outline-none hover:bg-[#F2F2F2]"
                 onClick={() => {
                   signOut();
                 }}
               >
-                <h1 className="text-[#969696]">Logout</h1>
+                <h1 className="text-sm text-[#969696]">Logout</h1>
                 <FiLogOut className="text-[#969696]" />
               </DropdownMenu.Item>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
         </div>
-        <div className="relative ml-20" ref={parent}>
+        <div className="" ref={parent}>
           {children}
         </div>
       </div>
@@ -374,13 +328,25 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
             <h1 className="text-sm text-red-400">Offline</h1>
           </div>
         )}
-        <div className="flex flex-row items-center gap-x-2 rounded-lg bg-green-300/20 py-1 px-2.5">
+        {/* <div className="flex flex-row items-center gap-x-2 rounded-lg bg-green-300/20 py-1 px-2.5">
           <div className="h-1.5 w-1.5 rounded-full bg-green-400"></div>
           <h1 className="text-sm text-green-400">Pre-Alpha</h1>
-        </div>
+        </div> */}
       </div>
     </div>
   );
 };
+
+// export async function getServerSideProps(context: any) {
+//   return {
+//     props: {
+//       session: await unstable_getServerSession(
+//         context.req,
+//         context.res,
+//         authOptions
+//       ),
+//     },
+//   };
+// }
 
 export default Layout;

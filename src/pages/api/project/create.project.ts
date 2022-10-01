@@ -49,8 +49,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     userId = token.userId;
   }
 
-  console.log("userId", userId);
-
   const createdProject = await prisma.project.create({
     data: {
       name: name,
@@ -71,8 +69,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       error: "Something went wrong",
     });
   }
-
-  console.log("createdProject", createdProject);
 
   return res.status(200).send(createdProject);
 };

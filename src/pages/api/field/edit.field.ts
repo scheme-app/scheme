@@ -8,6 +8,20 @@ const ArgTypes = z.object({
   type: z.enum(["STRING", "INT", "BOOLEAN"]).optional(),
   optional: z.boolean().optional().default(false),
   array: z.boolean().optional().default(false),
+  format: z
+    .enum([
+      "NONE",
+      "INT32",
+      "INT64",
+      "FLOAT",
+      "DOUBLE",
+      "BYTE",
+      "BINARY",
+      "DATE",
+      "DATE_TIME",
+      "PASSWORD",
+    ])
+    .default("NONE"),
 });
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {

@@ -28,6 +28,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           name: true,
         },
       },
+      owner: {
+        select: {
+          id: true,
+          name: true,
+          username: true,
+        },
+      },
     },
   });
 

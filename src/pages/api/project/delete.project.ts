@@ -4,8 +4,6 @@ import { prisma } from "../../../utils/prisma";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { projectId } = req.body;
 
-  console.log("projectId", projectId);
-
   if (!projectId) {
     return res.status(400).send({
       error: "Project id is required.",

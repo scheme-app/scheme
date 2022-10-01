@@ -23,110 +23,6 @@ type EditRoutePopoverPropTypes = {
   setEditRoutePopover: (show: boolean) => void;
 };
 
-type FolderSelectorPropTypes = {
-  valuesFolder: folder;
-  setShowFolderSelector: (value: boolean) => void;
-};
-
-type FolderPropTypes = {
-  id: string;
-  name: string;
-  valuesFolder: {
-    id: string;
-    name: string;
-  };
-  setShowFolderSelector: (value: boolean) => void;
-};
-
-// const projectId = "cl6tnc57v0025rhlpu8pnnhrd";
-
-// const getFolders = async () => {
-//   const response = await fetch(
-//     `http://localhost:3000/api/folder/get.folders?projectId=${projectId}`,
-//     {
-//       method: "GET",
-//     }
-//   );
-
-//   return response.json();
-// };
-
-const getFolders = async (projectId: { projectId: string }) => {
-  const response = await fetch(
-    `http://localhost:3000/api/folder/get.folders?projectId=${projectId}`,
-    {
-      method: "GET",
-    }
-  );
-
-  return response.json();
-};
-
-const Folder: FC<FolderPropTypes> = ({
-  id,
-  name,
-  valuesFolder,
-  setShowFolderSelector,
-}) => {
-  return (
-    <button
-      className="flex w-full flex-row items-center gap-x-2.5 rounded-md py-1 pl-2 hover:bg-[#F2F2F2]"
-      onClick={() => {
-        valuesFolder.id = id;
-        valuesFolder.name = name;
-        setShowFolderSelector(false);
-      }}
-    >
-      <BsFolder className="h-5 w-5 text-[#969696]" />
-      <h1 className="text-[#969696]">{name}</h1>
-    </button>
-  );
-};
-
-const FolderSelector: FC<FolderSelectorPropTypes> = ({
-  valuesFolder,
-  setShowFolderSelector,
-}) => {
-  const { project } = useContext(ProjectContext);
-  const { data, status }: { data: any; status: any } = useQuery(
-    ["folders"],
-    getFolders({ projectId: project.id }) as any
-  );
-
-  const ref = useRef(null);
-  useClickAway(ref, () => {
-    setShowFolderSelector(false);
-  });
-
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <div ref={ref}>
-      <ScrollArea.Root>
-        <ScrollArea.Viewport className="flex h-[7rem] w-[10rem] flex-col rounded-lg border-[1.5px] border-[#E4E4E4] bg-white py-2 px-2 shadow-md">
-          {data.map((folder: any) => {
-            return (
-              <Folder
-                key={folder.id}
-                id={folder.id}
-                name={folder.name}
-                valuesFolder={valuesFolder}
-                setShowFolderSelector={setShowFolderSelector}
-              />
-            );
-          })}
-        </ScrollArea.Viewport>
-        <ScrollArea.Scrollbar orientation="vertical">
-          <ScrollArea.Thumb />
-        </ScrollArea.Scrollbar>
-        <ScrollArea.Corner />
-      </ScrollArea.Root>
-    </div>
-  );
-};
-
 const EditRoutePopover: FC<EditRoutePopoverPropTypes> = ({
   name,
   type,
@@ -144,11 +40,6 @@ const EditRoutePopover: FC<EditRoutePopoverPropTypes> = ({
   const { project } = useContext(ProjectContext);
 
   const queryClient = useQueryClient();
-
-  queryClient.prefetchQuery(
-    ["folders"],
-    getFolders({ projectId: project.id }) as any
-  );
 
   const updateRoute = useMutation(
     (data: {
@@ -215,78 +106,56 @@ const EditRoutePopover: FC<EditRoutePopoverPropTypes> = ({
           <div
             role="group"
             ref={ref}
-            className="relative mt-8 mb-6 flex flex-col rounded-2xl border-[1.5px] border-[#E4E4E4] bg-white px-6 pt-4 pb-6 shadow-sm"
+            className="relative mb-6 mt-8 rounded-xl border-[1px] border-[#E4E4E4] bg-white px-6 pt-4 pb-4 shadow-sm"
           >
-            <div className="absolute top-0 right-0 mt-4 mr-6 flex flex-row gap-x-2">
-              <h1 className="text-sm italic tracking-wider text-[#969696]">
-                {`Index / ${values.folder.name + " / "}`}
-              </h1>
-              <h1 className="text-sm tracking-wide text-black underline">
-                {values.name}
-              </h1>
-            </div>
-            <div className="pr-40">
-              <div className="mt-4">
-                <h1 className="mb-2">Name</h1>
+            <div className="mt-4 flex flex-row gap-x-8">
+              <div>
+                <h1 className="mb-2 text-sm">Name</h1>
                 <Field
                   name="name"
                   autoComplete="off"
                   placeholder="field name"
-                  className="w-[22rem] rounded-lg border-[1.5px] border-[#E4E4E4] py-1.5 px-3 text-lg font-light text-[#969696] focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
+                  className="text-md h-[2.15rem] rounded-[0.3rem] border-[1px] border-[#E4E4E4] py-1.5 px-3 font-light text-[#969696] focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
                 />
               </div>
-              <div className="mt-4 flex flex-row gap-x-10">
-                <PopoverOptions
-                  fieldAlias="Type"
-                  fieldName="type"
-                  options={[
-                    { name: "GET", value: "GET" },
-                    { name: "POST", value: "POST" },
-                  ]}
-                  defaultValue={values.type}
-                />
-                <div className="w-full">
-                  <h1 className="mb-2">Folder</h1>
-                  <div className="flex flex-row items-center justify-between rounded-lg border-[1.5px] border-[#E4E4E4] py-2 px-3">
-                    <h1 className="font-light text-[#969696]">
-                      {`Index / ${values.folder.name}`}
-                    </h1>
-                    <button
-                      onClick={() => {
-                        setShowFolderSelector(!showFolderSelector);
-                      }}
-                    >
-                      <FiChevronDown className="h-5 w-5 text-[#969696]" />
-                    </button>
-                  </div>
-                  <div className="absolute bottom-0 right-0 mb-4 mr-4">
-                    {showFolderSelector && (
-                      <FolderSelector
-                        valuesFolder={values.folder}
-                        setShowFolderSelector={setShowFolderSelector}
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
-              <div className="mt-6 flex flex-row gap-x-4">
-                <Button
-                  name="Save"
-                  type="submit"
-                  onClick={() => {
-                    values.submit = true;
-                  }}
-                />
-                <Button
-                  name="Delete"
-                  type="button"
-                  onClick={() => {
-                    deleteRoute.mutate(routeId);
-                    // deleteField.mutate({ fieldId });
-                    // setEditRoutePopover(false);
-                  }}
-                />
-              </div>
+              <PopoverOptions
+                fieldAlias="Type"
+                fieldName="type"
+                options={[
+                  { name: "GET", value: "GET" },
+                  { name: "POST", value: "POST" },
+                ]}
+                defaultValue={values.type}
+              />
+            </div>
+            <div className="mt-6 flex flex-row gap-x-4">
+              <Button
+                name="Save"
+                type="submit"
+                onClick={() => {
+                  values.submit = true;
+                }}
+              />
+              {/* <Button
+                name="Delete"
+                type="button"
+                onClick={() => {
+                  deleteRoute.mutate(routeId);
+                  // deleteField.mutate({ fieldId });
+                  // setEditRoutePopover(false);
+                }}
+              /> */}
+              <button
+                className="text-md px-2 py-1 font-light text-[#969696] hover:text-red-500"
+                type="button"
+                onClick={() => {
+                  deleteRoute.mutate(routeId);
+                  // deleteField.mutate({ fieldId });
+                  // setEditRoutePopover(false);
+                }}
+              >
+                Delete
+              </button>
             </div>
           </div>
         </Form>

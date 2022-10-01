@@ -7,14 +7,14 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string;
-      username: string;
+      username: string | null;
       name: string;
       email: string;
       type: "USER" | "ADMIN";
-      projects: Array<{
-        id: string;
-        name: string;
-      }>;
+      // projects: Array<{
+      //   id: string;
+      //   name: string;
+      // }>;
       onboarded: boolean;
     } & DefaultSession["user"];
   }

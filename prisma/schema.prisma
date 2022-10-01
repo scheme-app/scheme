@@ -18,6 +18,8 @@ model User {
   type          UserType  @default(USER)
   projects      Project[]
   tokens        Token[]
+  routes        Route[]   @relation(name: "owner")
+  assignedTo    Route[]   @relation(name: "assignedTo")
 
   accounts Account[]
   sessions Session[]
@@ -26,7 +28,7 @@ model User {
 model Token {
   id   String @id @default(cuid())
   name String
-  user User   @relation(fields: [userId], references: [id])
+  user User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   userId String
 }
@@ -53,17 +55,22 @@ model Folder {
 }
 
 model Route {
-  id   String    @id @default(cuid())
-  name String
-  type RouteType
+  id       String        @id @default(cuid())
+  name     String
+  type     RouteType
+  status   RouteStatus   @default(PROTOTYPING)
+  priority RoutePriority @default(LOW)
 
   authorization AuthorizationType @default(NONE)
   project       Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
   folder        Folder?           @relation(fields: [folderId], references: [id], onDelete: Cascade)
   models        Model[]
+  owner         User?             @relation(name: "owner", fields: [userId], references: [id], onDelete: Cascade)
+  assignedTo    User[]            @relation(name: "assignedTo")
 
   projectId String
   folderId  String?
+  userId    String?
 }
 
 model Model {
@@ -79,11 +86,12 @@ model Model {
 }
 
 model Field {
-  id       String    @id @default(cuid())
+  id       String      @id @default(cuid())
   name     String
   type     FieldType
-  optional Boolean   @default(false)
-  array    Boolean   @default(false)
+  format   FieldFormat @default(NONE)
+  optional Boolean     @default(false)
+  array    Boolean     @default(false)
 
   models Model[]
 }
@@ -114,9 +122,34 @@ enum FieldType {
   COMPLEX
 }
 
+enum FieldFormat {
+  NONE
+  INT32
+  INT64
+  FLOAT
+  DOUBLE
+  BYTE
+  BINARY
+  DATE
+  DATE_TIME
+  PASSWORD
+}
+
 enum ModelType {
   PARENT
   CHILD
+}
+
+enum RouteStatus {
+  PROTOTYPING
+  DEVELOPING
+  COMPLETE
+}
+
+enum RoutePriority {
+  LOW
+  MEDIUM
+  HIGH
 }
 
 // NEXT AUTH REQUIRED MODELS

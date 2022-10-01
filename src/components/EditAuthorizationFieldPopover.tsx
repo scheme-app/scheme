@@ -80,7 +80,7 @@ const EditAuthorizationFieldPopover: FC<
             <div
               role="group"
               ref={ref}
-              className="mt-4 mb-6 flex flex-col rounded-2xl border-[1.5px] border-[#E4E4E4] bg-white px-6 pt-4 pb-6 shadow-sm"
+              className="mx-1 mt-4 mb-6 flex flex-col rounded-2xl border-[1px] border-[#E4E4E4] bg-white px-6 pt-4 pb-4 shadow-sm"
             >
               <div className="flex flex-row flex-wrap gap-x-4">
                 <PopoverOptions
@@ -97,7 +97,7 @@ const EditAuthorizationFieldPopover: FC<
                   defaultValue={values.type}
                 />
               </div>
-              <div className="mt-4 flex flex-row gap-x-4">
+              <div className="mt-6 flex flex-row gap-x-2">
                 <Button
                   name="Save"
                   type="submit"
@@ -105,13 +105,22 @@ const EditAuthorizationFieldPopover: FC<
                     values.submit = true;
                   }}
                 />
-                <Button
+                {/* <Button
                   name="Cancel"
                   type="button"
                   onClick={() => {
                     setAuthorizationFieldPopover(false);
                   }}
-                />
+                />*/}
+                <button
+                  className="text-md px-2 py-1 font-light text-[#969696] hover:text-black"
+                  type="button"
+                  onClick={() => {
+                    setAuthorizationFieldPopover(false);
+                  }}
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </Form>
