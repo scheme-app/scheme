@@ -390,6 +390,7 @@ const Home: NextPage = () => {
                     fields={data.models[1].fields}
                     id={data.models[1].id}
                   />
+                  <div className="py-8"></div>
                   <ScrollArea.Scrollbar orientation="vertical">
                     <ScrollArea.Thumb />
                   </ScrollArea.Scrollbar>
