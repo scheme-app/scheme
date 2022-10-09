@@ -14,6 +14,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       projects: {
         create: {
           name: projectName,
+          roles: {
+            create: [
+              {
+                type: "OWNER",
+                users: {
+                  connect: {
+                    id: userId,
+                  },
+                },
+              },
+              {
+                type: "MEMBER",
+              },
+            ],
+          },
         },
       },
       tokens: {
