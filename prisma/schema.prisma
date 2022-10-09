@@ -4,7 +4,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://abhinav@localhost:5432/abhinav"
+  // url      = "postgresql://abhinav@localhost:5432/abhinav"
+  url      = "postgresql://abhinav@localhost:5432/template1"
 }
 
 model User {
@@ -16,13 +17,29 @@ model User {
   image         String?
   onboarded     Boolean   @default(false)
   type          UserType  @default(USER)
-  projects      Project[]
   tokens        Token[]
-  routes        Route[]   @relation(name: "owner")
-  assignedTo    Route[]   @relation(name: "assignedTo")
+
+  routes     Route[]   @relation(name: "owner")
+  assignedTo Route[]   @relation(name: "assignedTo")
+  roles      Role[]
+  projects   Project[]
 
   accounts Account[]
   sessions Session[]
+}
+
+model Role {
+  id      String   @id @default(cuid())
+  type    RoleType @default(MEMBER)
+  project Project  @relation(fields: [projectId], references: [id])
+  users   User[]
+
+  projectId String
+}
+
+enum RoleType {
+  OWNER
+  MEMBER
 }
 
 model Token {
@@ -37,11 +54,10 @@ model Project {
   id   String @id @default(cuid())
   name String
 
-  owner   User?    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   folders Folder[]
   routes  Route[]
-
-  ownerId String
+  roles   Role[]
+  members User[]
 }
 
 model Folder {

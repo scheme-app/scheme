@@ -4,27 +4,43 @@ generator client {
 
 datasource db {
     provider = "postgresql"
-    url      = "postgresql://abhinav@localhost:5432/abhinav"
+    // url      = "postgresql://abhinav@localhost:5432/abhinav"
+    url      = "postgresql://abhinav@localhost:5432/postgres"
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    type          UserType  @default(USER)
-    projects      Project[]
+    id             String    @id @default(cuid())
+    name           String?
+    username       String?   @unique
+    email          String?   @unique
+    emailVerified  DateTime?
+    image          String?
+    onboarded      Boolean   @default(false)
+    type           UserType  @default(USER)
+    projects       Project[] @relation(name: "projectsOwned")
+    projectsMember Project[] @relation(name: "projectsMember")
+    tokens         Token[]
+    routes         Route[]   @relation(name: "owner")
+    assignedTo     Route[]   @relation(name: "assignedTo")
 
     accounts Account[]
     sessions Session[]
+}
+
+model Token {
+    id   String @id @default(cuid())
+    name String
+    user User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    userId String
 }
 
 model Project {
     id   String @id @default(cuid())
     name String
 
-    owner   User?    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+    owner   User?    @relation(name: "projectsOwned", fields: [ownerId], references: [id], onDelete: Cascade)
+    members User[]   @relation("projectsMember")
     folders Folder[]
     routes  Route[]
 
@@ -42,36 +58,29 @@ model Folder {
 }
 
 model Route {
-    id   String    @id @default(cuid())
-    name String
-    type RouteType
+    id       String        @id @default(cuid())
+    name     String
+    type     RouteType
+    status   RouteStatus   @default(PROTOTYPING)
+    priority RoutePriority @default(LOW)
 
     authorization AuthorizationType @default(NONE)
     project       Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
     folder        Folder?           @relation(fields: [folderId], references: [id], onDelete: Cascade)
     models        Model[]
-    nestedModels  NestedModel[]
+    owner         User?             @relation(name: "owner", fields: [userId], references: [id], onDelete: Cascade)
+    assignedTo    User[]            @relation(name: "assignedTo")
 
     projectId String
     folderId  String?
-}
-
-model Field {
-    id       String    @id @default(cuid())
-    name     String
-    type     FieldType
-    optional Boolean   @default(false)
-    array    Boolean   @default(false)
-
-    parentModel  Model?        @relation(fields: [parentModelId], references: [id], onDelete: Cascade)
-    nestedModels NestedModel[]
-
-    parentModelId String?
+    userId    String?
 }
 
 model Model {
-    id   String    @id @default(cuid())
-    type ModelType
+    id            String    @id @default(cuid())
+    name          String?
+    type          ModelType
+    parentModelId String?
 
     fields Field[]
     route  Route?  @relation(fields: [routeId], references: [id], onDelete: Cascade)
@@ -79,14 +88,15 @@ model Model {
     routeId String?
 }
 
-model NestedModel {
-    id   String          @id @default(cuid())
-    type NestedModelType
+model Field {
+    id       String      @id @default(cuid())
+    name     String
+    type     FieldType
+    format   FieldFormat @default(NONE)
+    optional Boolean     @default(false)
+    array    Boolean     @default(false)
 
-    fields      Field[]
-    parentRoute Route   @relation(fields: [parentRouteId], references: [id], onDelete: Cascade)
-
-    parentRouteId String
+    models Model[]
 }
 
 enum UserType {
@@ -105,8 +115,7 @@ enum AuthorizationType {
     BEARER
     BASIC
     DIGEST
-    OAUTH1
-    OAUTH2
+    OAUTH
 }
 
 enum FieldType {
@@ -116,14 +125,34 @@ enum FieldType {
     COMPLEX
 }
 
-enum ModelType {
-    ARGUMENT
-    RESPONSE
+enum FieldFormat {
+    NONE
+    INT32
+    INT64
+    FLOAT
+    DOUBLE
+    BYTE
+    BINARY
+    DATE
+    DATE_TIME
+    PASSWORD
 }
 
-enum NestedModelType {
+enum ModelType {
     PARENT
     CHILD
+}
+
+enum RouteStatus {
+    PROTOTYPING
+    DEVELOPING
+    COMPLETE
+}
+
+enum RoutePriority {
+    LOW
+    MEDIUM
+    HIGH
 }
 
 // NEXT AUTH REQUIRED MODELS
