@@ -208,7 +208,7 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
                   name="name"
                   autoComplete="off"
                   placeholder="field name"
-                  className="text-md h-[2.15rem] rounded-[0.3rem] border-[1px] border-[#E4E4E4] py-1.5 px-3 font-light text-[#969696] focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
+                  className="text-md h-[2.15rem] w-[14rem] rounded-[0.3rem] border-[1px] border-[#E4E4E4] py-1.5 px-3 font-light text-[#969696] focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
                 />
               </div>
               {values.type !== "BOOLEAN" && (

@@ -47,7 +47,7 @@ const NewUser: NextPage = () => {
   return (
     session && (
       <>
-        <h1>{JSON.stringify(session)}</h1>
+        {/* <h1>{JSON.stringify(session)}</h1> */}
         <div className="flex h-screen flex-row items-center justify-center gap-x-48 pl-12">
           <div className="flex flex-col">
             <div className="flex flex-col gap-y-4">

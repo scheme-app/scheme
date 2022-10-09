@@ -65,7 +65,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       id: projectId,
     },
     select: {
-      ownerId: true,
+      // ownerId: true,
+      roles: {
+        where: {
+          type: "OWNER",
+        },
+        select: {
+          users: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -75,7 +87,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
-  if (project.ownerId !== userId) {
+  // if (project.ownerId !== userId) {
+  //   return res.status(403).send({
+  //     error: "You are not authorized to add a route to this project.",
+  //   });
+  // }
+
+  if (
+    !project.roles.some((role) => role.users.some((user) => user.id === userId))
+  ) {
     return res.status(403).send({
       error: "You are not authorized to add a route to this project.",
     });

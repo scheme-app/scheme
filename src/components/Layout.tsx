@@ -112,7 +112,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <div className="w-1/8 relative flex-col items-center justify-center border-r-[1px] border-[#E4E4E4] p-8 pr-12">
+      <div className="relative w-[22rem] flex-col items-center justify-center border-r-[1px] border-[#E4E4E4] p-8 pr-12">
         <div className="mb-8 flex flex-row items-center gap-x-4">
           <Image src={SchemeHeaderIcon} />
           <h1 className="text-xl">Scheme</h1>

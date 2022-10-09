@@ -24,26 +24,41 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       select: {
         user: {
           select: {
-            projects: {
+            roles: {
+              where: {
+                type: "OWNER",
+              },
               select: {
-                id: true,
-                name: true,
-                _count: {
-                  select: {
-                    folders: true,
-                    routes: true,
-                  },
-                },
-                owner: {
+                project: {
                   select: {
                     id: true,
                     name: true,
-                    username: true,
                   },
                 },
               },
             },
           },
+          // select: {
+          //   projects: {
+          //     select: {
+          //       id: true,
+          //       name: true,
+          //       _count: {
+          //         select: {
+          //           folders: true,
+          //           routes: true,
+          //         },
+          //       },
+          //       // owner: {
+          //       //   select: {
+          //       //     id: true,
+          //       //     name: true,
+          //       //     username: true,
+          //       //   },
+          //       // },
+          //     },
+          //   },
+          // },
         },
       },
     });
@@ -54,30 +69,52 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       });
     }
 
-    projects = token?.user.projects as any;
+    // projects = token?.user.projects as any;
+    projects = token?.user.roles.map((role) => role.project) as any;
   }
 
   if (session) {
+    // const user = await prisma.user.findUnique({
+    //   where: {
+    //     id: session.user.id,
+    //   },
+    //   select: {
+    //     projects: {
+    //       select: {
+    //         id: true,
+    //         name: true,
+    //         _count: {
+    //           select: {
+    //             folders: true,
+    //             routes: true,
+    //           },
+    //         },
+    //         owner: {
+    //           select: {
+    //             id: true,
+    //             name: true,
+    //             username: true,
+    //           },
+    //         },
+    //       },
+    //     },
+    //   },
+    // });
+
     const user = await prisma.user.findUnique({
       where: {
         id: session.user.id,
       },
       select: {
-        projects: {
+        roles: {
+          where: {
+            type: "OWNER",
+          },
           select: {
-            id: true,
-            name: true,
-            _count: {
-              select: {
-                folders: true,
-                routes: true,
-              },
-            },
-            owner: {
+            project: {
               select: {
                 id: true,
                 name: true,
-                username: true,
               },
             },
           },
@@ -85,7 +122,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     });
 
-    projects = user?.projects as any;
+    // projects = user?.roles.proj as any;
+
+    projects = user?.roles.map((role) => role.project) as any;
   }
 
   return res.status(200).send(projects);

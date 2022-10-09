@@ -52,15 +52,30 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const createdProject = await prisma.project.create({
     data: {
       name: name,
+      roles: {
+        create: [
+          {
+            type: "OWNER",
+            users: {
+              connect: {
+                id: userId,
+              },
+            },
+          },
+          {
+            type: "MEMBER",
+          },
+        ],
+      },
       // ...(token && { owner: { connect: { id: token!.userId } } }),
       // ...(integrationToken && {
 
       // }),
-      owner: {
-        connect: {
-          id: userId,
-        },
-      },
+      // owner: {
+      //   connect: {
+      //     id: userId,
+      //   },
+      // },
     },
   });
 
