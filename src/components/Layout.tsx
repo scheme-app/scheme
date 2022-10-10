@@ -25,6 +25,7 @@ import { BsPerson } from "react-icons/bs";
 import { signOut } from "next-auth/react";
 import SchemeHeaderIcon from "../../public/scheme-header-icon.svg";
 import Image from "next/future/image";
+import SchemeMiniLogo from "../../public/scheme-mini-logo.svg";
 
 const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   const { data: session } = useSession();
@@ -113,12 +114,12 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <div className="flex h-screen overflow-hidden">
       <div className="relative w-[22rem] flex-col items-center justify-center border-r-[1px] border-[#E4E4E4] p-8 pr-12">
-        <div className="mb-8 flex flex-row items-center gap-x-4">
+        {/* <div className="mb-8 flex flex-row items-center gap-x-4">
           <Image src={SchemeHeaderIcon} />
           <h1 className="text-xl">Scheme</h1>
-        </div>
+        </div> */}
         <ScrollArea.Root>
-          <ScrollArea.Viewport className="h-[42rem] w-full">
+          <ScrollArea.Viewport className="h-[43.5rem] w-full">
             <div className="mb-3 flex flex-row items-center justify-between">
               <h1 className="text-[1rem]">Folders</h1>
               {/* <button className="flex h-6 w-6 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] hover:bg-[#F2F2F2]">
@@ -239,8 +240,9 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
               </ScrollArea.Root>
             </DropdownMenu.Content>
           </DropdownMenu.Portal>
-          <div className="fixed bottom-8 flex w-60 flex-row items-center justify-between rounded-lg border-[1.5px] border-[#E4E4E4] bg-white py-2 px-3">
-            {/* <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#F2F2F2]">
+          <div className="fixed bottom-8">
+            <div className="flex w-60 flex-row items-center justify-between rounded-lg border-[1.5px] border-[#E4E4E4] bg-white py-2 px-3">
+              {/* <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#F2F2F2]">
               <h1 className="font-semibold">
                 {(() => {
                   const tokenized = project.name.split(" ");
@@ -256,17 +258,24 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
                 })()}
               </h1>
             </div> */}
-            <Avatar
-              size={25}
-              name={project.id}
-              variant="marble"
-              // colors={["#A4AB80", "#7C8569", "#52493A", "#E8E0AE", "#968F4B"]}
-              colors={["#E1EDD1", "#AAB69B", "#7C8569", "#E8E0AE", "#A4AB80"]}
-            />
-            <h1 className="text-sm text-black">{project.name}</h1>
-            <DropdownMenu.Trigger className="flex items-center justify-center outline-none">
-              <HiChevronDown className="text-[#747474]" />
-            </DropdownMenu.Trigger>
+              <Avatar
+                size={25}
+                name={project.id}
+                variant="marble"
+                // colors={["#A4AB80", "#7C8569", "#52493A", "#E8E0AE", "#968F4B"]}
+                colors={["#E1EDD1", "#AAB69B", "#7C8569", "#E8E0AE", "#A4AB80"]}
+              />
+              <h1 className="text-sm text-black">{project.name}</h1>
+              <DropdownMenu.Trigger className="flex items-center justify-center outline-none">
+                <HiChevronDown className="text-[#747474]" />
+              </DropdownMenu.Trigger>
+            </div>
+            <div className="mt-6 flex flex-row items-center justify-between">
+              <h1 className="text-xs text-[#969696]">
+                Scheme v1.0 — Private Alpha
+              </h1>
+              <Image src={SchemeMiniLogo} className="h-[1.1rem] w-[1.1rem]" />
+            </div>
           </div>
         </DropdownMenu.Root>
       </div>
