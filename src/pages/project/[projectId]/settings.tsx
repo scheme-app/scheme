@@ -13,8 +13,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Formik, Form, Field } from "formik";
 import { BsArrowRightShort } from "react-icons/bs";
 import { MdOutlineErrorOutline } from "react-icons/md";
-import * as Select from "@radix-ui/react-select";
-import { FiChevronDown } from "react-icons/fi";
+import members from "./sampleMembers";
+import * as ScrollArea from "@radix-ui/react-scroll-area";
 
 const Settings: NextPage = () => {
   const router = useRouter();
@@ -102,11 +102,6 @@ const Settings: NextPage = () => {
     };
     return (
       <>
-        <Separator.Root
-          decorative
-          orientation="horizontal"
-          className="h-[1px] bg-[#E4E4E4]"
-        />
         <div className="relative mx-1 my-4 flex flex-row items-center">
           <div className="flex flex-row items-center">
             <div className="pr-8">
@@ -146,7 +141,7 @@ const Settings: NextPage = () => {
   };
 
   return (
-    <div className="flex h-screen flex-row items-center justify-center">
+    <div className="flex h-screen flex-row items-center justify-center gap-x-24">
       {/* <h1>username: {username}</h1>
       <h1>userStatus: {userStatus}</h1>
       <h1>userData: {JSON.stringify(userData)}</h1> */}
@@ -302,7 +297,7 @@ const Settings: NextPage = () => {
             </button>
           )}
         </div>
-        {membersData &&
+        {/* {membersData &&
           membersData.roles.map((role: any) => {
             return role.users.map((user: any) => {
               return (
@@ -316,7 +311,66 @@ const Settings: NextPage = () => {
                 </>
               );
             });
-          })}
+          })} */}
+        <Separator.Root
+          decorative
+          orientation="horizontal"
+          className="h-[1px] bg-[#E4E4E4]"
+        />
+        <ScrollArea.Root>
+          <ScrollArea.Viewport className="h-[20rem] w-full">
+            {/* {members.map((member: any, key) => {
+              return (
+                <>
+                  {key !== 0 && (
+                    <Separator.Root
+                      decorative
+                      orientation="horizontal"
+                      className="h-[1px] bg-[#E4E4E4]"
+                    />
+                  )}
+                  <Member
+                    key={key}
+                    id={member.id}
+                    name={member.name}
+                    username={member.username}
+                    role={member.role}
+                  />
+                </>
+              );
+            })} */}
+            {membersData &&
+              membersData.roles.map((role: any, roleKey: number) => {
+                return role.users.map((user: any, key: number) => {
+                  return (
+                    <>
+                      {key + roleKey !== 0 && (
+                        <Separator.Root
+                          decorative
+                          orientation="horizontal"
+                          className="h-[1px] bg-[#E4E4E4]"
+                        />
+                      )}
+                      <Member
+                        key={key}
+                        id={user.id}
+                        name={user.name}
+                        username={user.username}
+                        role={role.type}
+                      />
+                    </>
+                  );
+                });
+              })}
+            <ScrollArea.Scrollbar orientation="vertical">
+              <ScrollArea.Thumb />
+            </ScrollArea.Scrollbar>
+            <ScrollArea.Corner />
+          </ScrollArea.Viewport>
+        </ScrollArea.Root>
+      </div>
+      <div>
+        <Image src={schemeGradient} />
       </div>
     </div>
   );
