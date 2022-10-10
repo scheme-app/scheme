@@ -2,16 +2,22 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../utils/prisma";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { userId } = req.query;
+  const { userId, username } = req.query;
 
   const user = await prisma.user.findUnique({
     where: {
-      id: userId as string,
+      ...(userId && { id: userId as string }),
+      ...(username && { username: username as string }),
     },
     select: {
       id: true,
       name: true,
       username: true,
+      projects: {
+        select: {
+          id: true,
+        },
+      },
     },
   });
 

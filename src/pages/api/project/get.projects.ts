@@ -24,20 +24,28 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       select: {
         user: {
           select: {
-            roles: {
-              where: {
-                type: "OWNER",
-              },
+            projects: {
               select: {
-                project: {
-                  select: {
-                    id: true,
-                    name: true,
-                  },
-                },
+                id: true,
+                name: true,
               },
             },
           },
+          // select: {
+          //   roles: {
+          //     where: {
+          //       type: "OWNER",
+          //     },
+          //     select: {
+          //       project: {
+          //         select: {
+          //           id: true,
+          //           name: true,
+          //         },
+          //       },
+          //     },
+          //   },
+          // },
           // select: {
           //   projects: {
           //     select: {
@@ -70,7 +78,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     // projects = token?.user.projects as any;
-    projects = token?.user.roles.map((role) => role.project) as any;
+    // projects = token?.user.roles.map((role) => role.project) as any;
+    projects = token?.user.projects as any;
   }
 
   if (session) {
@@ -106,25 +115,33 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         id: session.user.id,
       },
       select: {
-        roles: {
-          where: {
-            type: "OWNER",
-          },
+        projects: {
           select: {
-            project: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
+            id: true,
+            name: true,
           },
         },
+
+        // roles: {
+        //   where: {
+        //     type: "OWNER",
+        //   },
+        //   select: {
+        //     project: {
+        //       select: {
+        //         id: true,
+        //         name: true,
+        //       },
+        //     },
+        //   },
+        // },
       },
     });
 
     // projects = user?.roles.proj as any;
 
-    projects = user?.roles.map((role) => role.project) as any;
+    // projects = user?.roles.map((role) => role.project) as any;
+    projects = user?.projects as any;
   }
 
   return res.status(200).send(projects);
