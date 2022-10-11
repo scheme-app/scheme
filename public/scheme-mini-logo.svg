@@ -1,0 +1,17 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="2.15385" cy="2.15385" r="1.65385" fill="black" fill-opacity="0.1" stroke="black"/>
+<circle cx="13.8462" cy="2.15385" r="1.65385" fill="black" fill-opacity="0.1" stroke="black"/>
+<circle cx="2.15385" cy="13.8462" r="1.65385" fill="black" fill-opacity="0.1" stroke="black"/>
+<circle cx="13.8462" cy="13.8462" r="1.65385" fill="black" fill-opacity="0.1" stroke="black"/>
+<line x1="2.34619" y1="5.42285" x2="2.34619" y2="10.5767" stroke="black" stroke-linecap="round"/>
+<line x1="10.5769" y1="14.0386" x2="5.42306" y2="14.0386" stroke="black" stroke-linecap="round"/>
+<line x1="10.5769" y1="2.34619" x2="5.42306" y2="2.34619" stroke="black" stroke-linecap="round"/>
+<line x1="14.0386" y1="5.42285" x2="14.0386" y2="10.5767" stroke="black" stroke-linecap="round"/>
+<rect x="4.30762" y="4.30762" width="7.38462" height="7.38462" rx="1" fill="url(#paint0_linear_417_1279)"/>
+<defs>
+<linearGradient id="paint0_linear_417_1279" x1="4.30762" y1="4.30762" x2="11.6922" y2="11.6922" gradientUnits="userSpaceOnUse">
+<stop offset="0.385417" stop-opacity="0.2"/>
+<stop offset="1" stop-opacity="0"/>
+</linearGradient>
+</defs>
+</svg>

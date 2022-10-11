@@ -25,6 +25,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 },
               },
               {
+                type: "ADMIN",
+              },
+              {
                 type: "MEMBER",
               },
             ],
