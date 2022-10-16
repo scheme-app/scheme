@@ -411,7 +411,7 @@ const Home: NextPage = () => {
                     </div>
                   </DropdownMenu.Trigger>
                 </div>
-                <DropdownMenu.Content className="mr-72 mt-[-2rem] w-36 rounded-md border-[1px] border-[#E4E4E4] bg-white py-1.5 px-1.5 shadow-md">
+                <DropdownMenu.Content className="mr-72 mt-[-2rem] w-40 rounded-md border-[1px] border-[#E4E4E4] bg-white py-1.5 px-1.5 shadow-md">
                   <DropdownMenu.Item
                     className="flex flex-row items-center gap-x-4 rounded-md px-2 py-1.5 outline-none hover:bg-[#F2F2F2]"
                     onClick={() => {

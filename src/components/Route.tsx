@@ -51,9 +51,9 @@ const Route: FC<RoutePropTypes> = ({ id, name, type }) => {
 
   return (
     <div
-      className={`relative flex flex-col rounded-md pl-2 pr-16 ${
+      className={`flex flex-row items-center rounded-md px-2 ${
         routeId === id ? "bg-[#F2F2F2]" : ""
-      }`}
+      } hover:bg-[#F2F2F2]`}
     >
       <button
         className="py-2"
@@ -62,14 +62,12 @@ const Route: FC<RoutePropTypes> = ({ id, name, type }) => {
           setRouteId(id);
         }}
       >
-        <div className="flex flex-row items-center">
-          <BsFileEarmarkCode className="mr-4 h-5 w-5 text-[#969696]" />
-          <div className="flex justify-start">
+        <div className="flex flex-row items-center gap-x-4">
+          <BsFileEarmarkCode className="h-5 w-5 text-[#969696]" />
+          <div className="flex w-36 flex-row justify-start truncate">
             <h1 className="text-sm">{name}</h1>
           </div>
-          <div className="absolute right-0 pr-2">
-            {type === "GET" ? <GetTag /> : <PostTag />}
-          </div>
+          <div>{type === "GET" ? <GetTag /> : <PostTag />}</div>
         </div>
       </button>
     </div>

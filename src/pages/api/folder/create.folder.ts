@@ -4,6 +4,9 @@ import { prisma } from "../../../utils/prisma";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { name, projectId } = req.body;
 
+  console.log("name", name);
+  console.log("projectId", projectId);
+
   const folder = await prisma.folder.create({
     data: {
       name: name,

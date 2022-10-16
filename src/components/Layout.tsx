@@ -26,6 +26,7 @@ import { signOut } from "next-auth/react";
 import SchemeHeaderIcon from "../../public/scheme-header-icon.svg";
 import Image from "next/future/image";
 import SchemeMiniLogo from "../../public/scheme-mini-logo.svg";
+import { BsFolderPlus } from "react-icons/bs";
 
 const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   const { data: session } = useSession();
@@ -64,26 +65,10 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
 
   const queryClient = useQueryClient();
 
-  const createRoute = useMutation(
-    ({
-      name,
-      type,
-      authorization,
-    }: {
-      name: string;
-      type: "GET" | "POST";
-      authorization:
-        | "NONE"
-        | "API_KEY"
-        | "BEARER"
-        | "BASIC"
-        | "DIGEST"
-        | "OAUTH";
-    }) => {
-      return axios.post("http://localhost:3000/api/route/create.route", {
+  const createFolder = useMutation(
+    ({ name }: { name: string }) => {
+      return axios.post("http://localhost:3000/api/folder/create.folder", {
         name,
-        type,
-        authorization,
         projectId: project.id,
       });
     },
@@ -113,23 +98,90 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <div className="relative w-[22rem] flex-col items-center justify-center border-r-[1px] border-[#E4E4E4] p-8 pr-12">
+      <div className="relative w-[20rem] flex-col items-center justify-center border-r-[1px] border-[#E4E4E4] p-8">
         {/* <div className="mb-8 flex flex-row items-center gap-x-4">
           <Image src={SchemeHeaderIcon} />
           <h1 className="text-xl">Scheme</h1>
         </div> */}
         <ScrollArea.Root>
           <ScrollArea.Viewport className="h-[43.5rem] w-full">
-            <div className="mb-3 flex flex-row items-center justify-between">
-              <h1 className="text-[1rem]">Folders</h1>
-              {/* <button className="flex h-6 w-6 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] hover:bg-[#F2F2F2]">
-                <h1 className="mb-0.5 text-xl text-[#969696]">+</h1>
-              </button> */}
-              <button className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] outline-none ring-0 hover:bg-[#F2F2F2]">
-                {/* <h1 className="mb-0.5 text-xl text-[#969696]">+</h1> */}
-                <HiOutlinePlusSm className="h-5 w-5 text-[#969696]" />
-              </button>
-            </div>
+            <Popover.Root>
+              <Popover.Portal>
+                <Popover.Content className="mt-6 ml-60">
+                  <Formik
+                    initialValues={{ name: "", submit: false }}
+                    onSubmit={(values) => {
+                      if (!values.submit) {
+                        return;
+                      }
+                      values.submit = false;
+
+                      createFolder.mutate(
+                        { name: values.name },
+                        {
+                          onSuccess: () => {
+                            return Popover.Close;
+                          },
+                        }
+                      );
+                    }}
+                  >
+                    {({ values }) => (
+                      <Form>
+                        <div className="rounded-[0.6rem] border-[1px] border-[#E4E4E4] bg-white px-6 pt-4 pb-4 shadow-sm">
+                          <div>
+                            <div className="flex flex-row items-center gap-x-2">
+                              <BsFolderPlus className="mb-2 h-4 w-4 text-black" />
+                              <h1 className="mb-2 text-sm">Folder Name</h1>
+                            </div>
+                            <Field
+                              name="name"
+                              autoComplete="off"
+                              placeholder="folder name"
+                              className="text-md mr-8 h-[2.15rem] rounded-[0.4rem] border-[1px] border-[#E4E4E4] py-1.5 px-3 font-light text-[#969696] focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
+                            />
+                          </div>
+                          <div className="mt-6 flex flex-row gap-x-1">
+                            <button
+                              className="rounded-md border-[1px] border-[#E4E4E4] py-0.5 px-2 text-sm font-light text-[#969696] hover:text-black hover:shadow-sm"
+                              type="submit"
+                              onClick={() => {
+                                values.submit = true;
+                              }}
+                            >
+                              Create
+                            </button>
+                            <Popover.Close>
+                              <button
+                                className="px-2 py-1 text-sm font-light text-[#969696] hover:text-black"
+                                type="button"
+                                onClick={() => {}}
+                              >
+                                Cancel
+                              </button>
+                            </Popover.Close>
+                          </div>
+                        </div>
+                      </Form>
+                    )}
+                  </Formik>
+                </Popover.Content>
+              </Popover.Portal>
+              <div className="mb-3 flex flex-row items-center justify-between">
+                <h1 className="text-[1rem]">Folders</h1>
+                <Popover.Trigger>
+                  <button
+                    className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] outline-none ring-0 hover:bg-[#F2F2F2]"
+                    onClick={() => {
+                      // setCreateFolder(true);
+                    }}
+                  >
+                    {/* <h1 className="mb-0.5 text-xl text-[#969696]">+</h1> */}
+                    <HiOutlinePlusSm className="h-5 w-5 text-[#969696]" />
+                  </button>
+                </Popover.Trigger>
+              </div>
+            </Popover.Root>
             {data.folders &&
               data.folders.map((folder: any) => (
                 <Folder
@@ -146,17 +198,14 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
               ))}
             <div className="mt-6 mb-2 flex flex-row items-center justify-between">
               <h1 className="text-[1rem]">Routes</h1>
-              <Popover.Root>
-                {/* <Popover.Trigger> */}
-                <button
-                  className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] outline-none ring-0 hover:bg-[#F2F2F2]"
-                  onClick={() => {
-                    setRouteId("");
-                  }}
-                >
-                  <HiOutlinePlusSm className="h-5 w-5 text-[#969696]" />
-                </button>
-              </Popover.Root>
+              <button
+                className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] outline-none ring-0 hover:bg-[#F2F2F2]"
+                onClick={() => {
+                  setRouteId("");
+                }}
+              >
+                <HiOutlinePlusSm className="h-5 w-5 text-[#969696]" />
+              </button>
             </div>
             {data.routes &&
               data.routes.map((route: any) => (
@@ -177,59 +226,53 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
           <DropdownMenu.Portal>
             <DropdownMenu.Content className="mr-36 mb-6">
               <ScrollArea.Root>
-                <ScrollArea.Viewport className="flex h-36 flex-col rounded-lg border-[1px] border-[#E4E4E4] bg-white py-2 px-2 shadow-md">
+                <ScrollArea.Viewport className="flex h-24 flex-col rounded-lg border-[1px] border-[#E4E4E4] bg-white py-2 px-2 shadow-md">
                   {projectData &&
                     projectData.map((project: { id: string; name: string }) => (
                       <DropdownMenu.Item
-                        className="outline-none"
+                        className="rounded-md px-2 py-1.5 outline-none hover:bg-[#F2F2F2]"
                         key={project.id}
                       >
-                        <button
-                          className="flex w-full flex-row items-center gap-x-4 rounded-lg p-2 hover:bg-[#F2F2F2]"
-                          onClick={() => {
-                            setRouteId("");
-                            setProject({
-                              id: project.id,
-                              name: project.name,
-                            });
-                          }}
-                        >
-                          {/* <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#F2F2F2]">
-                            <h1 className="font-semibold">
-                              {(() => {
-                                const tokenized = project.name.split(" ");
-
-                                if (tokenized.length === 1) {
-                                  return tokenized[0]!.charAt(0).toUpperCase();
-                                } else {
-                                  return (
-                                    tokenized[0]!.charAt(0).toUpperCase() +
-                                    tokenized[1]!.charAt(0).toUpperCase()
-                                  );
-                                }
-                              })()}
+                        <div className="flex flex-row items-center gap-x-2">
+                          <button
+                            className="flex w-full flex-row items-center gap-x-4"
+                            onClick={() => {
+                              setRouteId("");
+                              setProject({
+                                id: project.id,
+                                name: project.name,
+                              });
+                            }}
+                          >
+                            <Avatar
+                              size={25}
+                              name={project.id}
+                              variant="marble"
+                              colors={[
+                                "#E1EDD1",
+                                "#AAB69B",
+                                "#7C8569",
+                                "#E8E0AE",
+                                "#A4AB80",
+                              ]}
+                            />
+                            <h1 className="text-sm text-[#969696]">
+                              {project.name}
                             </h1>
-                          </div> */}
-                          <Avatar
-                            size={25}
-                            name={project.id}
-                            variant="marble"
-                            colors={[
-                              "#E1EDD1",
-                              "#AAB69B",
-                              "#7C8569",
-                              "#E8E0AE",
-                              "#A4AB80",
-                            ]}
-                          />
-                          <h1 className="text-sm text-[#969696]">
-                            {project.name}
-                          </h1>
-                        </button>
+                          </button>
+                          <button
+                            className="flex h-7 w-9 items-center justify-center rounded-md text-[#969696] hover:text-black"
+                            onClick={() => {
+                              router.push(`/project/${project.id}/settings`);
+                            }}
+                          >
+                            <h1 className="mb-2">...</h1>
+                          </button>
+                        </div>
                       </DropdownMenu.Item>
                     ))}
                   <button className="flex w-full flex-row items-center gap-x-2 rounded-lg p-2 hover:bg-[#F2F2F2]">
-                    <HiOutlinePlusSm className="h-4 w-4 text-[#969696]" />
+                    <HiOutlinePlusSm className="h-3.5 w-3.5 text-[#969696]" />
                     <h1 className="text-sm text-[#969696]">New Project</h1>
                   </button>
                 </ScrollArea.Viewport>
@@ -242,22 +285,6 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
           </DropdownMenu.Portal>
           <div className="fixed bottom-8">
             <div className="flex w-60 flex-row items-center justify-between rounded-lg border-[1.5px] border-[#E4E4E4] bg-white py-2 px-3">
-              {/* <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#F2F2F2]">
-              <h1 className="font-semibold">
-                {(() => {
-                  const tokenized = project.name.split(" ");
-
-                  if (tokenized.length === 1) {
-                    return tokenized[0]!.charAt(0).toUpperCase();
-                  } else {
-                    return (
-                      tokenized[0]!.charAt(0).toUpperCase() +
-                      tokenized[1]!.charAt(0).toUpperCase()
-                    );
-                  }
-                })()}
-              </h1>
-            </div> */}
               <Avatar
                 size={25}
                 name={project.id}

@@ -61,7 +61,12 @@ const Settings: NextPage = () => {
                 API enpoints for internal and external use.
               </h1>
             </div>
-            <div className="mt-16">
+            <Separator.Root
+              decorative
+              orientation="horizontal"
+              className="mt-6 h-[1px] w-full bg-[#E4E4E4]"
+            />
+            <div className="mt-12">
               <div className="mt-4 flex flex-row gap-x-16">
                 <div className="flex flex-col gap-y-6">
                   <h1 className="text-sm text-[#969696]">Avatar</h1>
@@ -98,7 +103,7 @@ const Settings: NextPage = () => {
                 </div>
               </div>
             </div>
-            <Separator.Root
+            {/* <Separator.Root
               decorative
               orientation="horizontal"
               className="my-6 h-[1px] w-full bg-[#E4E4E4]"
@@ -123,7 +128,7 @@ const Settings: NextPage = () => {
                     </div>
                   </div>
                 </div>
-              ))}
+              ))} */}
           </div>
         </div>
         <div>
