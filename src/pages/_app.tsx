@@ -11,6 +11,13 @@ const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const [routeId, setRouteId] = useState("");
+  const [newRouteType, setNewRouteType] = useState<"NONE" | "NEW" | "IMPORT">(
+    "NONE"
+  );
+  const [folder, setFolder] = useState<{ name: string; id: string }>({
+    name: "",
+    id: "",
+  });
   const [project, setProject] = useState({
     id: "",
     name: "",
@@ -21,7 +28,16 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <Inspect>
           <ProjectContext.Provider value={{ project, setProject }}>
-            <RouteContext.Provider value={{ routeId, setRouteId }}>
+            <RouteContext.Provider
+              value={{
+                routeId,
+                setRouteId,
+                newRouteType,
+                setNewRouteType,
+                folder,
+                setFolder,
+              }}
+            >
               <Component {...pageProps} />
             </RouteContext.Provider>
           </ProjectContext.Provider>
