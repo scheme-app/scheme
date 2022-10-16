@@ -34,7 +34,8 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   const router = useRouter();
 
   const { project, setProject } = useContext(ProjectContext);
-  const { routeId, setRouteId } = useContext(RouteContext);
+  const { routeId, setRouteId, setFolder, setNewRouteType } =
+    useContext(RouteContext);
 
   const getProjects = async () => {
     const response = await fetch(
@@ -98,11 +99,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <div className="relative w-[20rem] flex-col items-center justify-center border-r-[1px] border-[#E4E4E4] p-8">
-        {/* <div className="mb-8 flex flex-row items-center gap-x-4">
-          <Image src={SchemeHeaderIcon} />
-          <h1 className="text-xl">Scheme</h1>
-        </div> */}
+      <div className="relative w-[24rem] flex-col items-center justify-center border-r-[1px] border-[#E4E4E4] p-8">
         <ScrollArea.Root>
           <ScrollArea.Viewport className="h-[43.5rem] w-full">
             <Popover.Root>
@@ -186,6 +183,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
               data.folders.map((folder: any) => (
                 <Folder
                   key={folder.id}
+                  id={folder.id}
                   name={folder.name}
                   routes={folder.routes.map((route: any) => {
                     return {
@@ -201,6 +199,8 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
               <button
                 className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] outline-none ring-0 hover:bg-[#F2F2F2]"
                 onClick={() => {
+                  setNewRouteType("NONE");
+                  setFolder({ id: "", name: "" });
                   setRouteId("");
                 }}
               >

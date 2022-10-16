@@ -26,7 +26,7 @@ const GetTag: FC = () => {
 };
 
 const Route: FC<RoutePropTypes> = ({ id, name, type }) => {
-  const { routeId, setRouteId } = useContext(RouteContext);
+  const { routeId, setRouteId, setNewRouteType } = useContext(RouteContext);
 
   const queryClient = useQueryClient();
 
@@ -60,6 +60,7 @@ const Route: FC<RoutePropTypes> = ({ id, name, type }) => {
         onClick={() => {
           queryClient.invalidateQueries([routeId]);
           setRouteId(id);
+          setNewRouteType("NONE");
         }}
       >
         <div className="flex flex-row items-center gap-x-4">

@@ -65,11 +65,12 @@ const Home: NextPage = () => {
     setProject(projectData[0]);
   }
 
-  const { routeId, setRouteId } = useContext(RouteContext);
+  const { routeId, setRouteId, newRouteType, setNewRouteType, folder } =
+    useContext(RouteContext);
 
-  const [newRouteType, setNewRouteType] = useState<"NEW" | "IMPORT" | "NONE">(
-    "NONE"
-  );
+  // const [newRouteType, setNewRouteType] = useState<"NEW" | "IMPORT" | "NONE">(
+  //   "NONE"
+  // );
 
   const queryClient = useQueryClient();
 
@@ -78,6 +79,7 @@ const Home: NextPage = () => {
       name,
       type,
       authorization,
+      folderId,
     }: {
       name: string;
       type: "GET" | "POST";
@@ -88,12 +90,14 @@ const Home: NextPage = () => {
         | "BASIC"
         | "DIGEST"
         | "OAUTH";
+      folderId?: string;
     }) => {
       return axios.post("http://localhost:3000/api/route/create.route", {
         name,
         type,
         authorization,
         projectId: project.id,
+        folderId: folder.id,
       });
     },
     {
@@ -117,6 +121,27 @@ const Home: NextPage = () => {
   const { data, status } = useQuery([routeId], getRoute, {
     enabled: project.id !== "",
   });
+
+  const updateRoute = useMutation(
+    ({
+      status,
+      priority,
+    }: {
+      status?: "PROTOTYPING" | "DEVELOPING" | "COMPLETE";
+      priority?: "LOW" | "MEDIUM" | "HIGH";
+    }) => {
+      return axios.post("http://localhost:3000/api/route/update.route", {
+        routeId,
+        status,
+        priority,
+      });
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries([routeId]);
+      },
+    }
+  );
 
   return (
     <>
@@ -405,7 +430,7 @@ const Home: NextPage = () => {
                   <DropdownMenu.Trigger>
                     <div className="mt-2 flex flex-row items-center gap-x-4">
                       <div className="h-4 w-4 rounded-full border-[1.5px] border-[#969696]" />
-                      <h1 className="text-sm text-black">Prototyping</h1>
+                      <h1 className="text-sm text-black">{data.status}</h1>
 
                       {/* <FiChevronDown className="ml-2 h-3.5 w-3.5 text-[#969696]" /> */}
                     </div>
@@ -416,6 +441,9 @@ const Home: NextPage = () => {
                     className="flex flex-row items-center gap-x-4 rounded-md px-2 py-1.5 outline-none hover:bg-[#F2F2F2]"
                     onClick={() => {
                       // router.push("/settings");
+                      updateRoute.mutate({
+                        status: "PROTOTYPING",
+                      });
                     }}
                   >
                     <div className="h-4 w-4 rounded-full border-[1.5px] border-[#969696]" />
@@ -425,6 +453,9 @@ const Home: NextPage = () => {
                     className="flex flex-row items-center gap-x-4 rounded-md px-2 py-1.5 outline-none hover:bg-[#F2F2F2]"
                     onClick={() => {
                       // router.push("/settings");
+                      updateRoute.mutate({
+                        status: "DEVELOPING",
+                      });
                     }}
                   >
                     <div className="h-4 w-4 rounded-full border-[1.5px] border-[#969696]" />
@@ -434,6 +465,9 @@ const Home: NextPage = () => {
                     className="flex flex-row items-center gap-x-4 rounded-md px-2 py-1.5 outline-none hover:bg-[#F2F2F2]"
                     onClick={() => {
                       // router.push("/settings");
+                      updateRoute.mutate({
+                        status: "COMPLETE",
+                      });
                     }}
                   >
                     <div className="h-4 w-4 rounded-full border-[1.5px] border-[#969696]" />
@@ -448,7 +482,7 @@ const Home: NextPage = () => {
                     <div className="mt-2 flex flex-row items-center gap-x-4">
                       {/* <div className="h-4 w-4 rounded-full border-[1.5px] border-[#969696]" /> */}
                       <Image src={Priority} alt="priority" />
-                      <h1 className="text-sm text-black">Medium</h1>
+                      <h1 className="text-sm text-black">{data.priority}</h1>
                     </div>
                   </DropdownMenu.Trigger>
                 </div>
@@ -457,6 +491,9 @@ const Home: NextPage = () => {
                     className="flex flex-row items-center gap-x-4 rounded-md px-2 py-1.5 outline-none hover:bg-[#F2F2F2]"
                     onClick={() => {
                       // router.push("/settings");
+                      updateRoute.mutate({
+                        priority: "LOW",
+                      });
                     }}
                   >
                     <Image src={Priority} alt="priority" />
@@ -466,6 +503,9 @@ const Home: NextPage = () => {
                     className="flex flex-row items-center gap-x-4 rounded-md px-2 py-1.5 outline-none hover:bg-[#F2F2F2]"
                     onClick={() => {
                       // router.push("/settings");
+                      updateRoute.mutate({
+                        priority: "MEDIUM",
+                      });
                     }}
                   >
                     <Image src={Priority} alt="priority" />
@@ -475,6 +515,9 @@ const Home: NextPage = () => {
                     className="flex flex-row items-center gap-x-4 rounded-md px-2 py-1.5 outline-none hover:bg-[#F2F2F2]"
                     onClick={() => {
                       // router.push("/settings");
+                      updateRoute.mutate({
+                        priority: "HIGH",
+                      });
                     }}
                   >
                     <Image src={Priority} alt="priority" />
