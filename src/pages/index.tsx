@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useEffect } from "react";
+import { useEffect, FormEvent, useRef } from "react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import RouteHeader from "../components/RouteHeader";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -24,26 +24,18 @@ import Image from "next/future/image";
 import { FiChevronDown } from "react-icons/fi";
 import Avatar from "boring-avatars";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { HiOutlinePlusSm } from "react-icons/hi";
+import { MdOutlineErrorOutline } from "react-icons/md";
+import { BsArrowRightShort } from "react-icons/bs";
+import { useClickAway } from "react-use";
+import RouteUser from "../components/RouteUser";
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
 
-  const router = useRouter();
-
-  // useEffect(() => {
-  //   if (session === null) {
-  //     router.push("/login");
-  //   }
-  //   // if (session?.user.onboarded === false) {
-  //   //   router.push("/newUser");
-  //   // }
-  // });
-
   const { project, setProject } = useContext(ProjectContext);
-
-  // if (project.id === "" && session?.user?.projects[0]?.id) {
-  //   setProject(session?.user?.projects[0]);
-  // }
+  const [addMembers, setAddMembers] = useState(false);
+  const [username, setUsername] = useState("");
 
   const getProjects = async () => {
     const response = await fetch(
@@ -67,10 +59,6 @@ const Home: NextPage = () => {
 
   const { routeId, setRouteId, newRouteType, setNewRouteType, folder } =
     useContext(RouteContext);
-
-  // const [newRouteType, setNewRouteType] = useState<"NEW" | "IMPORT" | "NONE">(
-  //   "NONE"
-  // );
 
   const queryClient = useQueryClient();
 
@@ -142,6 +130,40 @@ const Home: NextPage = () => {
       },
     }
   );
+
+  const getUser = async (username: string) => {
+    const response = await axios.get(`/api/user/get.user?username=${username}`);
+
+    return response.data;
+  };
+
+  const { data: userData, status: userStatus } = useQuery(
+    ["user", username],
+    () => getUser(username),
+    {
+      enabled: !!username,
+      retry: true,
+    }
+  );
+
+  const assignMember = useMutation(
+    ({ username }: { username: string }) => {
+      return axios.post("http://localhost:3000/api/route/assignMember.route", {
+        username: username,
+        routeId: routeId,
+      });
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries([routeId]);
+      },
+    }
+  );
+
+  const ref = useRef(null);
+  useClickAway(ref, () => {
+    setAddMembers(false);
+  });
 
   return (
     <>
@@ -403,7 +425,7 @@ const Home: NextPage = () => {
                 folder={data.folder}
               />
               <ScrollArea.Root className="mt-8">
-                <ScrollArea.Viewport className="h-[40rem] w-full">
+                <ScrollArea.Viewport className="h-[44rem] w-full">
                   <Authorization authorization={data.authorization} />
                   <ParentModel
                     name="Arguments"
@@ -552,6 +574,124 @@ const Home: NextPage = () => {
                   </div>
                 </div>
               )}
+              <div>
+                <h1 className="text-sm text-[#747474]">Assigned To</h1>
+                {data.assignedTo.map(
+                  (user: { id: string; name: string; username: string }) => (
+                    <RouteUser
+                      id={user.id}
+                      name={user.name}
+                      username={user.username}
+                    />
+                  )
+                )}
+                {addMembers ? (
+                  <Formik
+                    initialValues={{
+                      submit: false,
+                      username: "",
+                    }}
+                    onSubmit={async (values) => {
+                      if (!values.submit) {
+                        return;
+                      }
+                      values.submit = false;
+
+                      assignMember.mutate(
+                        {
+                          username: values.username.replace("@", ""),
+                        },
+                        {
+                          onSuccess: () => {
+                            setUsername("");
+                            setAddMembers(false);
+                          },
+                        }
+                      );
+                    }}
+                  >
+                    {({ values }) => (
+                      <Form
+                        onChange={(event: FormEvent) => {
+                          setUsername(
+                            (event.target as HTMLTextAreaElement).value.replace(
+                              "@",
+                              ""
+                            )
+                          );
+                        }}
+                      >
+                        <div
+                          className="mt-4 flex flex-row items-center gap-x-2"
+                          ref={ref}
+                        >
+                          <div className="flex h-[2.25rem] flex-row items-center gap-x-2 rounded-lg border-[1px] border-[#E4E4E4] px-2">
+                            {userData && (
+                              <Avatar
+                                size={25}
+                                name={userData.id}
+                                variant="marble"
+                                colors={[
+                                  "#E1EDD1",
+                                  "#AAB69B",
+                                  "#7C8569",
+                                  "#E8E0AE",
+                                  "#A4AB80",
+                                ]}
+                              />
+                            )}
+                            <Field
+                              name="username"
+                              autoComplete="off"
+                              placeholder="@username"
+                              className="w-28 text-sm font-light focus:outline-none"
+                            />
+                            {data.assignedTo.map(
+                              (user: {
+                                id: string;
+                                name: string;
+                                username: string;
+                              }) => {
+                                if (user.username === username) {
+                                  return (
+                                    <MdOutlineErrorOutline className="h-5 w-5 text-red-500" />
+                                  );
+                                }
+                              }
+                            )}
+                          </div>
+                          {userData &&
+                            !data.assignedTo.find(
+                              (user: { id: string }) => user.id === userData.id
+                            ) && (
+                              <button
+                                className="flex items-center justify-center"
+                                type="submit"
+                                onClick={() => {
+                                  values.submit = true;
+                                }}
+                              >
+                                <BsArrowRightShort className="h-6 w-6 pt-1 text-[#747474] hover:text-black" />
+                              </button>
+                            )}
+                        </div>
+                      </Form>
+                    )}
+                  </Formik>
+                ) : (
+                  <button
+                    className="mt-4 w-min"
+                    onClick={() => {
+                      setAddMembers(true);
+                    }}
+                  >
+                    <div className="flex flex-row items-center gap-x-1 text-[#969696] hover:text-black">
+                      <HiOutlinePlusSm className="h-3 w-3" />
+                      <h1 className="w-max text-sm">Assign Member</h1>
+                    </div>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         ) : (
@@ -587,11 +727,6 @@ export async function getServerSideProps(context: any) {
 
   return {
     props: {
-      // session: await unstable_getServerSession(
-      //   context.req,
-      //   context.res,
-      //   authOptions
-      // ),
       session: session,
     },
   };

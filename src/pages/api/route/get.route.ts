@@ -35,6 +35,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           username: true,
         },
       },
+      assignedTo: {
+        select: {
+          id: true,
+          name: true,
+          username: true,
+        },
+      },
     },
   });
 

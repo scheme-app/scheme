@@ -1,0 +1,210 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  // url      = "postgresql://abhinav@localhost:5432/abhinav"
+  url      = "postgresql://abhinav@localhost:5432/template1"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  username      String?   @unique
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  onboarded     Boolean   @default(false)
+  type          UserType  @default(USER)
+  tokens        Token[]
+
+  routes     Route[]   @relation(name: "owner")
+  assignedTo Route[]   @relation(name: "assignedTo")
+  roles      Role[]
+  projects   Project[]
+
+  accounts Account[]
+  sessions Session[]
+}
+
+model Role {
+  id      String   @id @default(cuid())
+  type    RoleType @default(MEMBER)
+  project Project  @relation(fields: [projectId], references: [id])
+  users   User[]
+
+  projectId String
+}
+
+enum RoleType {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+model Token {
+  id   String @id @default(cuid())
+  name String
+  user User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  userId String
+}
+
+model Project {
+  id   String @id @default(cuid())
+  name String
+
+  folders Folder[]
+  routes  Route[]
+  roles   Role[]
+  members User[]
+}
+
+model Folder {
+  id   String @id @default(cuid())
+  name String
+
+  folders Folder[] @relation(name: "children")
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  routes  Route[]
+
+  projectId String
+  Folder    Folder? @relation(name: "children", fields: [folderId], references: [id])
+  folderId  String?
+}
+
+model Route {
+  id       String        @id @default(cuid())
+  name     String
+  type     RouteType
+  status   RouteStatus   @default(PROTOTYPING)
+  priority RoutePriority @default(LOW)
+
+  authorization AuthorizationType @default(NONE)
+  project       Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  folder        Folder?           @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  models        Model[]
+  owner         User?             @relation(name: "owner", fields: [userId], references: [id], onDelete: Cascade)
+  assignedTo    User[]            @relation(name: "assignedTo")
+
+  projectId String
+  folderId  String?
+  userId    String?
+}
+
+model Model {
+  id            String    @id @default(cuid())
+  name          String?
+  type          ModelType
+  parentModelId String?
+
+  fields Field[]
+  route  Route?  @relation(fields: [routeId], references: [id], onDelete: Cascade)
+
+  routeId String?
+}
+
+model Field {
+  id       String      @id @default(cuid())
+  name     String
+  type     FieldType
+  format   FieldFormat @default(NONE)
+  optional Boolean     @default(false)
+  array    Boolean     @default(false)
+
+  models Model[]
+}
+
+enum UserType {
+  USER
+  ADMIN
+}
+
+enum RouteType {
+  GET
+  POST
+}
+
+enum AuthorizationType {
+  NONE
+  API_KEY
+  BEARER
+  BASIC
+  DIGEST
+  OAUTH
+}
+
+enum FieldType {
+  STRING
+  INT
+  BOOLEAN
+  COMPLEX
+}
+
+enum FieldFormat {
+  NONE
+  INT32
+  INT64
+  FLOAT
+  DOUBLE
+  BYTE
+  BINARY
+  DATE
+  DATE_TIME
+  PASSWORD
+}
+
+enum ModelType {
+  PARENT
+  CHILD
+}
+
+enum RouteStatus {
+  PROTOTYPING
+  DEVELOPING
+  COMPLETE
+}
+
+enum RoutePriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+// NEXT AUTH REQUIRED MODELS
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}

@@ -13,12 +13,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Formik, Form, Field } from "formik";
 import { BsArrowRightShort } from "react-icons/bs";
 import { MdOutlineErrorOutline } from "react-icons/md";
-import members from "./sampleMembers";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 
 const Settings: NextPage = () => {
   const router = useRouter();
   const { projectId } = router.query;
+
+  const [tab, setTab] = useState<"GENERAL" | "MEMBERS">("GENERAL");
 
   const [addMembers, setAddMembers] = useState(false);
   const [addMemberType, setAddMemberType] = useState<"MEMBER" | "ADMIN">(
@@ -53,6 +54,19 @@ const Settings: NextPage = () => {
       retry: true,
     }
   );
+
+  const getProject = async () => {
+    const response = await fetch(
+      `http://localhost:3000/api/project/get.project?projectId=${projectId}`,
+      {
+        method: "GET",
+      }
+    );
+
+    return response.json();
+  };
+
+  const { data: projectData, status } = useQuery([projectId], getProject);
 
   const queryClient = useQueryClient();
 
@@ -142,19 +156,35 @@ const Settings: NextPage = () => {
 
   return (
     <div className="flex h-screen flex-row items-center justify-center gap-x-24">
-      {/* <h1>username: {username}</h1>
-      <h1>userStatus: {userStatus}</h1>
-      <h1>userData: {JSON.stringify(userData)}</h1> */}
       <div>
         <div className="mb-2 flex w-[36rem] flex-row items-center justify-between">
           <div className="flex flex-row items-center gap-x-4">
-            <h1 className="text-sm text-[#747474]">General</h1>
-            <h1 className="text-sm text-black underline underline-offset-2">
+            <button
+              className={`text-sm ${
+                tab === "GENERAL"
+                  ? "text-black underline underline-offset-2"
+                  : "text-[#747474]"
+              }`}
+              onClick={() => {
+                // setTab("GENERAL");
+              }}
+            >
+              General
+            </button>
+            <button
+              className={`text-sm ${
+                tab === "MEMBERS"
+                  ? "text-black underline underline-offset-2"
+                  : "text-[#747474]"
+              }`}
+              onClick={() => {
+                setTab("MEMBERS");
+              }}
+            >
               Members
-            </h1>
-            <h1 className="text-sm text-[#747474]">Tags</h1>
+            </button>
           </div>
-          {addMembers ? (
+          {tab === "MEMBERS" && addMembers ? (
             <Formik
               initialValues={{
                 submit: false,
@@ -286,88 +316,63 @@ const Settings: NextPage = () => {
               )}
             </Formik>
           ) : (
-            <button
-              className="flex flex-row items-center gap-x-0.5 text-[#747474] underline-offset-2 hover:text-black hover:underline"
-              onClick={() => {
-                setAddMembers(true);
-              }}
-            >
-              <HiOutlinePlusSm className="mb-0.5 h-3.5 w-3.5" />
-              <h1 className="text-sm">Add Member</h1>
-            </button>
+            tab === "MEMBERS" && (
+              <button
+                className="flex flex-row items-center gap-x-0.5 text-[#747474] underline-offset-2 hover:text-black hover:underline"
+                onClick={() => {
+                  setAddMembers(true);
+                }}
+              >
+                <HiOutlinePlusSm className="mb-0.5 h-3.5 w-3.5" />
+                <h1 className="text-sm">Add Member</h1>
+              </button>
+            )
           )}
         </div>
-        {/* {membersData &&
-          membersData.roles.map((role: any) => {
-            return role.users.map((user: any) => {
-              return (
-                <>
-                  <Member
-                    id={user.id}
-                    name={user.name}
-                    username={user.username}
-                    role={role.type}
-                  />
-                </>
-              );
-            });
-          })} */}
         <Separator.Root
           decorative
           orientation="horizontal"
           className="h-[1px] bg-[#E4E4E4]"
         />
-        <ScrollArea.Root>
-          <ScrollArea.Viewport className="h-[20rem] w-full">
-            {/* {members.map((member: any, key) => {
-              return (
-                <>
-                  {key !== 0 && (
-                    <Separator.Root
-                      decorative
-                      orientation="horizontal"
-                      className="h-[1px] bg-[#E4E4E4]"
-                    />
-                  )}
-                  <Member
-                    key={key}
-                    id={member.id}
-                    name={member.name}
-                    username={member.username}
-                    role={member.role}
-                  />
-                </>
-              );
-            })} */}
-            {membersData &&
-              membersData.roles.map((role: any, roleKey: number) => {
-                return role.users.map((user: any, key: number) => {
-                  return (
-                    <>
-                      {key + roleKey !== 0 && (
-                        <Separator.Root
-                          decorative
-                          orientation="horizontal"
-                          className="h-[1px] bg-[#E4E4E4]"
+        {tab === "MEMBERS" ? (
+          <ScrollArea.Root>
+            <ScrollArea.Viewport className="h-[20rem] w-full">
+              {membersData &&
+                membersData.roles.map((role: any, roleKey: number) => {
+                  return role.users.map((user: any, key: number) => {
+                    return (
+                      <>
+                        {key + roleKey !== 0 && (
+                          <Separator.Root
+                            decorative
+                            orientation="horizontal"
+                            className="h-[1px] bg-[#E4E4E4]"
+                          />
+                        )}
+                        <Member
+                          key={key}
+                          id={user.id}
+                          name={user.name}
+                          username={user.username}
+                          role={role.type}
                         />
-                      )}
-                      <Member
-                        key={key}
-                        id={user.id}
-                        name={user.name}
-                        username={user.username}
-                        role={role.type}
-                      />
-                    </>
-                  );
-                });
-              })}
-            <ScrollArea.Scrollbar orientation="vertical">
-              <ScrollArea.Thumb />
-            </ScrollArea.Scrollbar>
-            <ScrollArea.Corner />
-          </ScrollArea.Viewport>
-        </ScrollArea.Root>
+                      </>
+                    );
+                  });
+                })}
+              <ScrollArea.Scrollbar orientation="vertical">
+                <ScrollArea.Thumb />
+              </ScrollArea.Scrollbar>
+              <ScrollArea.Corner />
+            </ScrollArea.Viewport>
+          </ScrollArea.Root>
+        ) : (
+          projectData && (
+            <div className="flex h-[20rem] flex-row items-center justify-center">
+              <h1>Coming Soon...</h1>
+            </div>
+          )
+        )}
       </div>
       <div>
         <Image src={schemeGradient} />

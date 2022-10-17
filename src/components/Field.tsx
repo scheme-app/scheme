@@ -102,7 +102,11 @@ const Field: FC<FieldPropTypes> = ({
             {formattedType[type]}
           </p>
         </div>
-        <div className="w-2/5">
+        <div
+          className={`${
+            array || optional || format !== "NONE" ? "w-[39%]" : "w-[70%]"
+          }`}
+        >
           <p className="truncate text-lg font-light">{name}</p>
         </div>
         <div className="absolute right-0 mr-1 flex flex-row">
