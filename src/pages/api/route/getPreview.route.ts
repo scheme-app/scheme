@@ -25,6 +25,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     },
   });
+
+  if (!route) return res.status(500).json({ error: "Route not found." });
+
+  return res.status(200).json(route);
 };
 
 export default handler;

@@ -2,6 +2,7 @@ import { FC, useContext, useEffect } from "react";
 import RouteContext from "../context/Route.context";
 import { useQueryClient } from "@tanstack/react-query";
 import { BsFileEarmarkCode } from "react-icons/bs";
+import { useRouter } from "next/router";
 
 type RoutePropTypes = {
   id: string;
@@ -27,6 +28,8 @@ const GetTag: FC = () => {
 
 const Route: FC<RoutePropTypes> = ({ id, name, type }) => {
   const { routeId, setRouteId, setNewRouteType } = useContext(RouteContext);
+
+  const router = useRouter();
 
   const queryClient = useQueryClient();
 
@@ -58,9 +61,10 @@ const Route: FC<RoutePropTypes> = ({ id, name, type }) => {
       <button
         className="py-2"
         onClick={() => {
-          queryClient.invalidateQueries([routeId]);
+          // queryClient.invalidateQueries([routeId]);
           setRouteId(id);
           setNewRouteType("NONE");
+          router.push(`?routeId=${id}`, undefined, { shallow: true });
         }}
       >
         <div className="flex flex-row items-center gap-x-4">

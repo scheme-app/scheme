@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { useEffect, FormEvent, useRef } from "react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import RouteHeader from "../components/RouteHeader";
@@ -29,8 +29,9 @@ import { MdOutlineErrorOutline } from "react-icons/md";
 import { BsArrowRightShort } from "react-icons/bs";
 import { useClickAway } from "react-use";
 import RouteUser from "../components/RouteUser";
+import Head from "next/head";
 
-const Home: NextPage = () => {
+const Home: NextPage<{ routeIdProp: string }> = ({ routeIdProp }) => {
   const { data: session } = useSession();
 
   const { project, setProject } = useContext(ProjectContext);
@@ -165,8 +166,23 @@ const Home: NextPage = () => {
     setAddMembers(false);
   });
 
+  useEffect(() => {
+    if (routeIdProp !== "") {
+      setRouteId(routeIdProp);
+      routeIdProp = "";
+    }
+  }, []);
+
   return (
     <>
+      <Head>
+        <meta property="og:title" content="View Route on Scheme" />
+        <meta
+          property="og:image"
+          content={`http://localhost:3000/api/og?routeId=${"cl90o0b6p063137lp5ki24ecc"}`}
+        />
+        {/* <title>Hello There.</title> */}
+      </Head>
       <Layout>
         {routeId === "" ? (
           <div className="flex h-screen items-center justify-center">
@@ -709,24 +725,27 @@ export async function getServerSideProps(context: any) {
     authOptions
   );
 
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/login",
-      },
-    };
-  }
+  const { routeId } = context.query;
 
-  if (session.user.onboarded === false) {
-    return {
-      redirect: {
-        destination: "/newUser",
-      },
-    };
-  }
+  // if (!session) {
+  //   return {
+  //     redirect: {
+  //       destination: "/login",
+  //     },
+  //   };
+  // }
+
+  // if (session.user.onboarded === false) {
+  //   return {
+  //     redirect: {
+  //       destination: "/newUser",
+  //     },
+  //   };
+  // }
 
   return {
     props: {
+      routeIdProp: routeId || "",
       session: session,
     },
   };

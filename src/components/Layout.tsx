@@ -301,7 +301,11 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
               <h1 className="text-xs text-[#969696]">
                 Scheme v1.0 — Private Alpha
               </h1>
-              <Image src={SchemeMiniLogo} className="h-[1.1rem] w-[1.1rem]" />
+              <Image
+                src={SchemeMiniLogo}
+                className="h-[1.1rem] w-[1.1rem]"
+                alt="logo"
+              />
             </div>
           </div>
         </DropdownMenu.Root>
