@@ -166,7 +166,7 @@ const Settings: NextPage = () => {
                   : "text-[#747474]"
               }`}
               onClick={() => {
-                // setTab("GENERAL");
+                setTab("GENERAL");
               }}
             >
               General
@@ -375,7 +375,7 @@ const Settings: NextPage = () => {
         )}
       </div>
       <div>
-        <Image src={schemeGradient} />
+        <Image src={schemeGradient} alt="scheme gradient" />
       </div>
     </div>
   );

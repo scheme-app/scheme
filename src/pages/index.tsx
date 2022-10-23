@@ -436,6 +436,7 @@ const Home: NextPage<{ routeIdProp: string }> = ({ routeIdProp }) => {
             {/* <h1>{JSON.stringify(data.owner)}</h1> */}
             <div className="w-[65%]">
               <RouteHeader
+                id={data.id}
                 name={data.name}
                 type={data.type}
                 folder={data.folder}
@@ -727,21 +728,21 @@ export async function getServerSideProps(context: any) {
 
   const { routeId } = context.query;
 
-  // if (!session) {
-  //   return {
-  //     redirect: {
-  //       destination: "/login",
-  //     },
-  //   };
-  // }
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/login",
+      },
+    };
+  }
 
-  // if (session.user.onboarded === false) {
-  //   return {
-  //     redirect: {
-  //       destination: "/newUser",
-  //     },
-  //   };
-  // }
+  if (session.user.onboarded === false) {
+    return {
+      redirect: {
+        destination: "/newUser",
+      },
+    };
+  }
 
   return {
     props: {

@@ -15,6 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       id: routeId,
     },
     select: {
+      id: true,
       name: true,
       type: true,
       project: {

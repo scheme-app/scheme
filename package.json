@@ -24,6 +24,7 @@
     "boring-avatars": "^1.7.0",
     "formik": "^2.2.9",
     "i": "^0.3.7",
+    "iconoir-react": "^5.3.2",
     "inspx": "^0.0.1-alpha.6",
     "next": "^12.3.1",
     "next-auth": "^4.10.3",
