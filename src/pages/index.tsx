@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { useEffect, FormEvent, useRef } from "react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import RouteHeader from "../components/RouteHeader";
@@ -29,8 +29,9 @@ import { MdOutlineErrorOutline } from "react-icons/md";
 import { BsArrowRightShort } from "react-icons/bs";
 import { useClickAway } from "react-use";
 import RouteUser from "../components/RouteUser";
+import Head from "next/head";
 
-const Home: NextPage = () => {
+const Home: NextPage<{ routeIdProp: string }> = ({ routeIdProp }) => {
   const { data: session } = useSession();
 
   const { project, setProject } = useContext(ProjectContext);
@@ -132,7 +133,10 @@ const Home: NextPage = () => {
   );
 
   const getUser = async (username: string) => {
-    const response = await axios.get(`/api/user/get.user?username=${username}`);
+    const response = await axios.get(
+      `/api/user/get.user?username=${username}&projectId=${project.id}`
+      // `/api/user/get.user?username=${username}`
+    );
 
     return response.data;
   };
@@ -165,8 +169,23 @@ const Home: NextPage = () => {
     setAddMembers(false);
   });
 
+  useEffect(() => {
+    if (routeIdProp !== "") {
+      setRouteId(routeIdProp);
+      routeIdProp = "";
+    }
+  }, []);
+
   return (
     <>
+      <Head>
+        <meta property="og:title" content="View Route on Scheme" />
+        <meta
+          property="og:image"
+          content={`http://localhost:3000/api/og?routeId=${"cl90o0b6p063137lp5ki24ecc"}`}
+        />
+        {/* <title>Hello There.</title> */}
+      </Head>
       <Layout>
         {routeId === "" ? (
           <div className="flex h-screen items-center justify-center">
@@ -420,6 +439,7 @@ const Home: NextPage = () => {
             {/* <h1>{JSON.stringify(data.owner)}</h1> */}
             <div className="w-[65%]">
               <RouteHeader
+                id={data.id}
                 name={data.name}
                 type={data.type}
                 folder={data.folder}
@@ -703,11 +723,15 @@ const Home: NextPage = () => {
 };
 
 export async function getServerSideProps(context: any) {
+  let valid = false;
+
   const session = await unstable_getServerSession(
     context.req,
     context.res,
     authOptions
   );
+
+  const { routeId } = context.query;
 
   if (!session) {
     return {
@@ -725,8 +749,25 @@ export async function getServerSideProps(context: any) {
     };
   }
 
+  // if (routeId) {
+  //   const route = await axios.get(
+  //     `http://localhost:3000/api/route/getPreview.route?routeId=${routeId}`
+  //   );
+
+  //   const user = await axios.get(
+  //     `http://localhost:3000/api/user/get.user?userId=${session.user.id}`
+  //   );
+
+  //   user.data.projects.map((project: { id: string }) => {
+  //     if (project.id === route.data.project.id) {
+  //       valid = true;
+  //     }
+  //   });
+  // }
   return {
     props: {
+      // routeIdProp: valid ? routeId || "" : "",
+      routeIdProp: routeId || "",
       session: session,
     },
   };

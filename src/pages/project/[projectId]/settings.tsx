@@ -19,7 +19,7 @@ const Settings: NextPage = () => {
   const router = useRouter();
   const { projectId } = router.query;
 
-  const [tab, setTab] = useState<"GENERAL" | "MEMBERS">("GENERAL");
+  const [tab, setTab] = useState<"GENERAL" | "MEMBERS">("MEMBERS");
 
   const [addMembers, setAddMembers] = useState(false);
   const [addMemberType, setAddMemberType] = useState<"MEMBER" | "ADMIN">(
@@ -166,7 +166,7 @@ const Settings: NextPage = () => {
                   : "text-[#747474]"
               }`}
               onClick={() => {
-                // setTab("GENERAL");
+                setTab("GENERAL");
               }}
             >
               General
@@ -375,7 +375,7 @@ const Settings: NextPage = () => {
         )}
       </div>
       <div>
-        <Image src={schemeGradient} />
+        <Image src={schemeGradient} alt="scheme gradient" />
       </div>
     </div>
   );
