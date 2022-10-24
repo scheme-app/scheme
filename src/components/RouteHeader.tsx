@@ -56,18 +56,18 @@ const RouteHeader: FC<PropTypes> = ({ id, name, type, folder }) => {
           <button
             className="flex h-7 w-7 items-center justify-center rounded-md border-[1px] border-[#E4E4E4] hover:bg-[#F2F2F2]"
             onClick={() => {
-              setShowEditRoutePopover(!showEditRoutePopover);
-            }}
-          >
-            <h1 className="mb-2 text-[#747474]">...</h1>
-          </button>
-          <button
-            className="flex h-7 w-7 items-center justify-center rounded-md border-[1px] border-[#E4E4E4] hover:bg-[#F2F2F2]"
-            onClick={() => {
               copyToClipboard(`http://localhost:3000/route/${id}/share`);
             }}
           >
             <ShareIos className="h-[1.1rem] w-[1.1rem] text-[#747474]" />
+          </button>
+          <button
+            className="flex h-7 w-7 items-center justify-center rounded-md border-[1px] border-[#E4E4E4] hover:bg-[#F2F2F2]"
+            onClick={() => {
+              setShowEditRoutePopover(!showEditRoutePopover);
+            }}
+          >
+            <h1 className="mb-2 text-[#747474]">...</h1>
           </button>
         </div>
       </div>

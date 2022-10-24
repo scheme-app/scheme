@@ -2,12 +2,13 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../../utils/prisma";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { userId, username } = req.query;
+  const { userId, username, projectId } = req.query;
 
   const user = await prisma.user.findUnique({
     where: {
       ...(userId && { id: userId as string }),
       ...(username && { username: username as string }),
+      // ...(projectId && { projects: { some: { id: projectId as string } } }),
     },
     select: {
       id: true,
@@ -24,6 +25,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!user) {
     return res.status(400).send({
       error: "User not found",
+    });
+  }
+
+  if (projectId && !user.projects.some((project) => project.id === projectId)) {
+    return res.status(400).send({
+      error: "User does not have access to this project.",
     });
   }
 

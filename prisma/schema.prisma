@@ -5,7 +5,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   // url      = "postgresql://abhinav@localhost:5432/abhinav"
-  url      = "postgresql://abhinav@localhost:5432/template1"
+  url      = "postgresql://abhinav@localhost:5432/cc-postgres-local"
 }
 
 model User {
@@ -81,6 +81,7 @@ model Route {
   authorization AuthorizationType @default(NONE)
   project       Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
   folder        Folder?           @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  headers       Header[]
   models        Model[]
   owner         User?             @relation(name: "owner", fields: [userId], references: [id], onDelete: Cascade)
   assignedTo    User[]            @relation(name: "assignedTo")
@@ -88,6 +89,15 @@ model Route {
   projectId String
   folderId  String?
   userId    String?
+}
+
+model Header {
+  id    String @id @default(cuid())
+  key   String
+  value String
+  route Route  @relation(fields: [routeId], references: [id], onDelete: Cascade)
+
+  routeId String
 }
 
 model Model {

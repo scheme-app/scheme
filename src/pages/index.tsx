@@ -133,7 +133,10 @@ const Home: NextPage<{ routeIdProp: string }> = ({ routeIdProp }) => {
   );
 
   const getUser = async (username: string) => {
-    const response = await axios.get(`/api/user/get.user?username=${username}`);
+    const response = await axios.get(
+      `/api/user/get.user?username=${username}&projectId=${project.id}`
+      // `/api/user/get.user?username=${username}`
+    );
 
     return response.data;
   };
@@ -720,6 +723,8 @@ const Home: NextPage<{ routeIdProp: string }> = ({ routeIdProp }) => {
 };
 
 export async function getServerSideProps(context: any) {
+  let valid = false;
+
   const session = await unstable_getServerSession(
     context.req,
     context.res,
@@ -744,8 +749,24 @@ export async function getServerSideProps(context: any) {
     };
   }
 
+  // if (routeId) {
+  //   const route = await axios.get(
+  //     `http://localhost:3000/api/route/getPreview.route?routeId=${routeId}`
+  //   );
+
+  //   const user = await axios.get(
+  //     `http://localhost:3000/api/user/get.user?userId=${session.user.id}`
+  //   );
+
+  //   user.data.projects.map((project: { id: string }) => {
+  //     if (project.id === route.data.project.id) {
+  //       valid = true;
+  //     }
+  //   });
+  // }
   return {
     props: {
+      // routeIdProp: valid ? routeId || "" : "",
       routeIdProp: routeId || "",
       session: session,
     },

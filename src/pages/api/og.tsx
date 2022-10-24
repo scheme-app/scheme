@@ -62,10 +62,10 @@ const handler = async (req: NextRequest) => {
             <h1 tw="text-7xl pr-6">{data.name}</h1>
             {data.type === "GET" ? <GetTag /> : <PostTag />}
           </div>
-          <div tw="flex flex-row items-center absolute bottom-0 left-0 mb-4 ml-4">
+          <div tw="flex flex-row items-center absolute bottom-0 left-0 mb-6 ml-4">
             <img
-              width="48"
-              height="48"
+              width="60"
+              height="60"
               src={`http://localhost:3000/scheme-icon-black.svg`}
             />
             <h1 tw="text-3xl pl-4">View on Scheme</h1>

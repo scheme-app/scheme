@@ -19,7 +19,7 @@ const Settings: NextPage = () => {
   const router = useRouter();
   const { projectId } = router.query;
 
-  const [tab, setTab] = useState<"GENERAL" | "MEMBERS">("GENERAL");
+  const [tab, setTab] = useState<"GENERAL" | "MEMBERS">("MEMBERS");
 
   const [addMembers, setAddMembers] = useState(false);
   const [addMemberType, setAddMemberType] = useState<"MEMBER" | "ADMIN">(
