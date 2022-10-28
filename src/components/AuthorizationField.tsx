@@ -41,10 +41,10 @@ const AuthorizationField: FC<AuthorizationFieldPropTypes> = ({
         <div className="mr-12 flex items-center rounded-md bg-[#F2F2F2] py-1.5 px-4">
           {authorization === "NONE" ? (
             // <MdLockOpen className="h-6 w-6 text-[#747474]" />
-            <Image src={openLock} width={14} height={14} />
+            <Image src={openLock} width={14} height={14} alt="no auth" />
           ) : (
             // <MdLockOutline className="h-6 w-6 text-[#747474]" />
-            <Image src={lock} width={14} height={14} />
+            <Image src={lock} width={14} height={14} alt="auth" />
           )}
         </div>
         <div className="w-2/5">

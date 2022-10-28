@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, useFormikContext } from "formik";
 import { useSession } from "next-auth/react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
@@ -9,9 +9,33 @@ import Image from "next/future/image";
 import schemeGradient from "../../public/scheme-gradient.svg";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
+import { useState, FormEvent } from "react";
+import { WarningCircledOutline } from "iconoir-react";
+import { MdOutlineErrorOutline } from "react-icons/md";
+
+const FormObserver: React.FC<{ setUsername: any }> = ({ setUsername }) => {
+  const {
+    values,
+  }: {
+    values: {
+      name: string;
+      username: string;
+      projectName: string;
+      submit: boolean;
+    };
+  } = useFormikContext();
+
+  useEffect(() => {
+    // alert(`FormObserver::values -- ${JSON.stringify(values)}`);
+    setUsername(values.username);
+  }, [values]);
+
+  return null;
+};
 
 const NewUser: NextPage = () => {
   const { data: session } = useSession();
+  const [username, setUsername] = useState("");
 
   const router = useRouter();
 
@@ -31,6 +55,21 @@ const NewUser: NextPage = () => {
         username: username,
         projectName: projectName,
       });
+    }
+  );
+
+  const getUser = async (username: string) => {
+    const response = await axios.get(`/api/user/get.user?username=${username}`);
+
+    return response.data;
+  };
+
+  const { data: userData, status: userStatus } = useQuery(
+    ["user", username],
+    () => getUser(username),
+    {
+      enabled: !!username,
+      retry: true,
     }
   );
 
@@ -97,7 +136,12 @@ const NewUser: NextPage = () => {
                 }}
               >
                 {({ values }) => (
-                  <Form className="flex flex-col gap-y-6">
+                  <Form
+                    className="flex flex-col gap-y-6"
+                    // onChange={(event: FormEvent) => {
+                    // }}
+                  >
+                    <FormObserver setUsername={setUsername} />
                     <div className="flex flex-row gap-x-16">
                       <div className="flex flex-col gap-y-6">
                         <h1 className="text-sm text-[#969696]">Name</h1>
@@ -131,6 +175,10 @@ const NewUser: NextPage = () => {
                               values.username !== "" && "text-black"
                             }`}
                           />
+                          {/* <WarningCircledOutline className="h-[1.2rem] w-[1.2rem] text-red-500" /> */}
+                          {userData && (
+                            <MdOutlineErrorOutline className="h-5 w-5 text-red-500" />
+                          )}
                         </div>
                         <Field
                           name="projectName"
@@ -143,15 +191,17 @@ const NewUser: NextPage = () => {
                       </div>
                     </div>
                     <div className="mt-4">
-                      <button
-                        className="rounded-md border-[1px] border-[#E4E4E4] px-2 py-1 text-sm font-light text-black hover:shadow-sm"
-                        type="submit"
-                        onClick={() => {
-                          values.submit = true;
-                        }}
-                      >
-                        Continue
-                      </button>
+                      {!userData && (
+                        <button
+                          className="rounded-md border-[1px] border-[#E4E4E4] px-2 py-1 text-sm font-light text-black hover:shadow-sm"
+                          type="submit"
+                          onClick={() => {
+                            values.submit = true;
+                          }}
+                        >
+                          Continue
+                        </button>
+                      )}
                     </div>
                   </Form>
                 )}
@@ -159,7 +209,7 @@ const NewUser: NextPage = () => {
             </div>
           </div>
           <div>
-            <Image src={schemeGradient} />
+            <Image src={schemeGradient} alt="scheme gradient" />
           </div>
         </div>
       </>

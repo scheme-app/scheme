@@ -5,7 +5,9 @@ generator client {
 datasource db {
   provider = "postgresql"
   // url      = "postgresql://abhinav@localhost:5432/abhinav"
-  url      = "postgresql://abhinav@localhost:5432/cc-postgres-local"
+  // url      = "postgresql://abhinav@localhost:5432/postgres"
+  // url      = "postgresql://abhinav@localhost:5432/cc-postgres-local"
+  url      = "postgresql://abhinav@localhost:5432/template1"
 }
 
 model User {

@@ -89,7 +89,7 @@ const Login = ({ providers }: { providers: any }) => {
           </div>
         </div>
         <div>
-          <Image src={schemeGradient} />
+          <Image src={schemeGradient} alt="scheme gradient" />
         </div>
       </div>
     </>
