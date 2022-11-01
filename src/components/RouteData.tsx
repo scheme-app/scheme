@@ -35,7 +35,7 @@ const RouteData: FC<PropTypes> = ({
   models,
 }) => {
   return (
-    <>
+    <div className="w-[65%]">
       <RouteHeader id={id} name={name} type={type} />
       <ScrollArea.Root className="mt-8">
         <ScrollArea.Viewport className="h-[44rem] w-full">
@@ -57,7 +57,7 @@ const RouteData: FC<PropTypes> = ({
           <ScrollArea.Corner />
         </ScrollArea.Viewport>
       </ScrollArea.Root>
-    </>
+    </div>
   );
 };
 
