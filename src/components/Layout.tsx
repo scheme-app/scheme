@@ -34,37 +34,28 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   const router = useRouter();
 
   const { project, setProject } = useContext(ProjectContext);
-  const { routeId, setRouteId, setFolder, setNewRouteType } =
-    useContext(RouteContext);
+  const { setRouteId, setFolder, setNewRouteType } = useContext(RouteContext);
 
-  const getProjects = async () => {
-    const response = await fetch(
-      `http://localhost:3000/api/project/get.projects?userId=${session?.user.id}`,
-      {
-        method: "GET",
-      }
-    );
-
-    return response.json();
-  };
+  const queryClient = useQueryClient();
 
   const { data: projectData, status: projectStatus } = useQuery(
     ["projects"],
-    getProjects
+    async () => {
+      const response = await axios.get(
+        `http://localhost:3000/api/project/get.projects?userId=${session?.user.id}`
+      );
+
+      return response.data;
+    }
   );
 
-  const getProject = async () => {
-    const response = await fetch(
-      `http://localhost:3000/api/project/get.project?projectId=${project.id}`,
-      {
-        method: "GET",
-      }
+  const { data, status } = useQuery([project.id], async () => {
+    const response = await axios.get(
+      `http://localhost:3000/api/project/get.project?projectId=${project.id}`
     );
 
-    return response.json();
-  };
-
-  const queryClient = useQueryClient();
+    return response.data;
+  });
 
   const createFolder = useMutation(
     ({ name }: { name: string }) => {
@@ -79,10 +70,6 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
       },
     }
   );
-
-  const { data, status } = useQuery([project.id], getProject);
-
-  const { online } = useNetworkState();
 
   const parent = useRef(null);
   useEffect(() => {
@@ -360,18 +347,6 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
         <div className="" ref={parent}>
           {children}
         </div>
-      </div>
-      <div className="absolute bottom-0 right-0 mr-8 mb-8 flex flex-row gap-x-2">
-        {!online && (
-          <div className="flex flex-row items-center gap-x-2 rounded-lg bg-red-300/20 px-1.5">
-            <TbWifiOff className=" h-5 w-5 text-red-400" />
-            <h1 className="text-sm text-red-400">Offline</h1>
-          </div>
-        )}
-        {/* <div className="flex flex-row items-center gap-x-2 rounded-lg bg-green-300/20 py-1 px-2.5">
-          <div className="h-1.5 w-1.5 rounded-full bg-green-400"></div>
-          <h1 className="text-sm text-green-400">Pre-Alpha</h1>
-        </div> */}
       </div>
     </div>
   );

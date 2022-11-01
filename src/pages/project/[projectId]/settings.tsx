@@ -55,18 +55,13 @@ const Settings: NextPage = () => {
     }
   );
 
-  const getProject = async () => {
-    const response = await fetch(
-      `http://localhost:3000/api/project/get.project?projectId=${projectId}`,
-      {
-        method: "GET",
-      }
+  const { data: projectData, status } = useQuery([projectId], async () => {
+    const response = await axios.get(
+      `http://localhost:3000/api/project/get.project?projectId=${projectId}`
     );
 
-    return response.json();
-  };
-
-  const { data: projectData, status } = useQuery([projectId], getProject);
+    return response.data;
+  });
 
   const queryClient = useQueryClient();
 

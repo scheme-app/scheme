@@ -24,17 +24,10 @@ const GetTag = () => {
 const handler = async (req: NextRequest) => {
   let name = "veryLongUpdatedsfsdfsdf.user";
   name.length > 21 ? (name = name.substring(0, 18) + "...") : (name = name);
-  const type = "GET";
 
   const { searchParams } = new URL(req.url);
 
   const routeId = searchParams.get("routeId");
-
-  console.log("fetching with id:", routeId);
-
-  // const response = await fetch(
-  //   `http://localhost:3000/api/route/getPreview.route?routeId=cl90o0b6p063137lp5ki24ecc`
-  // );
 
   const response = await fetch(
     `http://localhost:3000/api/route/getPreview.route?routeId=${routeId}`
@@ -44,7 +37,6 @@ const handler = async (req: NextRequest) => {
 
   return new ImageResponse(
     (
-      // Modified based on https://tailwindui.com/components/marketing/sections/cta-sections
       <div
         style={{
           height: "100%",
@@ -58,7 +50,6 @@ const handler = async (req: NextRequest) => {
       >
         <div tw="flex relative h-full w-full justify-center">
           <div tw="flex flex-row items-center absolute top-[45%]">
-            {/* <h1 tw="text-7xl pr-6">{name}</h1> */}
             <h1 tw="text-7xl pr-6">{data.name}</h1>
             {data.type === "GET" ? <GetTag /> : <PostTag />}
           </div>
