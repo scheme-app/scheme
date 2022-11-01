@@ -38,8 +38,6 @@ const Home: NextPage<{ routeIdProp: string }> = ({ routeIdProp }) => {
   const { data: session } = useSession();
 
   const { project, setProject } = useContext(ProjectContext);
-  const [addMembers, setAddMembers] = useState(false);
-  const [username, setUsername] = useState("");
 
   const getProjects = async () => {
     const response = await fetch(
@@ -61,42 +59,7 @@ const Home: NextPage<{ routeIdProp: string }> = ({ routeIdProp }) => {
     setProject(projectData[0]);
   }
 
-  const { routeId, setRouteId, folder } = useContext(RouteContext);
-
-  const queryClient = useQueryClient();
-
-  const createRoute = useMutation(
-    ({
-      name,
-      type,
-      authorization,
-      folderId,
-    }: {
-      name: string;
-      type: "GET" | "POST";
-      authorization:
-        | "NONE"
-        | "API_KEY"
-        | "BEARER"
-        | "BASIC"
-        | "DIGEST"
-        | "OAUTH";
-      folderId?: string;
-    }) => {
-      return axios.post("http://localhost:3000/api/route/create.route", {
-        name,
-        type,
-        authorization,
-        projectId: project.id,
-        folderId: folder.id,
-      });
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries([project.id]);
-      },
-    }
-  );
+  const { routeId, setRouteId } = useContext(RouteContext);
 
   const getRoute = async () => {
     const response = await fetch(
@@ -111,64 +74,6 @@ const Home: NextPage<{ routeIdProp: string }> = ({ routeIdProp }) => {
 
   const { data, status } = useQuery([routeId], getRoute, {
     enabled: project.id !== "",
-  });
-
-  const updateRoute = useMutation(
-    ({
-      status,
-      priority,
-    }: {
-      status?: "PROTOTYPING" | "DEVELOPING" | "COMPLETE";
-      priority?: "LOW" | "MEDIUM" | "HIGH";
-    }) => {
-      return axios.post("http://localhost:3000/api/route/update.route", {
-        routeId,
-        status,
-        priority,
-      });
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries([routeId]);
-      },
-    }
-  );
-
-  const getUser = async (username: string) => {
-    const response = await axios.get(
-      `/api/user/get.user?username=${username}&projectId=${project.id}`
-      // `/api/user/get.user?username=${username}`
-    );
-
-    return response.data;
-  };
-
-  const { data: userData, status: userStatus } = useQuery(
-    ["user", username],
-    () => getUser(username),
-    {
-      enabled: !!username,
-      retry: true,
-    }
-  );
-
-  const assignMember = useMutation(
-    ({ username }: { username: string }) => {
-      return axios.post("http://localhost:3000/api/route/assignMember.route", {
-        username: username,
-        routeId: routeId,
-      });
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries([routeId]);
-      },
-    }
-  );
-
-  const ref = useRef(null);
-  useClickAway(ref, () => {
-    setAddMembers(false);
   });
 
   useEffect(() => {

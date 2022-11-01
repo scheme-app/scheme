@@ -9,8 +9,8 @@ import PopoverOptions from "./PopoverOptions";
 import Button from "./Button";
 
 const CreateRoute: FC = () => {
-  const { project, setProject } = useContext(ProjectContext);
-  const { routeId, setRouteId, newRouteType, setNewRouteType, folder } =
+  const { project } = useContext(ProjectContext);
+  const { setRouteId, newRouteType, setNewRouteType, folder } =
     useContext(RouteContext);
 
   const queryClient = useQueryClient();
