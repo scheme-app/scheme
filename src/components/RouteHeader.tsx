@@ -76,7 +76,7 @@ const RouteHeader: FC<PropTypes> = ({ id, name, type, folder }) => {
           <EditRoutePopover
             name={name}
             type={type}
-            folder={folder}
+            // folder={folder}
             setEditRoutePopover={setShowEditRoutePopover}
           />
         )}

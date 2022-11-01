@@ -30,6 +30,7 @@ import { BsArrowRightShort } from "react-icons/bs";
 import { useClickAway } from "react-use";
 import RouteUser from "../components/RouteUser";
 import Head from "next/head";
+import RouteData from "../components/RouteData";
 
 const Home: NextPage<{ routeIdProp: string }> = ({ routeIdProp }) => {
   const { data: session } = useSession();
@@ -438,32 +439,13 @@ const Home: NextPage<{ routeIdProp: string }> = ({ routeIdProp }) => {
           <div className="mt-24 flex flex-row gap-x-24">
             {/* <h1>{JSON.stringify(data.owner)}</h1> */}
             <div className="w-[65%]">
-              <RouteHeader
+              <RouteData
                 id={data.id}
                 name={data.name}
                 type={data.type}
-                folder={data.folder}
+                authorization={data.authorization}
+                models={data.models}
               />
-              <ScrollArea.Root className="mt-8">
-                <ScrollArea.Viewport className="h-[44rem] w-full">
-                  <Authorization authorization={data.authorization} />
-                  <ParentModel
-                    name="Arguments"
-                    fields={data.models[0].fields}
-                    id={data.models[0].id}
-                  />
-                  <ParentModel
-                    name="Response"
-                    fields={data.models[1].fields}
-                    id={data.models[1].id}
-                  />
-                  <div className="py-8"></div>
-                  <ScrollArea.Scrollbar orientation="vertical">
-                    <ScrollArea.Thumb />
-                  </ScrollArea.Scrollbar>
-                  <ScrollArea.Corner />
-                </ScrollArea.Viewport>
-              </ScrollArea.Root>
             </div>
             <div className="flex flex-col gap-y-8 border-l-[1px] border-[#E4E4E4] pl-8 pt-8">
               <DropdownMenu.Root>
