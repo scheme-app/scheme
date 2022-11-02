@@ -250,31 +250,24 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
                   }}
                 />*/}
 
-            <div className="mt-6 flex flex-row gap-x-2">
+            <div className="mt-8 flex flex-row gap-x-2">
               <Button
                 name="Save"
                 type="submit"
+                style="primary"
                 onClick={() => {
                   values.submit = true;
                 }}
               />
-              {/* <Button
-                  name="Cancel"
-                  type="button"
-                  onClick={() => {
-                    setAuthorizationFieldPopover(false);
-                  }}
-                />*/}
-              <button
-                className="text-md px-2 py-1 font-light text-[#969696] hover:text-red-500"
+              <Button
+                name="Delete"
                 type="button"
+                style="delete"
                 onClick={() => {
                   deleteField.mutate({ fieldId });
                   setEditFieldPopover(false);
                 }}
-              >
-                Delete
-              </button>
+              />
             </div>
           </div>
         </Form>

@@ -115,7 +115,7 @@ const EditRoutePopover: FC<EditRoutePopoverPropTypes> = ({
                   name="name"
                   autoComplete="off"
                   placeholder="field name"
-                  className="text-md h-[2.15rem] rounded-[0.3rem] border-[1px] border-[#E4E4E4] py-1.5 px-3 font-light text-[#969696] focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
+                  className="text-md h-[2.15rem] rounded-[0.4rem] border-[1px] border-[#E4E4E4] py-1.5 px-3 font-light text-[#969696] focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
                 />
               </div>
               <PopoverOptions
@@ -128,34 +128,23 @@ const EditRoutePopover: FC<EditRoutePopoverPropTypes> = ({
                 defaultValue={values.type}
               />
             </div>
-            <div className="mt-6 flex flex-row gap-x-4">
+            <div className="mt-8 flex flex-row gap-x-2">
               <Button
                 name="Save"
+                style="primary"
                 type="submit"
                 onClick={() => {
                   values.submit = true;
                 }}
               />
-              {/* <Button
+              <Button
                 name="Delete"
+                style="delete"
                 type="button"
                 onClick={() => {
                   deleteRoute.mutate(routeId);
-                  // deleteField.mutate({ fieldId });
-                  // setEditRoutePopover(false);
                 }}
-              /> */}
-              <button
-                className="text-md px-2 py-1 font-light text-[#969696] hover:text-red-500"
-                type="button"
-                onClick={() => {
-                  deleteRoute.mutate(routeId);
-                  // deleteField.mutate({ fieldId });
-                  // setEditRoutePopover(false);
-                }}
-              >
-                Delete
-              </button>
+              />
             </div>
           </div>
         </Form>

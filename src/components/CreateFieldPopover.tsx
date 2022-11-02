@@ -264,12 +264,22 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
                   }}
                 />*/}
 
-            <div className="mt-6 flex flex-row gap-x-2">
+            <div className="mt-8 flex flex-row gap-x-2">
               <Button
-                name="Save"
+                name="Create"
                 type="submit"
+                style="primary"
                 onClick={() => {
                   values.submit = true;
+                }}
+              />
+
+              <Button
+                name="Cancel"
+                type="button"
+                style="secondary"
+                onClick={() => {
+                  setCreateFieldPopover(false);
                 }}
               />
               {/* <Button
@@ -279,7 +289,7 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
                     setAuthorizationFieldPopover(false);
                   }}
                 />*/}
-              <button
+              {/* <button
                 className="text-md px-2 py-1 font-light text-[#969696] hover:text-black"
                 type="button"
                 onClick={() => {
@@ -287,7 +297,7 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
                 }}
               >
                 Cancel
-              </button>
+              </button> */}
             </div>
           </div>
         </Form>

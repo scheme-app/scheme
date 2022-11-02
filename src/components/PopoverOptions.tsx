@@ -23,7 +23,7 @@ const PopoverOption: FC<PopoverOptionPropTypes> = ({
 }) => {
   return (
     <button
-      className={`text-md px-3 font-light text-[#969696] ${
+      className={`text-md px-2.5 font-light text-[#969696] ${
         active === value ? "bg-[#F2F2F2]" : ""
       }`}
       onClick={() => {
@@ -72,7 +72,7 @@ const PopoverOptions: FC<PopoverOptionsPropTypes> = ({
   return (
     <div>
       <h1 className="mb-2 text-sm">{fieldAlias}</h1>
-      <div className="overflow-hidden rounded-[0.3rem] border-[1px] border-[#E4E4E4]">
+      <div className="overflow-hidden rounded-[0.4rem] border-[1px] border-[#E4E4E4]">
         <div className="flex flex-row">
           {options.map((option, i) => {
             if (i !== options.length - 1) {

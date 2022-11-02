@@ -1,64 +1,20 @@
 import type { NextPage } from "next";
-import { useSession } from "next-auth/react";
-import { useEffect } from "react";
-import { useRouter } from "next/router";
 import { FaGoogle } from "react-icons/fa";
 import { getProviders, signIn } from "next-auth/react";
 import Image from "next/future/image";
 import schemeGradient from "../../public/scheme-gradient.svg";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
-import { redirect } from "next/dist/server/api-utils";
 
-const Login = ({ providers }: { providers: any }) => {
-  const { data: session, status } = useSession();
+type PropTypes = {
+  providers: any;
+};
 
-  const router = useRouter();
-
-  // useEffect(() => {
-  //   // if (session !== null) {
-  //   //   router.push("/api/auth/signout");
-  //   // }
-  //   if (session?.user.onboarded === false) {
-  //     router.push("/newUser");
-  //   } else if (session?.user.onboarded === true) {
-  //     router.push("/");
-  //   }
-  //   // if (session !== null) {
-  //   //   router.push("/");
-  //   // }
-  // });
-
-  // if (session) {
-  //   if (session.user.onboarded === false) {
-  //     router.push("/newUser");
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   // alert(JSON.stringify(session));
-  //   if (session) {
-  //     if (session?.user.onboarded === false) {
-  //       router.push("/newUser");
-  //     }
-  //   }
-  // });
-
-  // useEffect(() => {
-  //   if (session) {
-  //     if (session?.user.onboarded === false) {
-  //       router.push("/newUser");
-  //     } else if (session?.user.onboarded === true) {
-  //       router.push("/");
-  //     }
-  //   }
-  // }, [status]);
-
+const Login: NextPage<PropTypes> = ({ providers }) => {
   const provider = Object.values(providers)[0];
 
   return (
     <>
-      {/* <h1>session: {JSON.stringify(session)}</h1> */}
       <div className="flex h-screen flex-row items-center justify-center gap-x-48 pl-12">
         <div className="flex flex-col">
           <div className="flex flex-col gap-y-4">
@@ -123,11 +79,6 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       providers,
-      // session: await unstable_getServerSession(
-      //   context.req,
-      //   context.res,
-      //   authOptions
-      // ),
       session: session,
     },
   };

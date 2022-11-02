@@ -101,26 +101,19 @@ const EditAuthorizationFieldPopover: FC<
                 <Button
                   name="Save"
                   type="submit"
+                  style="primary"
                   onClick={() => {
                     values.submit = true;
                   }}
                 />
-                {/* <Button
+                <Button
                   name="Cancel"
                   type="button"
+                  style="secondary"
                   onClick={() => {
                     setAuthorizationFieldPopover(false);
                   }}
-                />*/}
-                <button
-                  className="text-md px-2 py-1 font-light text-[#969696] hover:text-black"
-                  type="button"
-                  onClick={() => {
-                    setAuthorizationFieldPopover(false);
-                  }}
-                >
-                  Cancel
-                </button>
+                />
               </div>
             </div>
           </Form>
