@@ -1,17 +1,25 @@
+// React
 import type { NextPage } from "next";
-import { useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import Layout from "../components/Layout";
-import { useContext } from "react";
+import { useEffect, useContext } from "react";
+
+//Context
 import RouteContext from "../context/Route.context";
 import ProjectContext from "../context/Project.context";
+
+// data fetching
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
+//auth
 import { useSession } from "next-auth/react";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
+
+//components
+import Layout from "../components/Layout";
 import RouteData from "../components/RouteData";
 import RouteMetaData from "../components/RouteMetaData";
 import CreateRoute from "../components/CreateRoute";
-import axios from "axios";
 
 export async function getServerSideProps(context: any) {
   const session = await unstable_getServerSession(
