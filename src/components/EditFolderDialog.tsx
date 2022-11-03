@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Formik, Form, Field } from "formik";
-import Button from "./Button";
+import { Button } from "@components/shared";
 import { HiArrowNarrowRight } from "react-icons/hi";
 
 type EditFolderDialogPropTypes = {
@@ -49,11 +49,17 @@ const EditFolderDialog: FC<EditFolderDialogPropTypes> = ({
               <Button
                 name="Save"
                 type="submit"
+                style="primary"
                 onClick={() => {
                   values.submit = true;
                 }}
               />
-              <Button name="Cancel" type="button" />
+              <Button
+                name="Cancel"
+                type="button"
+                style="secondary"
+                onClick={() => {}}
+              />
             </div>
           </div>
         </Form>

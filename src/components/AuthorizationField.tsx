@@ -1,7 +1,4 @@
 import { FC, useState, useEffect, useRef } from "react";
-import { BiPencil } from "react-icons/bi";
-import { MdLockOutline } from "react-icons/md";
-import { MdLockOpen } from "react-icons/md";
 import EditAuthorizationFieldPopover from "../components/EditAuthorizationFieldPopover";
 import autoAnimate from "@formkit/auto-animate";
 import Image from "next/future/image";

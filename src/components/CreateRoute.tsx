@@ -5,8 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import ProjectContext from "../context/Project.context";
 import RouteContext from "../context/Route.context";
-import PopoverOptions from "./PopoverOptions";
-import Button from "./Button";
+import { Button, PopoverOptions } from "@components/shared";
 
 const CreateRoute: FC = () => {
   const { project } = useContext(ProjectContext);
@@ -153,6 +152,7 @@ const CreateRoute: FC = () => {
                     <Button
                       name="Create"
                       type="submit"
+                      style="primary"
                       onClick={() => {
                         values.submit = true;
                       }}
@@ -256,6 +256,7 @@ const CreateRoute: FC = () => {
                     <Button
                       name="Create"
                       type="submit"
+                      style="primary"
                       onClick={() => {
                         values.submit = true;
                       }}
