@@ -1,14 +1,22 @@
+//react
 import { FC, useContext, useRef } from "react";
+//context
+// import RouteContext from "@/context/RouteContext";
+import RouteContext from "@/context/Route.context";
+//formik
 import { Formik, Form, Field } from "formik";
-import PopoverOptions from "../components/PopoverOptions";
-import Button from "../components/Button";
-import { useClickAway } from "react-use";
+//data fetching
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import RouteContext from "../context/Route.context";
-import type { FieldFormat, FieldType } from "@prisma/client";
+//components
+import { Button, PopoverOptions } from "@components/shared";
+//icons
 import { HiOutlineCalendar } from "react-icons/hi";
 import { BsClock } from "react-icons/bs";
+//types
+import type { FieldFormat, FieldType } from "@prisma/client";
+//misc
+import { useClickAway } from "react-use";
 
 type CreateFieldPopoverPropTypes = {
   parentModelId: string;
@@ -123,7 +131,6 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
                   { name: "ABC", value: "STRING" },
                   { name: "123", value: "INT" },
                   { name: "T/F", value: "BOOLEAN" },
-                  // { name: "{ }", value: "COMPLEX" },
                 ]}
                 defaultValue={values.type}
               />
@@ -135,12 +142,10 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
                     { name: "None", value: "NONE" },
                     { name: "B64", value: "BYTE" },
                     { name: "1011", value: "BINARY" },
-                    // { name: "3/12", value: "DATE" },
                     {
                       icon: <HiOutlineCalendar className="h-5 w-5" />,
                       value: "DATE",
                     },
-                    // { name: "1:32", value: "DATE_TIME" },
                     {
                       icon: <BsClock className="h-5 w-5" />,
                       value: "DATE_TIME",
@@ -186,35 +191,7 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
                   />
                 </>
               )}
-
-              {/* <PopoverOptions
-                  fieldAlias="Array"
-                  fieldName="array"
-                  options={[
-                    { name: "Yes", value: true },
-                    { name: "No", value: false },
-                  ]}
-                  defaultValue={values.array}
-                />
-                <PopoverOptions
-                  fieldAlias="Optional"
-                  fieldName="optional"
-                  options={[
-                    { name: "Yes", value: true },
-                    { name: "No", value: false },
-                  ]}
-                  defaultValue={values.optional}
-                /> */}
             </div>
-            {/* <div className="mt-4">
-                <h1 className="mb-2">Name</h1>
-                <Field
-                  name="name"
-                  autoComplete="off"
-                  placeholder="field name"
-                  className="rounded-lg border-[1px] border-[#E4E4E4] py-1.5 px-3 text-lg font-light focus:outline-none focus:ring-2 focus:ring-[#F2F2F2]"
-                />
-              </div> */}
             <div className="mt-4 flex flex-row gap-x-6">
               <div className="h-full">
                 <h1 className="mb-2 text-sm">Name</h1>
@@ -248,22 +225,6 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
                 </>
               )}
             </div>
-            {/* <div className="mt-4 flex flex-row gap-x-4">
-                <Button
-                  name="Save"
-                  type="submit"
-                  onClick={() => {
-                    values.submit = true;
-                  }}
-                />
-                <Button
-                  name="Cancel"
-                  type="button"
-                  onClick={() => {
-                    setCreateFieldPopover(false);
-                  }}
-                />*/}
-
             <div className="mt-8 flex flex-row gap-x-2">
               <Button
                 name="Add"
@@ -273,7 +234,6 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
                   values.submit = true;
                 }}
               />
-
               <Button
                 name="Cancel"
                 type="button"
@@ -290,4 +250,4 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
   );
 };
 
-export default CreateFieldPopover;
+export { CreateFieldPopover };

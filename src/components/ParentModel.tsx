@@ -1,23 +1,20 @@
+//react
 import { FC, useState, useRef, useEffect } from "react";
-import Field from "./Field";
-import CreateFieldPopover from "./CreateFieldPopover";
+//components
+import { Field, CreateFieldPopover } from "@components/field";
 import ComplexField from "./ComplexField";
-import autoAnimate from "@formkit/auto-animate";
-import { HiOutlinePlusSm } from "react-icons/hi";
 import * as Separator from "@radix-ui/react-separator";
-import { FieldFormat } from "@prisma/client";
+//icons
+import { HiOutlinePlusSm } from "react-icons/hi";
+//types
+import type { FieldPropTypes } from "@components/field";
+//misc
+import autoAnimate from "@formkit/auto-animate";
 
 type ParentModelPropTypes = {
   id: string;
   name: string;
-  fields: Array<{
-    id: string;
-    name: string;
-    type: "STRING" | "INT" | "BOOLEAN" | "COMPLEX";
-    array: boolean;
-    optional: boolean;
-    format: FieldFormat;
-  }>;
+  fields: Array<FieldPropTypes>;
 };
 
 const ParentModel: FC<ParentModelPropTypes> = ({ id, name, fields }) => {
