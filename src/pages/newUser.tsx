@@ -1,16 +1,20 @@
+//React/Next;
 import type { NextPage } from "next";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+//Formik
 import { Formik, Form, Field, useFormikContext } from "formik";
-import { useSession } from "next-auth/react";
+//Data Fetching
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useEffect } from "react";
-import { useRouter } from "next/router";
-import Image from "next/future/image";
-import schemeGradient from "../../public/scheme-gradient.svg";
+//Auth
+import { useSession } from "next-auth/react";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
-import { useState, FormEvent } from "react";
-import { WarningCircledOutline } from "iconoir-react";
+//Images
+import Image from "next/future/image";
+import schemeGradient from "../../public/scheme-gradient.svg";
+//Icons
 import { MdOutlineErrorOutline } from "react-icons/md";
 
 const FormObserver: React.FC<{ setUsername: any }> = ({ setUsername }) => {
@@ -26,7 +30,6 @@ const FormObserver: React.FC<{ setUsername: any }> = ({ setUsername }) => {
   } = useFormikContext();
 
   useEffect(() => {
-    // alert(`FormObserver::values -- ${JSON.stringify(values)}`);
     setUsername(values.username);
   }, [values]);
 
@@ -73,20 +76,9 @@ const NewUser: NextPage = () => {
     }
   );
 
-  // useEffect(() => {
-  //   if (session === null) {
-  //     router.push("/login");
-  //   }
-
-  //   if (session?.user.onboarded === true) {
-  //     router.push("/");
-  //   }
-  // });
-
   return (
     session && (
       <>
-        {/* <h1>{JSON.stringify(session)}</h1> */}
         <div className="flex h-screen flex-row items-center justify-center gap-x-48 pl-12">
           <div className="flex flex-col">
             <div className="flex flex-col gap-y-4">
@@ -123,12 +115,6 @@ const NewUser: NextPage = () => {
                     },
                     {
                       onSuccess: () => {
-                        // while (router.isReady === false) {}
-                        // if (router.isReady === true) {
-                        //   // router.push("/", undefined, { shallow: false });
-                        //   router.push("/");
-                        // }
-
                         router.push("/");
                       },
                     }
@@ -136,11 +122,7 @@ const NewUser: NextPage = () => {
                 }}
               >
                 {({ values }) => (
-                  <Form
-                    className="flex flex-col gap-y-6"
-                    // onChange={(event: FormEvent) => {
-                    // }}
-                  >
+                  <Form className="flex flex-col gap-y-6">
                     <FormObserver setUsername={setUsername} />
                     <div className="flex flex-row gap-x-16">
                       <div className="flex flex-col gap-y-6">
@@ -242,11 +224,6 @@ export async function getServerSideProps(context: any) {
 
   return {
     props: {
-      // session: await unstable_getServerSession(
-      //   context.req,
-      //   context.res,
-      //   authOptions
-      // ),
       session: session,
     },
   };

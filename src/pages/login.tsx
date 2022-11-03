@@ -1,8 +1,12 @@
+//react
 import type { NextPage } from "next";
-import { FaGoogle } from "react-icons/fa";
-import { getProviders, signIn } from "next-auth/react";
+//images
 import Image from "next/future/image";
 import schemeGradient from "../../public/scheme-gradient.svg";
+//icons
+import { FaGoogle } from "react-icons/fa";
+//auth
+import { getProviders, signIn } from "next-auth/react";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
 

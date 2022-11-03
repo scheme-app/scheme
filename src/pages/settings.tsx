@@ -1,22 +1,25 @@
+//React/Next
 import type { NextPage } from "next";
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import Router, { useRouter } from "next/router";
-import * as Separator from "@radix-ui/react-separator";
-import { HiOutlinePlusSm } from "react-icons/hi";
-import Avatar from "boring-avatars";
-import { IoCopyOutline } from "react-icons/io5";
-import { useCopyToClipboard } from "react-use";
-import { BsArrowReturnRight } from "react-icons/bs";
+import Router from "next/router";
+//Auth
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
+import { useSession } from "next-auth/react";
+//Images
 import Image from "next/future/image";
 import schemeGradient from "../../public/scheme-gradient.svg";
-import axios from "axios";
+import Avatar from "boring-avatars";
+//Formik
 import { Formik, Form, Field, useFormikContext } from "formik";
+//Data Fetching
 import { useMutation, useQuery } from "@tanstack/react-query";
+import axios from "axios";
+//Icons
 import { MdOutlineErrorOutline } from "react-icons/md";
-import Button from "../components/Button";
+//Components
+import { Button } from "@components/shared";
+import * as Separator from "@radix-ui/react-separator";
 
 export async function getServerSideProps(context: any) {
   const session = await unstable_getServerSession(
