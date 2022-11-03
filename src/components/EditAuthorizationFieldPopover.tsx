@@ -97,7 +97,7 @@ const EditAuthorizationFieldPopover: FC<
                   defaultValue={values.type}
                 />
               </div>
-              <div className="mt-6 flex flex-row gap-x-2">
+              <div className="mt-8 flex flex-row gap-x-2">
                 <Button
                   name="Save"
                   type="submit"

@@ -4,11 +4,8 @@ import ProjectContext from "../context/Project.context";
 import PopoverOptions from "./PopoverOptions";
 import Button from "./Button";
 import { Formik, Form, Field } from "formik";
-import { FiChevronDown } from "react-icons/fi";
-import { BsFolder } from "react-icons/bs";
-import * as ScrollArea from "@radix-ui/react-scroll-area";
 import { useClickAway } from "react-use";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
 type folder = {

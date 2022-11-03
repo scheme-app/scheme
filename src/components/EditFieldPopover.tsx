@@ -99,7 +99,7 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
         <Form>
           <div
             role="group"
-            className="mx-1 mt-4 mb-6 flex flex-col rounded-xl border-[1px] border-[#E4E4E4] bg-white px-6 pt-4 pb-4 shadow-sm"
+            className="mx-1 mb-6 flex flex-col rounded-xl border-[1px] border-[#E4E4E4] bg-white px-6 pt-4 pb-4 shadow-sm"
           >
             <div className="flex flex-row flex-wrap gap-x-4">
               <PopoverOptions
@@ -234,22 +234,6 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
                 </>
               )}
             </div>
-            {/* <div className="mt-4 flex flex-row gap-x-4">
-                <Button
-                  name="Save"
-                  type="submit"
-                  onClick={() => {
-                    values.submit = true;
-                  }}
-                />
-                <Button
-                  name="Cancel"
-                  type="button"
-                  onClick={() => {
-                    setCreateFieldPopover(false);
-                  }}
-                />*/}
-
             <div className="mt-8 flex flex-row gap-x-2">
               <Button
                 name="Save"
