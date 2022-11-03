@@ -6,7 +6,7 @@ type AuthorizationPropTypes = {
   authorization: "NONE" | "BEARER" | "API_KEY" | "BASIC" | "DIGEST" | "OAUTH";
 };
 
-const Authorization: FC<AuthorizationPropTypes> = ({ authorization }) => {
+const AuthorizationModel: FC<AuthorizationPropTypes> = ({ authorization }) => {
   return (
     <div className="flex flex-col">
       <h1 className="text-md font-light text-[#747474]">Headers</h1>
@@ -20,4 +20,4 @@ const Authorization: FC<AuthorizationPropTypes> = ({ authorization }) => {
   );
 };
 
-export default Authorization;
+export { AuthorizationModel };

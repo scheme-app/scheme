@@ -2,7 +2,7 @@ import { FC, ReactNode, useState, useEffect, useRef } from "react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import Folder from "../components/Folder";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Route from "./Route";
+import Route from "./Route_sidebar";
 import { useNetworkState } from "react-use";
 import { TbWifiOff } from "react-icons/tb";
 import { HiChevronDown } from "react-icons/hi";

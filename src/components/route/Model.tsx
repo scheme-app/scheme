@@ -10,13 +10,13 @@ import type { FieldPropTypes } from "@components/field";
 //misc
 import autoAnimate from "@formkit/auto-animate";
 
-type ParentModelPropTypes = {
+type ModelPropTypes = {
   id: string;
   name: string;
   fields: Array<FieldPropTypes>;
 };
 
-const ParentModel: FC<ParentModelPropTypes> = ({ id, name, fields }) => {
+const Model: FC<ModelPropTypes> = ({ id, name, fields }) => {
   const [showCreateFieldPopover, setShowCreateFieldPopover] = useState(false);
 
   const parent = useRef(null);
@@ -83,4 +83,4 @@ const ParentModel: FC<ParentModelPropTypes> = ({ id, name, fields }) => {
   );
 };
 
-export default ParentModel;
+export { Model };

@@ -17,7 +17,8 @@ import { authOptions } from "./api/auth/[...nextauth]";
 
 //components
 import Layout from "../components/Layout";
-import RouteData from "../components/RouteData";
+// import RouteData from "../components/RouteData";
+import { RouteData } from "@/components/route";
 import RouteMetaData from "../components/RouteMetaData";
 import CreateRoute from "../components/CreateRoute";
 

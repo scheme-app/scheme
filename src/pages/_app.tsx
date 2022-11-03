@@ -6,10 +6,14 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import RouteContext from "../context/Route.context";
 import { useState } from "react";
 import ProjectContext from "../context/Project.context";
+import { Session } from "next-auth";
 
 const queryClient = new QueryClient();
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+function MyApp({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps<{ session: Session }>) {
   const [routeId, setRouteId] = useState("");
   const [newRouteType, setNewRouteType] = useState<"NONE" | "NEW" | "IMPORT">(
     "NONE"

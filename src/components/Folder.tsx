@@ -1,6 +1,6 @@
 import { FC, useState, useRef, useEffect, useContext } from "react";
 import { BsFolder, BsFolder2Open } from "react-icons/bs";
-import Route from "./Route";
+import Route from "./Route_sidebar";
 import autoAnimate from "@formkit/auto-animate";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import * as Popover from "@radix-ui/react-popover";
