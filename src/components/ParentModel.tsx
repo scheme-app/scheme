@@ -2,7 +2,6 @@
 import { FC, useState, useRef, useEffect } from "react";
 //components
 import { Field, CreateFieldPopover } from "@components/field";
-import ComplexField from "./ComplexField";
 import * as Separator from "@radix-ui/react-separator";
 //icons
 import { HiOutlinePlusSm } from "react-icons/hi";
@@ -40,36 +39,24 @@ const ParentModel: FC<ParentModelPropTypes> = ({ id, name, fields }) => {
         />
       )}
       {fields.map(({ id, name, type, array, optional, format }) => {
-        if (type !== "COMPLEX") {
-          return (
-            <>
-              <Separator.Root
-                decorative
-                orientation="horizontal"
-                className="h-[1px] bg-[#E4E4E4]"
-              />
-              <Field
-                key={id}
-                id={id}
-                name={name}
-                type={type}
-                array={array}
-                optional={optional}
-                format={format}
-              />
-            </>
-          );
-        } else {
-          return (
-            <ComplexField
+        return (
+          <>
+            <Separator.Root
+              decorative
+              orientation="horizontal"
+              className="h-[1px] bg-[#E4E4E4]"
+            />
+            <Field
               key={id}
               id={id}
               name={name}
+              type={type}
               array={array}
               optional={optional}
+              format={format}
             />
-          );
-        }
+          </>
+        );
       })}
 
       {!showCreateFieldPopover && (
