@@ -3,8 +3,6 @@ import * as ScrollArea from "@radix-ui/react-scroll-area";
 import Folder from "../components/Folder";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Route from "./Route_sidebar";
-import { useNetworkState } from "react-use";
-import { TbWifiOff } from "react-icons/tb";
 import { HiChevronDown } from "react-icons/hi";
 import autoAnimate from "@formkit/auto-animate";
 import { useContext } from "react";
@@ -17,13 +15,10 @@ import { useRouter } from "next/router";
 import Avatar from "boring-avatars";
 import * as Popover from "@radix-ui/react-popover";
 import { Formik, Form, Field } from "formik";
-import Button from "./Button";
-import PopoverOptions from "./PopoverOptions";
 import axios from "axios";
 import { FiLogOut } from "react-icons/fi";
 import { BsPerson } from "react-icons/bs";
 import { signOut } from "next-auth/react";
-import SchemeHeaderIcon from "../../public/scheme-header-icon.svg";
 import Image from "next/future/image";
 import SchemeMiniLogo from "../../public/scheme-mini-logo.svg";
 import { BsFolderPlus } from "react-icons/bs";
@@ -160,7 +155,6 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
                       // setCreateFolder(true);
                     }}
                   >
-                    {/* <h1 className="mb-0.5 text-xl text-[#969696]">+</h1> */}
                     <HiOutlinePlusSm className="h-5 w-5 text-[#969696]" />
                   </button>
                 </Popover.Trigger>
@@ -276,7 +270,6 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
                 size={25}
                 name={project.id}
                 variant="marble"
-                // colors={["#A4AB80", "#7C8569", "#52493A", "#E8E0AE", "#968F4B"]}
                 colors={["#E1EDD1", "#AAB69B", "#7C8569", "#E8E0AE", "#A4AB80"]}
               />
               <h1 className="text-sm text-black">{project.name}</h1>
@@ -300,24 +293,14 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
       <div className="h-screen w-full flex-col justify-center pl-24 pr-12 pt-8">
         <div className="flex w-full flex-row justify-between">
           <div></div>
-          {/* <div className="flex flex-row gap-x-2">
-            <h1 className="text-sm italic tracking-wider text-[#969696]">
-              Index / user /
-            </h1>
-            <h1 className="text-sm tracking-wide text-black underline">
-              createUser
-            </h1>
-          </div> */}
           <DropdownMenu.Root>
             <div className="flex flex-row items-center gap-x-2">
               <Avatar
                 size={25}
                 name={session?.user.id}
                 variant="marble"
-                // colors={["#A4AB80", "#7C8569", "#52493A", "#E8E0AE", "#968F4B"]}
                 colors={["#E1EDD1", "#AAB69B", "#7C8569", "#E8E0AE", "#A4AB80"]}
               />
-              {/* <h1 className="text-md text-black">{session?.user.name}</h1> */}
               <DropdownMenu.Trigger className="outline-none">
                 <HiChevronDown className="text-[#969696]" />
               </DropdownMenu.Trigger>
@@ -351,17 +334,5 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
     </div>
   );
 };
-
-// export async function getServerSideProps(context: any) {
-//   return {
-//     props: {
-//       session: await unstable_getServerSession(
-//         context.req,
-//         context.res,
-//         authOptions
-//       ),
-//     },
-//   };
-// }
 
 export default Layout;
