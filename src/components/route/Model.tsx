@@ -84,3 +84,4 @@ const Model: FC<ModelPropTypes> = ({ id, name, fields }) => {
 };
 
 export { Model };
+export type { ModelPropTypes };

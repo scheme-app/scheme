@@ -2,8 +2,8 @@ import { FC, useState, useEffect, useRef } from "react";
 import EditAuthorizationFieldPopover from "./EditAuthorizationFieldPopover";
 import autoAnimate from "@formkit/auto-animate";
 import Image from "next/future/image";
-import lock from "../../../public/lock.svg";
-import openLock from "../../../public/openLock.svg";
+import lock from "../../../../public/lock.svg";
+import openLock from "../../../../public/openLock.svg";
 
 type AuthorizationFieldPropTypes = {
   authorization: "NONE" | "BEARER" | "API_KEY" | "BASIC" | "DIGEST" | "OAUTH";

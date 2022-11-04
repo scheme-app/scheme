@@ -2,7 +2,7 @@ import { FC, useState, useContext } from "react";
 import Avatar from "boring-avatars";
 import { CgRemove } from "react-icons/cg";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import RouteContext from "../context/Route.context";
+import RouteContext from "@/context/Route.context";
 import axios from "axios";
 
 const RouteUser: FC<{

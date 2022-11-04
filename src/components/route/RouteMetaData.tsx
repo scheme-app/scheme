@@ -5,7 +5,7 @@ import axios from "axios";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/future/image";
 import Avatar from "boring-avatars";
-import Priority from "../../public/priority.svg";
+import Priority from "../../../public/priority.svg";
 import { Formik, Form, Field } from "formik";
 import RouteUser from "./RouteUser";
 import { HiOutlinePlusSm } from "react-icons/hi";
@@ -335,4 +335,4 @@ const RouteMetaData: FC<PropTypes> = ({
   );
 };
 
-export default RouteMetaData;
+export { RouteMetaData };

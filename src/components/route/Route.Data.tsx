@@ -1,22 +1,14 @@
 import { FC } from "react";
 import RouteHeader from "./RouteHeader";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
-import { AuthorizationModel } from "./AuthorizationModel";
+import { AuthorizationModel } from "./authorization";
 import { Model } from "./Model";
-import { FieldFormat, AuthorizationType } from "@prisma/client";
-
-type Field = {
-  id: string;
-  name: string;
-  type: "STRING" | "INT" | "BOOLEAN" | "COMPLEX";
-  array: boolean;
-  optional: boolean;
-  format: FieldFormat;
-};
+import { AuthorizationType } from "@prisma/client";
+import { FieldPropTypes } from "@components/field";
 
 type Model = {
   id: string;
-  fields: Array<Field>;
+  fields: Array<FieldPropTypes>;
 };
 
 type PropTypes = {

@@ -18,8 +18,9 @@ import { authOptions } from "./api/auth/[...nextauth]";
 //components
 import Layout from "../components/Layout";
 // import RouteData from "../components/RouteData";
-import { RouteData } from "@/components/route";
-import RouteMetaData from "../components/RouteMetaData";
+// import { RouteData } from "@/components/route";
+// import RouteMetaData from "../components/RouteMetaData";
+import { Route } from "@/components/route";
 import CreateRoute from "../components/CreateRoute";
 
 export async function getServerSideProps(context: any) {
@@ -104,23 +105,7 @@ const Home: NextPage<{ routeIdProp: string }> = ({ routeIdProp }) => {
         {routeId === "" ? (
           <CreateRoute />
         ) : status === "success" ? (
-          <div className="mt-24 flex flex-row gap-x-24">
-            <RouteData
-              id={data.id}
-              name={data.name}
-              type={data.type}
-              authorization={data.authorization}
-              models={data.models}
-            />
-            <RouteMetaData
-              projectId={project.id}
-              routeId={routeId}
-              status={data.status}
-              priority={data.priority}
-              owner={data.owner}
-              assignedTo={data.assignedTo}
-            />
-          </div>
+          <Route routeData={data} projectId={project.id} />
         ) : (
           <div></div>
         )}
