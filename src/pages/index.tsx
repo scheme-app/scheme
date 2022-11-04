@@ -74,20 +74,6 @@ const Home: NextPage<{ routeIdProp: string }> = ({ routeIdProp }) => {
 
   const { routeId, setRouteId } = useContext(RouteContext);
 
-  const { data, status } = useQuery(
-    [routeId],
-    async () => {
-      const response = await axios.get(
-        `http://localhost:3000/api/route/get.route?routeId=${routeId}`
-      );
-
-      return response.data;
-    },
-    {
-      enabled: project.id !== "",
-    }
-  );
-
   useEffect(() => {
     if (routeIdProp !== "") {
       setRouteId(routeIdProp);
@@ -95,19 +81,7 @@ const Home: NextPage<{ routeIdProp: string }> = ({ routeIdProp }) => {
     }
   }, []);
 
-  return (
-    <>
-      <Layout>
-        {routeId === "" ? (
-          <CreateRoute />
-        ) : status === "loading" ? (
-          <div></div> //implement loading state
-        ) : (
-          <Route routeData={data} projectId={project.id} />
-        )}
-      </Layout>
-    </>
-  );
+  return <Layout>{routeId === "" ? <CreateRoute /> : <Route />}</Layout>;
 };
 
 export default Home;

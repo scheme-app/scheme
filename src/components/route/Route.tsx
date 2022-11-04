@@ -1,38 +1,32 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { RouteData } from "./Route.Data";
 import { Metadata } from "./metadata";
+import RouteContext from "@/context/Route.context";
+import ProjectContext from "@/context/Project.context";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
-import type {
-  RouteType,
-  AuthorizationType,
-  RouteStatus,
-  RoutePriority,
-} from "@prisma/client";
-import type { ModelPropTypes } from "./Model";
+const Route: FC = () => {
+  const { routeId } = useContext(RouteContext);
+  const { project } = useContext(ProjectContext);
 
-type User = {
-  id: string;
-  name: string;
-  username: string;
-};
+  const { data, status } = useQuery(
+    [routeId],
+    async () => {
+      const response = await axios.get(
+        `http://localhost:3000/api/route/get.route?routeId=${routeId}`
+      );
 
-type PropTypes = {
-  routeData: {
-    id: string;
-    name: string;
-    type: RouteType;
-    authorization: AuthorizationType;
-    models: Array<ModelPropTypes>;
-    status: RouteStatus;
-    priority: RoutePriority;
-    owner: User;
-    assignedTo: Array<User>;
-  };
-  projectId: string;
-};
+      return response.data;
+    },
+    {
+      enabled: project.id !== "",
+    }
+  );
 
-const Route: FC<PropTypes> = ({ routeData: data, projectId }) => {
-  return (
+  return status === "loading" ? (
+    <div></div> //implement loading state
+  ) : (
     <div className="mt-24 flex flex-row gap-x-24">
       <RouteData
         id={data.id}
@@ -42,8 +36,6 @@ const Route: FC<PropTypes> = ({ routeData: data, projectId }) => {
         models={data.models}
       />
       <Metadata
-        projectId={projectId}
-        routeId={data.id}
         status={data.status}
         priority={data.priority}
         owner={data.owner}
