@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import RouteContext from "@/context/Route.context";
 import axios from "axios";
 
-const RouteUser: FC<{
+const User: FC<{
   id: string;
   name: string;
   username: string;
@@ -40,8 +40,6 @@ const RouteUser: FC<{
       }}
     >
       <div className="flex w-44 flex-row gap-x-4">
-        {/* <div className="h-4 w-4 rounded-full border-[1.5px] border-[#969696]" /> */}
-        {/* <Image src={Priority} alt="priority" /> */}
         <Avatar
           size={25}
           name={id}
@@ -69,4 +67,4 @@ const RouteUser: FC<{
   );
 };
 
-export default RouteUser;
+export { User };

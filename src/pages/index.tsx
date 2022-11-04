@@ -101,7 +101,7 @@ const Home: NextPage<{ routeIdProp: string }> = ({ routeIdProp }) => {
         {routeId === "" ? (
           <CreateRoute />
         ) : status === "loading" ? (
-          <div></div>
+          <div></div> //implement loading state
         ) : (
           <Route routeData={data} projectId={project.id} />
         )}

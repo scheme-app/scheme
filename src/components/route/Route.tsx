@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { RouteData } from "./Route.Data";
-import { RouteMetaData } from "./RouteMetaData";
+import { Metadata } from "./metadata";
 
 import type {
   RouteType,
@@ -41,7 +41,7 @@ const Route: FC<PropTypes> = ({ routeData: data, projectId }) => {
         authorization={data.authorization}
         models={data.models}
       />
-      <RouteMetaData
+      <Metadata
         projectId={projectId}
         routeId={data.id}
         status={data.status}
