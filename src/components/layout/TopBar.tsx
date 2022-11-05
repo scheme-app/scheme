@@ -5,7 +5,7 @@ import Avatar from "boring-avatars";
 import { HiChevronDown } from "react-icons/hi";
 import { BsPerson } from "react-icons/bs";
 import { FiLogOut } from "react-icons/fi";
-import { Session } from "next-auth";
+import type { Session } from "next-auth";
 import { signOut } from "next-auth/react";
 
 type PropTypes = {

@@ -1,2 +1,2 @@
 export * from "./TopBar";
-export * from "./sidebar";
+export * from "./sidebar/ProjectSelector";

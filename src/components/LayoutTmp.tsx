@@ -3,43 +3,38 @@ import * as ScrollArea from "@radix-ui/react-scroll-area";
 import Folder from "./Folder";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Route from "./Route_sidebar";
-import { HiChevronDown } from "react-icons/hi";
 import autoAnimate from "@formkit/auto-animate";
 import { useContext } from "react";
 import ProjectContext from "../context/Project.context";
 import RouteContext from "../context/Route.context";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { useSession } from "next-auth/react";
-import { HiOutlinePlusSm } from "react-icons/hi";
-import { useRouter } from "next/router";
-import Avatar from "boring-avatars";
 import * as Popover from "@radix-ui/react-popover";
 import { Formik, Form, Field } from "formik";
 import axios from "axios";
 import { BsFolderPlus } from "react-icons/bs";
-import { SidebarFooter } from "@components/layout/sidebar";
 import { TopBar } from "@components/layout/TopBar";
+import { ProjectSelector } from "@components/layout/sidebar/ProjectSelector";
+import { HiOutlinePlusSm } from "react-icons/hi";
 
 const LayoutTmp: FC<{ children: ReactNode }> = ({ children }) => {
   const { data: session } = useSession();
-
-  const router = useRouter();
 
   const { project, setProject } = useContext(ProjectContext);
   const { setRouteId, setFolder, setNewRouteType } = useContext(RouteContext);
 
   const queryClient = useQueryClient();
 
-  const { data: projectData, status: projectStatus } = useQuery(
-    ["projects"],
-    async () => {
-      const response = await axios.get(
-        `http://localhost:3000/api/project/get.projects?userId=${session?.user.id}`
-      );
+  const { data: projectData } = useQuery(["projects"], async () => {
+    const response = await axios.get(
+      `http://localhost:3000/api/project/get.projects?userId=${session?.user.id}`
+    );
 
-      return response.data;
-    }
-  );
+    return response.data;
+  });
+
+  if (project.id === "" && projectData) {
+    setProject(projectData[0]);
+  }
 
   const { data, status } = useQuery([project.id], async () => {
     const response = await axios.get(
@@ -72,11 +67,9 @@ const LayoutTmp: FC<{ children: ReactNode }> = ({ children }) => {
       });
   }, [parent]);
 
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
-
-  return (
+  return status === "loading" ? (
+    <></> //implement loading state
+  ) : (
     <div className="flex h-screen overflow-hidden">
       <div className="relative w-[24rem] flex-col items-center justify-center border-r-[1px] border-[#E4E4E4] p-8">
         <ScrollArea.Root>
@@ -200,83 +193,7 @@ const LayoutTmp: FC<{ children: ReactNode }> = ({ children }) => {
             <ScrollArea.Corner />
           </ScrollArea.Viewport>
         </ScrollArea.Root>
-        <DropdownMenu.Root>
-          <DropdownMenu.Portal>
-            <DropdownMenu.Content className="mr-36 mb-6">
-              <ScrollArea.Root>
-                <ScrollArea.Viewport className="flex h-24 flex-col rounded-lg border-[1px] border-[#E4E4E4] bg-white py-2 px-2 shadow-md">
-                  {projectData &&
-                    projectData.map((project: { id: string; name: string }) => (
-                      <DropdownMenu.Item
-                        className="rounded-md px-2 py-1.5 outline-none hover:bg-[#F2F2F2]"
-                        key={project.id}
-                      >
-                        <div className="flex flex-row items-center gap-x-2">
-                          <button
-                            className="flex w-full flex-row items-center gap-x-4"
-                            onClick={() => {
-                              setRouteId("");
-                              setProject({
-                                id: project.id,
-                                name: project.name,
-                              });
-                            }}
-                          >
-                            <Avatar
-                              size={25}
-                              name={project.id}
-                              variant="marble"
-                              colors={[
-                                "#E1EDD1",
-                                "#AAB69B",
-                                "#7C8569",
-                                "#E8E0AE",
-                                "#A4AB80",
-                              ]}
-                            />
-                            <h1 className="text-sm text-[#969696]">
-                              {project.name}
-                            </h1>
-                          </button>
-                          <button
-                            className="flex h-7 w-9 items-center justify-center rounded-md text-[#969696] hover:text-black"
-                            onClick={() => {
-                              router.push(`/project/${project.id}/settings`);
-                            }}
-                          >
-                            <h1 className="mb-2">...</h1>
-                          </button>
-                        </div>
-                      </DropdownMenu.Item>
-                    ))}
-                  <button className="flex w-full flex-row items-center gap-x-2 rounded-lg p-2 hover:bg-[#F2F2F2]">
-                    <HiOutlinePlusSm className="h-3.5 w-3.5 text-[#969696]" />
-                    <h1 className="text-sm text-[#969696]">New Project</h1>
-                  </button>
-                </ScrollArea.Viewport>
-                <ScrollArea.Scrollbar orientation="vertical">
-                  <ScrollArea.Thumb />
-                </ScrollArea.Scrollbar>
-                <ScrollArea.Corner />
-              </ScrollArea.Root>
-            </DropdownMenu.Content>
-          </DropdownMenu.Portal>
-          <div className="fixed bottom-8">
-            <div className="flex w-60 flex-row items-center justify-between rounded-lg border-[1.5px] border-[#E4E4E4] bg-white py-2 px-3">
-              <Avatar
-                size={25}
-                name={project.id}
-                variant="marble"
-                colors={["#E1EDD1", "#AAB69B", "#7C8569", "#E8E0AE", "#A4AB80"]}
-              />
-              <h1 className="text-sm text-black">{project.name}</h1>
-              <DropdownMenu.Trigger className="flex items-center justify-center outline-none">
-                <HiChevronDown className="text-[#747474]" />
-              </DropdownMenu.Trigger>
-            </div>
-            <SidebarFooter />
-          </div>
-        </DropdownMenu.Root>
+        <ProjectSelector session={session} />
       </div>
       <div className="h-screen w-full flex-col justify-center pl-24 pr-12 pt-8">
         <TopBar session={session} />

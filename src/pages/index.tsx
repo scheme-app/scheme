@@ -3,15 +3,9 @@ import type { NextPage } from "next";
 import { useEffect, useContext } from "react";
 
 //Context
-import RouteContext from "../context/Route.context";
-import ProjectContext from "../context/Project.context";
-
-// data fetching
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import RouteContext from "@/context/Route.context";
 
 //auth
-import { useSession } from "next-auth/react";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
 
@@ -53,25 +47,6 @@ export async function getServerSideProps(context: any) {
 }
 
 const Home: NextPage<{ routeIdProp: string }> = ({ routeIdProp }) => {
-  const { data: session } = useSession();
-
-  const { project, setProject } = useContext(ProjectContext);
-
-  const { data: projectData, status: projectStatus } = useQuery(
-    ["projects"],
-    async () => {
-      const response = await axios.get(
-        `http://localhost:3000/api/project/get.projects?userId=${session?.user.id}`
-      );
-
-      return response.data;
-    }
-  );
-
-  if (project.id === "" && projectData) {
-    setProject(projectData[0]);
-  }
-
   const { routeId, setRouteId } = useContext(RouteContext);
 
   useEffect(() => {
