@@ -4,16 +4,6 @@ import autoAnimate from "@formkit/auto-animate";
 import { ShareIos } from "iconoir-react";
 import { useCopyToClipboard } from "react-use";
 
-type PropTypes = {
-  id: string;
-  name: string;
-  type: "GET" | "POST";
-  folder?: {
-    id: string;
-    name: string;
-  };
-};
-
 const PostTag: FC = () => {
   return (
     <div className="mt-2 flex h-6 items-center rounded-[0.25rem] bg-[#FBF3EE] px-1">
@@ -32,7 +22,17 @@ const GetTag: FC = () => {
   );
 };
 
-const RouteHeader: FC<PropTypes> = ({ id, name, type, folder }) => {
+type PropTypes = {
+  id: string;
+  name: string;
+  type: "GET" | "POST";
+  folder?: {
+    id: string;
+    name: string;
+  };
+};
+
+const RouteHeader: FC<PropTypes> = ({ id, name, type }) => {
   const [showEditRoutePopover, setShowEditRoutePopover] = useState(false);
   const [state, copyToClipboard] = useCopyToClipboard();
 
@@ -76,7 +76,6 @@ const RouteHeader: FC<PropTypes> = ({ id, name, type, folder }) => {
           <EditRoutePopover
             name={name}
             type={type}
-            // folder={folder}
             setEditRoutePopover={setShowEditRoutePopover}
           />
         )}
