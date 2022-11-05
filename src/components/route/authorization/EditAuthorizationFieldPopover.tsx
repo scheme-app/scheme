@@ -1,9 +1,8 @@
 import { FC, useRef, useContext } from "react";
 import { Formik, Form } from "formik";
-import PopoverOptions from "./PopoverOptions";
-import Button from "./Button";
+import { Button, PopoverOptions } from "@components/shared";
 import { useClickAway } from "react-use";
-import RouteContext from "../context/Route.context";
+import RouteContext from "@/context/Route.context";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -97,30 +96,23 @@ const EditAuthorizationFieldPopover: FC<
                   defaultValue={values.type}
                 />
               </div>
-              <div className="mt-6 flex flex-row gap-x-2">
+              <div className="mt-8 flex flex-row gap-x-2">
                 <Button
                   name="Save"
                   type="submit"
+                  style="primary"
                   onClick={() => {
                     values.submit = true;
                   }}
                 />
-                {/* <Button
+                <Button
                   name="Cancel"
                   type="button"
+                  style="secondary"
                   onClick={() => {
                     setAuthorizationFieldPopover(false);
                   }}
-                />*/}
-                <button
-                  className="text-md px-2 py-1 font-light text-[#969696] hover:text-black"
-                  type="button"
-                  onClick={() => {
-                    setAuthorizationFieldPopover(false);
-                  }}
-                >
-                  Cancel
-                </button>
+                />
               </div>
             </div>
           </Form>

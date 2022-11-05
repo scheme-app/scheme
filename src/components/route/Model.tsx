@@ -1,26 +1,22 @@
+//react
 import { FC, useState, useRef, useEffect } from "react";
-import Field from "./Field";
-import CreateFieldPopover from "./CreateFieldPopover";
-import ComplexField from "./ComplexField";
-import autoAnimate from "@formkit/auto-animate";
-import { HiOutlinePlusSm } from "react-icons/hi";
+//components
+import { Field, CreateFieldPopover } from "@components/field";
 import * as Separator from "@radix-ui/react-separator";
-import { FieldFormat } from "@prisma/client";
+//icons
+import { HiOutlinePlusSm } from "react-icons/hi";
+//types
+import type { FieldPropTypes } from "@components/field";
+//misc
+import autoAnimate from "@formkit/auto-animate";
 
-type ParentModelPropTypes = {
+type ModelPropTypes = {
   id: string;
   name: string;
-  fields: Array<{
-    id: string;
-    name: string;
-    type: "STRING" | "INT" | "BOOLEAN" | "COMPLEX";
-    array: boolean;
-    optional: boolean;
-    format: FieldFormat;
-  }>;
+  fields: Array<FieldPropTypes>;
 };
 
-const ParentModel: FC<ParentModelPropTypes> = ({ id, name, fields }) => {
+const Model: FC<ModelPropTypes> = ({ id, name, fields }) => {
   const [showCreateFieldPopover, setShowCreateFieldPopover] = useState(false);
 
   const parent = useRef(null);
@@ -43,36 +39,24 @@ const ParentModel: FC<ParentModelPropTypes> = ({ id, name, fields }) => {
         />
       )}
       {fields.map(({ id, name, type, array, optional, format }) => {
-        if (type !== "COMPLEX") {
-          return (
-            <>
-              <Separator.Root
-                decorative
-                orientation="horizontal"
-                className="h-[1px] bg-[#E4E4E4]"
-              />
-              <Field
-                key={id}
-                id={id}
-                name={name}
-                type={type}
-                array={array}
-                optional={optional}
-                format={format}
-              />
-            </>
-          );
-        } else {
-          return (
-            <ComplexField
+        return (
+          <>
+            <Separator.Root
+              decorative
+              orientation="horizontal"
+              className="h-[1px] bg-[#E4E4E4]"
+            />
+            <Field
               key={id}
               id={id}
               name={name}
+              type={type}
               array={array}
               optional={optional}
+              format={format}
             />
-          );
-        }
+          </>
+        );
       })}
 
       {!showCreateFieldPopover && (
@@ -99,4 +83,5 @@ const ParentModel: FC<ParentModelPropTypes> = ({ id, name, fields }) => {
   );
 };
 
-export default ParentModel;
+export { Model };
+export type { ModelPropTypes };

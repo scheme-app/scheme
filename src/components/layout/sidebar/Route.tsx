@@ -1,13 +1,15 @@
 import { FC, useContext, useEffect } from "react";
-import RouteContext from "../context/Route.context";
+import RouteContext from "@/context/Route.context";
 import { useQueryClient } from "@tanstack/react-query";
 import { BsFileEarmarkCode } from "react-icons/bs";
 import { useRouter } from "next/router";
+import axios from "axios";
+import type { RouteType } from "@prisma/client";
 
 type RoutePropTypes = {
   id: string;
   name: string;
-  type: "GET" | "POST";
+  type: RouteType;
 };
 
 const PostTag: FC = () => {
@@ -33,21 +35,15 @@ const Route: FC<RoutePropTypes> = ({ id, name, type }) => {
 
   const queryClient = useQueryClient();
 
-  const getRoute = async () => {
-    console.log("getting route");
-    const response = await fetch(
-      `http://localhost:3000/api/route/get.route?routeId=${id}`,
-      {
-        method: "GET",
-      }
-    );
-
-    return response.json();
-  };
-
   useEffect(() => {
     const prefetch = async () => {
-      await queryClient.prefetchQuery([id], getRoute);
+      await queryClient.prefetchQuery([id], async () => {
+        const response = await axios.get(
+          `http://localhost:3000/api/route/get.route?routeId=${id}`
+        );
+
+        return response.data;
+      });
     };
     prefetch();
   }, []);
@@ -79,4 +75,5 @@ const Route: FC<RoutePropTypes> = ({ id, name, type }) => {
   );
 };
 
-export default Route;
+export { Route };
+export type { RoutePropTypes };

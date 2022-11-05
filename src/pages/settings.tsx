@@ -1,24 +1,59 @@
+//React/Next
 import type { NextPage } from "next";
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import Router, { useRouter } from "next/router";
-import * as Separator from "@radix-ui/react-separator";
-import { HiOutlinePlusSm } from "react-icons/hi";
-import Avatar from "boring-avatars";
-import { IoCopyOutline } from "react-icons/io5";
-import { useCopyToClipboard } from "react-use";
-import { BsArrowReturnRight } from "react-icons/bs";
+import Router from "next/router";
+//Auth
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
+import { useSession } from "next-auth/react";
+//Images
 import Image from "next/future/image";
 import schemeGradient from "../../public/scheme-gradient.svg";
-import axios from "axios";
+import Avatar from "boring-avatars";
+//Formik
 import { Formik, Form, Field, useFormikContext } from "formik";
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
-import { Session } from "next-auth";
+//Data Fetching
+import { useMutation, useQuery } from "@tanstack/react-query";
+import axios from "axios";
+//Icons
 import { MdOutlineErrorOutline } from "react-icons/md";
+//Components
+import { Button } from "@components/shared";
+import * as Separator from "@radix-ui/react-separator";
 
-const FormObserver: React.FC<{ setUsername: any }> = ({ setUsername }) => {
+export async function getServerSideProps(context: any) {
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/login",
+      },
+    };
+  }
+
+  if (session.user.onboarded === false) {
+    return {
+      redirect: {
+        destination: "/newUser",
+      },
+    };
+  }
+
+  return {
+    props: {
+      session: session,
+    },
+  };
+}
+
+const FormObserver: React.FC<{ setUsername: (username: string) => void }> = ({
+  setUsername,
+}) => {
   const {
     values,
   }: {
@@ -43,8 +78,6 @@ const Settings: NextPage = () => {
   const [editProfile, setEditProfile] = useState(false);
   const [username, setUsername] = useState("");
 
-  console.log("session in page", session);
-
   const updateProfile = useMutation(
     ({ name, username }: { name?: string; username?: string }) => {
       return axios.post("/api/user/update.user", {
@@ -55,15 +88,15 @@ const Settings: NextPage = () => {
     }
   );
 
-  const getUser = async (username: string) => {
-    const response = await axios.get(`/api/user/get.user?username=${username}`);
-
-    return response.data;
-  };
-
   const { data: userData, status: userStatus } = useQuery(
     ["user", username],
-    () => getUser(username),
+    async () => {
+      const response = await axios.get(
+        `/api/user/get.user?username=${username}`
+      );
+
+      return response.data;
+    },
     {
       enabled: !!username,
       retry: true,
@@ -174,26 +207,24 @@ const Settings: NextPage = () => {
                     </div>
                     <div className="mt-4 flex flex-row gap-x-3">
                       {!userData && (
-                        <button
-                          className="rounded-md border-[1px] border-[#E4E4E4] py-0.5 px-3 text-sm font-light text-[#969696] hover:text-black hover:shadow-sm"
+                        <Button
+                          name="Save"
                           type="submit"
+                          style="primary"
                           onClick={() => {
                             values.submit = true;
                           }}
-                        >
-                          Save
-                        </button>
+                        />
                       )}
-                      <button
-                        className="px-2 py-1 text-sm font-light text-[#969696] hover:text-black"
+                      <Button
+                        name="Cancel"
                         type="button"
+                        style="secondary"
                         onClick={() => {
                           setUsername("");
                           setEditProfile(false);
                         }}
-                      >
-                        Cancel
-                      </button>
+                      />
                     </div>
                   </Form>
                 )}
@@ -262,15 +293,15 @@ const Settings: NextPage = () => {
               </div>
             </div>
             <div className="mt-6 flex flex-row gap-x-2">
-              <button
-                className="rounded-md border-[1px] border-[#E4E4E4] py-0.5 px-2 text-sm font-light text-[#969696] hover:text-black hover:shadow-sm"
-                type="submit"
+              <Button
+                name="Edit Profile"
+                type="button"
+                style="primary"
+                size="small"
                 onClick={() => {
                   setEditProfile(true);
                 }}
-              >
-                Edit Profile
-              </button>
+              />
             </div>
           </div>
         </div>
@@ -281,37 +312,5 @@ const Settings: NextPage = () => {
     ))
   );
 };
-
-export async function getServerSideProps(context: any) {
-  const session = await unstable_getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  );
-
-  console.log("session", session);
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/login",
-      },
-    };
-  }
-
-  if (session.user.onboarded === false) {
-    return {
-      redirect: {
-        destination: "/newUser",
-      },
-    };
-  }
-
-  return {
-    props: {
-      session: session,
-    },
-  };
-}
 
 export default Settings;

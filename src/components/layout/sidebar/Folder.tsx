@@ -1,16 +1,17 @@
 import { FC, useState, useRef, useEffect, useContext } from "react";
 import { BsFolder, BsFolder2Open } from "react-icons/bs";
-import Route from "./Route";
+import { Route } from "@components/layout/sidebar/Route";
 import autoAnimate from "@formkit/auto-animate";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import * as Popover from "@radix-ui/react-popover";
 import { Formik, Form, Field } from "formik";
-import Button from "./Button";
-import PopoverOptions from "./PopoverOptions";
 import axios from "axios";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import ProjectContext from "../context/Project.context";
-import RouteContext from "../context/Route.context";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+// import ProjectContext from "../context/Project.context";
+// import RouteContext from "../context/Route.context";
+import RouteContext from "@/context/Route.context";
+import ProjectContext from "@/context/Project.context";
+
 import { BsFolderPlus } from "react-icons/bs";
 
 type PropTypes = {
@@ -226,4 +227,6 @@ const Folder: FC<PropTypes> = ({ id, name, routes }) => {
   );
 };
 
-export default Folder;
+export { Folder };
+
+export type { PropTypes as FolderPropTypes };
