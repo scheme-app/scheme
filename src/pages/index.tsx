@@ -16,7 +16,7 @@ import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
 
 //components
-import Layout from "@components/Layout";
+import LayoutTmp from "@components/LayoutTmp";
 import { Route, CreateRoute } from "@/components/route";
 
 export async function getServerSideProps(context: any) {
@@ -81,7 +81,7 @@ const Home: NextPage<{ routeIdProp: string }> = ({ routeIdProp }) => {
     }
   }, []);
 
-  return <Layout>{routeId === "" ? <CreateRoute /> : <Route />}</Layout>;
+  return <LayoutTmp>{routeId === "" ? <CreateRoute /> : <Route />}</LayoutTmp>;
 };
 
 export default Home;

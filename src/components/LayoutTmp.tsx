@@ -1,6 +1,6 @@
-import { FC, ReactNode, useState, useEffect, useRef } from "react";
+import { FC, ReactNode, useEffect, useRef } from "react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
-import Folder from "../components/Folder";
+import Folder from "./Folder";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Route from "./Route_sidebar";
 import { HiChevronDown } from "react-icons/hi";
@@ -16,14 +16,11 @@ import Avatar from "boring-avatars";
 import * as Popover from "@radix-ui/react-popover";
 import { Formik, Form, Field } from "formik";
 import axios from "axios";
-import { FiLogOut } from "react-icons/fi";
-import { BsPerson } from "react-icons/bs";
-import { signOut } from "next-auth/react";
-import Image from "next/future/image";
-import SchemeMiniLogo from "../../public/scheme-mini-logo.svg";
 import { BsFolderPlus } from "react-icons/bs";
+import { SidebarFooter } from "@components/layout/sidebar";
+import { TopBar } from "@components/layout/TopBar";
 
-const Layout: FC<{ children: ReactNode }> = ({ children }) => {
+const LayoutTmp: FC<{ children: ReactNode }> = ({ children }) => {
   const { data: session } = useSession();
 
   const router = useRouter();
@@ -277,56 +274,12 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
                 <HiChevronDown className="text-[#747474]" />
               </DropdownMenu.Trigger>
             </div>
-            <div className="mt-6 flex flex-row items-center justify-between">
-              <h1 className="text-xs text-[#969696]">
-                Scheme v1.0 — Private Alpha
-              </h1>
-              <Image
-                src={SchemeMiniLogo}
-                className="h-[1.1rem] w-[1.1rem]"
-                alt="logo"
-              />
-            </div>
+            <SidebarFooter />
           </div>
         </DropdownMenu.Root>
       </div>
       <div className="h-screen w-full flex-col justify-center pl-24 pr-12 pt-8">
-        <div className="flex w-full flex-row justify-between">
-          <div></div>
-          <DropdownMenu.Root>
-            <div className="flex flex-row items-center gap-x-2">
-              <Avatar
-                size={25}
-                name={session?.user.id}
-                variant="marble"
-                colors={["#E1EDD1", "#AAB69B", "#7C8569", "#E8E0AE", "#A4AB80"]}
-              />
-              <DropdownMenu.Trigger className="outline-none">
-                <HiChevronDown className="text-[#969696]" />
-              </DropdownMenu.Trigger>
-            </div>
-            <DropdownMenu.Content className="mr-12 mt-4 w-36 rounded-lg border-[1px] border-[#E4E4E4] bg-white py-1.5 px-1.5 shadow-md">
-              <DropdownMenu.Item
-                className="flex flex-row items-center justify-between rounded-md px-2 py-1.5 outline-none hover:bg-[#F2F2F2]"
-                onClick={() => {
-                  router.push("/settings");
-                }}
-              >
-                <h1 className="text-sm text-[#969696]">Settings</h1>
-                <BsPerson className="text-[#969696]" />
-              </DropdownMenu.Item>
-              <DropdownMenu.Item
-                className="flex flex-row items-center justify-between rounded-md px-2 py-1.5 outline-none hover:bg-[#F2F2F2]"
-                onClick={() => {
-                  signOut();
-                }}
-              >
-                <h1 className="text-sm text-[#969696]">Logout</h1>
-                <FiLogOut className="text-[#969696]" />
-              </DropdownMenu.Item>
-            </DropdownMenu.Content>
-          </DropdownMenu.Root>
-        </div>
+        <TopBar session={session} />
         <div className="" ref={parent}>
           {children}
         </div>
@@ -335,4 +288,4 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   );
 };
 
-export default Layout;
+export default LayoutTmp;
