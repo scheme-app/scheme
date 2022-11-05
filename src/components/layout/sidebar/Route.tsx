@@ -4,11 +4,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import { BsFileEarmarkCode } from "react-icons/bs";
 import { useRouter } from "next/router";
 import axios from "axios";
+import type { RouteType } from "@prisma/client";
 
 type RoutePropTypes = {
   id: string;
   name: string;
-  type: "GET" | "POST";
+  type: RouteType;
 };
 
 const PostTag: FC = () => {
@@ -75,3 +76,4 @@ const Route: FC<RoutePropTypes> = ({ id, name, type }) => {
 };
 
 export { Route };
+export type { RoutePropTypes };

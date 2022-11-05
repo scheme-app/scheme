@@ -7,8 +7,11 @@ import * as Popover from "@radix-ui/react-popover";
 import { Formik, Form, Field } from "formik";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import ProjectContext from "../context/Project.context";
-import RouteContext from "../context/Route.context";
+// import ProjectContext from "../context/Project.context";
+// import RouteContext from "../context/Route.context";
+import RouteContext from "@/context/Route.context";
+import ProjectContext from "@/context/Project.context";
+
 import { BsFolderPlus } from "react-icons/bs";
 
 type PropTypes = {
@@ -224,4 +227,6 @@ const Folder: FC<PropTypes> = ({ id, name, routes }) => {
   );
 };
 
-export default Folder;
+export { Folder };
+
+export type { PropTypes as FolderPropTypes };

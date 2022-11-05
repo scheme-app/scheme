@@ -4,16 +4,10 @@ import RouteContext from "@/context/Route.context";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import { Route } from "./Route";
 
-import type { RouteType } from "@prisma/client";
-
-type Route = {
-  id: string;
-  name: string;
-  type: RouteType;
-};
+import type { RoutePropTypes } from "./Route";
 
 type PropTypes = {
-  routes: Array<Route>;
+  routes: Array<RoutePropTypes>;
 };
 
 const Routes: FC<PropTypes> = ({ routes }) => {
@@ -35,7 +29,7 @@ const Routes: FC<PropTypes> = ({ routes }) => {
         </button>
       </div>
       {routes &&
-        routes.map((route: Route) => (
+        routes.map((route: RoutePropTypes) => (
           <Route
             key={route.id}
             id={route.id}

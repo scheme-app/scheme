@@ -1,8 +1,6 @@
 import { FC, ReactNode, useEffect, useRef } from "react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
-import Folder from "./Folder";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-// import Route from "./Route_sidebar";
 import autoAnimate from "@formkit/auto-animate";
 import { useContext } from "react";
 import ProjectContext from "../context/Project.context";
@@ -14,6 +12,7 @@ import axios from "axios";
 import { BsFolderPlus } from "react-icons/bs";
 import { TopBar } from "@components/layout/TopBar";
 import { ProjectSelector } from "@components/layout/sidebar/ProjectSelector";
+import { Folders } from "@components/layout/sidebar/Folders";
 import { Routes } from "@components/layout/sidebar/Routes";
 
 import { HiOutlinePlusSm } from "react-icons/hi";
@@ -140,54 +139,13 @@ const LayoutTmp: FC<{ children: ReactNode }> = ({ children }) => {
               <div className="mb-3 flex flex-row items-center justify-between">
                 <h1 className="text-[1rem]">Folders</h1>
                 <Popover.Trigger>
-                  <button
-                    className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] outline-none ring-0 hover:bg-[#F2F2F2]"
-                    onClick={() => {
-                      // setCreateFolder(true);
-                    }}
-                  >
+                  <button className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] outline-none ring-0 hover:bg-[#F2F2F2]">
                     <HiOutlinePlusSm className="h-5 w-5 text-[#969696]" />
                   </button>
                 </Popover.Trigger>
               </div>
             </Popover.Root>
-            {data.folders &&
-              data.folders.map((folder: any) => (
-                <Folder
-                  key={folder.id}
-                  id={folder.id}
-                  name={folder.name}
-                  routes={folder.routes.map((route: any) => {
-                    return {
-                      id: route.id,
-                      name: route.name,
-                      type: route.type,
-                    };
-                  })}
-                />
-              ))}
-            {/* <div className="mt-6 mb-2 flex flex-row items-center justify-between">
-              <h1 className="text-[1rem]">Routes</h1>
-              <button
-                className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] outline-none ring-0 hover:bg-[#F2F2F2]"
-                onClick={() => {
-                  setNewRouteType("NONE");
-                  setFolder({ id: "", name: "" });
-                  setRouteId("");
-                }}
-              >
-                <HiOutlinePlusSm className="h-5 w-5 text-[#969696]" />
-              </button>
-            </div>
-            {data.routes &&
-              data.routes.map((route: any) => (
-                <Route
-                  key={route.id}
-                  id={route.id}
-                  name={route.name}
-                  type={route.type}
-                />
-              ))} */}
+            <Folders folders={data.folders} />
             <Routes routes={data.routes} />
             <ScrollArea.Scrollbar orientation="vertical">
               <ScrollArea.Thumb />
