@@ -1,11 +1,11 @@
 import { FC, ReactNode, useEffect, useRef } from "react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import autoAnimate from "@formkit/auto-animate";
 import { useContext } from "react";
 import ProjectContext from "../context/Project.context";
 import { useSession } from "next-auth/react";
-import axios from "axios";
 import { TopBar } from "@components/layout/TopBar";
 import { ProjectSelector } from "@components/layout/sidebar/ProjectSelector";
 import { Folders } from "@components/layout/sidebar/Folders";
@@ -15,8 +15,6 @@ const LayoutTmp: FC<{ children: ReactNode }> = ({ children }) => {
   const { data: session } = useSession();
 
   const { project, setProject } = useContext(ProjectContext);
-
-  const queryClient = useQueryClient();
 
   const { data: projectData } = useQuery(["projects"], async () => {
     const response = await axios.get(

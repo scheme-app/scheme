@@ -27,7 +27,7 @@ const Route: FC = () => {
   return status === "loading" ? (
     <div></div> //implement loading state
   ) : (
-    <div className="mt-24 flex flex-row gap-x-24">
+    <div className="mt-16 flex flex-row gap-x-24">
       <RouteData
         id={data.id}
         name={data.name}
