@@ -4,14 +4,14 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import autoAnimate from "@formkit/auto-animate";
 import { useContext } from "react";
-import ProjectContext from "../context/Project.context";
+import ProjectContext from "@/context/Project.context";
 import { useSession } from "next-auth/react";
 import { TopBar } from "@components/layout/TopBar";
 import { ProjectSelector } from "@components/layout/sidebar/ProjectSelector";
 import { Folders } from "@components/layout/sidebar/Folders";
 import { Routes } from "@components/layout/sidebar/Routes";
 
-const LayoutTmp: FC<{ children: ReactNode }> = ({ children }) => {
+const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   const { data: session } = useSession();
 
   const { project, setProject } = useContext(ProjectContext);
@@ -72,4 +72,4 @@ const LayoutTmp: FC<{ children: ReactNode }> = ({ children }) => {
   );
 };
 
-export default LayoutTmp;
+export { Layout };
