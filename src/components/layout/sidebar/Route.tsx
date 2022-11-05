@@ -1,5 +1,5 @@
 import { FC, useContext, useEffect } from "react";
-import RouteContext from "../context/Route.context";
+import RouteContext from "@/context/Route.context";
 import { useQueryClient } from "@tanstack/react-query";
 import { BsFileEarmarkCode } from "react-icons/bs";
 import { useRouter } from "next/router";
@@ -74,4 +74,4 @@ const Route: FC<RoutePropTypes> = ({ id, name, type }) => {
   );
 };
 
-export default Route;
+export { Route };

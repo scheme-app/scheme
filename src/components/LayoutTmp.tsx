@@ -2,7 +2,7 @@ import { FC, ReactNode, useEffect, useRef } from "react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import Folder from "./Folder";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Route from "./Route_sidebar";
+// import Route from "./Route_sidebar";
 import autoAnimate from "@formkit/auto-animate";
 import { useContext } from "react";
 import ProjectContext from "../context/Project.context";
@@ -14,13 +14,14 @@ import axios from "axios";
 import { BsFolderPlus } from "react-icons/bs";
 import { TopBar } from "@components/layout/TopBar";
 import { ProjectSelector } from "@components/layout/sidebar/ProjectSelector";
+import { Routes } from "@components/layout/sidebar/Routes";
+
 import { HiOutlinePlusSm } from "react-icons/hi";
 
 const LayoutTmp: FC<{ children: ReactNode }> = ({ children }) => {
   const { data: session } = useSession();
 
   const { project, setProject } = useContext(ProjectContext);
-  const { setRouteId, setFolder, setNewRouteType } = useContext(RouteContext);
 
   const queryClient = useQueryClient();
 
@@ -165,7 +166,7 @@ const LayoutTmp: FC<{ children: ReactNode }> = ({ children }) => {
                   })}
                 />
               ))}
-            <div className="mt-6 mb-2 flex flex-row items-center justify-between">
+            {/* <div className="mt-6 mb-2 flex flex-row items-center justify-between">
               <h1 className="text-[1rem]">Routes</h1>
               <button
                 className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border-[1.5px] border-[#E4E4E4] outline-none ring-0 hover:bg-[#F2F2F2]"
@@ -186,7 +187,8 @@ const LayoutTmp: FC<{ children: ReactNode }> = ({ children }) => {
                   name={route.name}
                   type={route.type}
                 />
-              ))}
+              ))} */}
+            <Routes routes={data.routes} />
             <ScrollArea.Scrollbar orientation="vertical">
               <ScrollArea.Thumb />
             </ScrollArea.Scrollbar>
@@ -195,7 +197,7 @@ const LayoutTmp: FC<{ children: ReactNode }> = ({ children }) => {
         </ScrollArea.Root>
         <ProjectSelector session={session} />
       </div>
-      <div className="h-screen w-full flex-col justify-center pl-24 pr-12 pt-8">
+      <div className="w-full flex-col justify-center pl-24 pr-12 pt-8">
         <TopBar session={session} />
         <div className="" ref={parent}>
           {children}
