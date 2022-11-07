@@ -1,5 +1,5 @@
 import { ImageResponse } from "@vercel/og";
-import { NextRequest } from "next/server";
+// import { NextRequest } from "next/server";
 
 export const config = {
   runtime: "experimental-edge",
@@ -21,19 +21,20 @@ const GetTag = () => {
   );
 };
 
-const handler = async (req: NextRequest) => {
-  let name = "veryLongUpdatedsfsdfsdf.user";
-  name.length > 21 ? (name = name.substring(0, 18) + "...") : (name = name);
+// const handler = async (req: NextRequest) => {
+const handler = async () => {
+  // let name = "veryLongUpdatedsfsdfsdf.user";
+  // name.length > 21 ? (name = name.substring(0, 18) + "...") : (name = name);
 
-  const { searchParams } = new URL(req.url);
+  // const { searchParams } = new URL(req.url);
 
-  const routeId = searchParams.get("routeId");
+  // const routeId = searchParams.get("routeId");
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/route/getPreview.route?routeId=${routeId}`
-  );
+  // const response = await fetch(
+  // `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/route/getPreview.route?routeId=${routeId}`
+  // );
 
-  const data = await response.json();
+  // const data = await response.json();
 
   return new ImageResponse(
     (
