@@ -5,7 +5,7 @@ import { prisma } from "../../../utils/prisma";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
-  debug: true,
+  // debug: true,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID!,
