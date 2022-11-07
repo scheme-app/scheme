@@ -48,7 +48,7 @@ const handler = async (req: NextRequest) => {
           backgroundColor: "white",
         }}
       >
-        <div tw="flex relative h-full w-full justify-center">
+        {/* <div tw="flex relative h-full w-full justify-center">
           <div tw="flex flex-row items-center absolute top-[45%]">
             <h1 tw="text-7xl pr-6">{data.name}</h1>
             {data.type === "GET" ? <GetTag /> : <PostTag />}
@@ -61,7 +61,7 @@ const handler = async (req: NextRequest) => {
             />
             <h1 tw="text-3xl pl-4">View on Scheme</h1>
           </div>
-        </div>
+        </div> */}
       </div>
     ),
     {
