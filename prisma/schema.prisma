@@ -1,13 +1,24 @@
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// datasource db {
+//   provider = "postgresql"
+//   // url      = "postgresql://abhinav@localhost:5432/abhinav"
+//   // url      = "postgresql://abhinav@localhost:5432/postgres"
+//   // url      = "postgresql://abhinav@localhost:5432/cc-postgres-local"
+//   url      = "postgresql://abhinav@localhost:5432/template1"
+// }
+
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider = "postgresql"
-  // url      = "postgresql://abhinav@localhost:5432/abhinav"
-  // url      = "postgresql://abhinav@localhost:5432/postgres"
-  // url      = "postgresql://abhinav@localhost:5432/cc-postgres-local"
-  url      = "postgresql://abhinav@localhost:5432/template1"
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
 }
 
 model User {
@@ -190,11 +201,11 @@ model Account {
   provider          String
   providerAccountId String
   refresh_token     String?
-  access_token      String?
+  access_token      String? @db.VarChar(255)
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?
+  id_token          String? @db.VarChar(1500)
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
