@@ -70,7 +70,7 @@ const StatusDropdown: FC<PropTypes> = ({ status }) => {
       </div>
       <DropdownMenu.Content className="mr-64 mt-[-2rem] w-36 rounded-md border-[1px] border-[#E4E4E4] bg-white py-1.5 px-1.5 shadow-md">
         {statuses.map((status) => {
-          return <StatusItem status={status} />;
+          return <StatusItem key={status.value} status={status} />;
         })}
       </DropdownMenu.Content>
     </DropdownMenu.Root>

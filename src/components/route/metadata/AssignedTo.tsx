@@ -81,7 +81,12 @@ const AssignedTo: FC<PropTypes> = ({ assignedTo }) => {
       <h1 className="text-sm text-[#747474]">Assigned To</h1>
       {assignedTo.map(
         (user: { id: string; name: string; username: string }) => (
-          <User id={user.id} name={user.name} username={user.username} />
+          <User
+            key={user.id}
+            id={user.id}
+            name={user.name}
+            username={user.username}
+          />
         )
       )}
       {addMembers ? (
@@ -146,7 +151,10 @@ const AssignedTo: FC<PropTypes> = ({ assignedTo }) => {
                     (user: { id: string; name: string; username: string }) => {
                       if (user.username === username) {
                         return (
-                          <MdOutlineErrorOutline className="h-5 w-5 text-red-500" />
+                          <MdOutlineErrorOutline
+                            className="h-5 w-5 text-red-500"
+                            key={user.id}
+                          />
                         );
                       }
                     }

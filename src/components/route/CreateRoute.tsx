@@ -288,9 +288,7 @@ const CreateRoute: FC = () => {
                   </div>
                   <div>
                     <h1 className="mb-2 text-sm">Parsed JSON</h1>
-                    <div className="h-[24rem] w-[24rem] rounded-lg border-[1px] border-[#E4E4E4]">
-                      {}/////
-                    </div>
+                    <div className="h-[24rem] w-[24rem] rounded-lg border-[1px] border-[#E4E4E4]"></div>
                   </div>
                 </div>
               </Form>

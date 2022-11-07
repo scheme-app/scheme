@@ -70,7 +70,7 @@ const PriorityDropdown: FC<PropTypes> = ({ priority }) => {
       </div>
       <DropdownMenu.Content className="mr-64 mt-[-2rem] w-36 rounded-md border-[1px] border-[#E4E4E4] bg-white py-1.5 px-1.5 shadow-md">
         {priorities.map((priority) => {
-          return <PriorityItem priority={priority} />;
+          return <PriorityItem key={priority.value} priority={priority} />;
         })}
       </DropdownMenu.Content>
     </DropdownMenu.Root>

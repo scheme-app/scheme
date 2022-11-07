@@ -30,7 +30,7 @@ const Share: NextPage<{
         />
       </Head>
       <h1>
-        Error you don't have the permissions to view this route. Please request
+        Error you do not have the permissions to view this route. Please request
         that the owner of the project add you.
       </h1>
     </>

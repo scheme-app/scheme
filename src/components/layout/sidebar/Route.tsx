@@ -46,7 +46,7 @@ const Route: FC<RoutePropTypes> = ({ id, name, type }) => {
       });
     };
     prefetch();
-  }, []);
+  }, [id, queryClient]);
 
   return (
     <div
