@@ -44,7 +44,10 @@ const EditRoutePopover: FC<EditRoutePopoverPropTypes> = ({
       type: string;
       folderId?: string;
     }) => {
-      return axios.post("http://localhost:3000/api/route/update.route", data);
+      return axios.post(
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/route/update.route`,
+        data
+      );
     },
     {
       onSuccess: () => {
@@ -56,9 +59,12 @@ const EditRoutePopover: FC<EditRoutePopoverPropTypes> = ({
 
   const deleteRoute = useMutation(
     (routeId: string) => {
-      return axios.post("http://localhost:3000/api/route/delete.route", {
-        routeId: routeId,
-      });
+      return axios.post(
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/route/delete.route`,
+        {
+          routeId: routeId,
+        }
+      );
     },
     {
       onSuccess: () => {

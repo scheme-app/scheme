@@ -52,17 +52,22 @@ const NewUser: NextPage = () => {
       username: string;
       projectName: string;
     }) => {
-      return axios.post("http://localhost:3000/api/user/onboard.user", {
-        userId: session!.user.id,
-        name: name,
-        username: username,
-        projectName: projectName,
-      });
+      return axios.post(
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/user/onboard.user`,
+        {
+          userId: session!.user.id,
+          name: name,
+          username: username,
+          projectName: projectName,
+        }
+      );
     }
   );
 
   const getUser = async (username: string) => {
-    const response = await axios.get(`/api/user/get.user?username=${username}`);
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/user/get.user?username=${username}`
+    );
 
     return response.data;
   };

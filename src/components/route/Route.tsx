@@ -14,7 +14,7 @@ const Route: FC = () => {
     [routeId],
     async () => {
       const response = await axios.get(
-        `http://localhost:3000/api/route/get.route?routeId=${routeId}`
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/route/get.route?routeId=${routeId}`
       );
 
       return response.data;

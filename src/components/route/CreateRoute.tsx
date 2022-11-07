@@ -32,13 +32,16 @@ const CreateRoute: FC = () => {
         | "OAUTH";
       folderId?: string;
     }) => {
-      return axios.post("http://localhost:3000/api/route/create.route", {
-        name,
-        type,
-        authorization,
-        projectId: project.id,
-        folderId: folder.id,
-      });
+      return axios.post(
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/route/create.route`,
+        {
+          name,
+          type,
+          authorization,
+          projectId: project.id,
+          folderId: folder.id,
+        }
+      );
     },
     {
       onSuccess: () => {

@@ -34,7 +34,7 @@ const EditAuthorizationFieldPopover: FC<
         | "OAUTH";
     }) => {
       return axios.post(
-        `http://localhost:3000/api/route/updateAuthorization.route`,
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/route/updateAuthorization.route`,
         {
           routeId: routeId,
           ...data,

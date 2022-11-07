@@ -20,10 +20,13 @@ const PriorityItem: FC<{
 
   const updateRoute = useMutation(
     ({ priority }: { priority: RoutePriority }) => {
-      return axios.post("http://localhost:3000/api/route/update.route", {
-        routeId,
-        priority,
-      });
+      return axios.post(
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/route/update.route`,
+        {
+          routeId,
+          priority,
+        }
+      );
     },
     {
       onSuccess: () => {

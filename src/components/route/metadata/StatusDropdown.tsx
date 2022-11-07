@@ -20,10 +20,13 @@ const StatusItem: FC<{
 
   const updateRoute = useMutation(
     ({ status }: { status: RouteStatus }) => {
-      return axios.post("http://localhost:3000/api/route/update.route", {
-        routeId,
-        status,
-      });
+      return axios.post(
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/route/update.route`,
+        {
+          routeId,
+          status,
+        }
+      );
     },
     {
       onSuccess: () => {

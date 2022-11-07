@@ -39,10 +39,13 @@ const AssignedTo: FC<PropTypes> = ({ assignedTo }) => {
 
   const assignMember = useMutation(
     ({ username }: { username: string }) => {
-      return axios.post("http://localhost:3000/api/route/assignMember.route", {
-        username: username,
-        routeId: routeId,
-      });
+      return axios.post(
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/route/assignMember.route`,
+        {
+          username: username,
+          routeId: routeId,
+        }
+      );
     },
     {
       onSuccess: () => {
