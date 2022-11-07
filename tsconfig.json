@@ -19,7 +19,8 @@
     "paths": {
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"]
-    }
+    },
+    "typeRoots": ["node_modules/@types", "src/@types"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "tailwind.config.js"],
   "exclude": ["node_modules"]

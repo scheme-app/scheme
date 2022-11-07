@@ -1,4 +1,4 @@
-import NextAuth, { DefaultSession } from "next-auth";
+import NextAuth, { DefaultSession, DefaultUser } from "next-auth";
 
 declare module "next-auth" {
   /**
@@ -17,6 +17,13 @@ declare module "next-auth" {
       // }>;
       onboarded: boolean;
     } & DefaultSession["user"];
+  }
+
+  interface User {
+    username: string;
+    type: "USER" | "ADMIN";
+    onboarded: boolean;
+    DefaultUser;
   }
 }
 
