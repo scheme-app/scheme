@@ -5,21 +5,21 @@ export const config = {
   runtime: "experimental-edge",
 };
 
-const PostTag = () => {
-  return (
-    <div tw="mt-4 flex items-center rounded-xl h-12 bg-[#FBF3EE] px-3">
-      <h1 tw="text-4xl font-semibold text-[#D6B29D]">POST</h1>
-    </div>
-  );
-};
+// const PostTag = () => {
+//   return (
+//     <div tw="mt-4 flex items-center rounded-xl h-12 bg-[#FBF3EE] px-3">
+//       <h1 tw="text-4xl font-semibold text-[#D6B29D]">POST</h1>
+//     </div>
+//   );
+// };
 
-const GetTag = () => {
-  return (
-    <div tw="mt-4 flex items-center rounded-xl h-12 bg-[#EBF7F7] px-4">
-      <h1 tw="text-4xl font-semibold text-[#86B0B1]">GET</h1>
-    </div>
-  );
-};
+// const GetTag = () => {
+//   return (
+//     <div tw="mt-4 flex items-center rounded-xl h-12 bg-[#EBF7F7] px-4">
+//       <h1 tw="text-4xl font-semibold text-[#86B0B1]">GET</h1>
+//     </div>
+//   );
+// };
 
 // const handler = async (req: NextRequest) => {
 const handler = async () => {
