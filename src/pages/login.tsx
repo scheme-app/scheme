@@ -1,5 +1,6 @@
 //react
 import type { NextPage } from "next";
+import Head from "next/head";
 //images
 import Image from "next/future/image";
 import schemeGradient from "../../public/scheme-gradient.svg";
@@ -19,6 +20,25 @@ const Login: NextPage<PropTypes> = ({ providers }) => {
 
   return (
     <>
+      <Head>
+        <title>Scheme⠀-⠀Alpha.</title>
+        <meta property="og:title" content="Scheme⠀-⠀Alpha." key="title" />
+        <meta property="og:url" content={process.env.NEXT_PUBLIC_VERCEL_URL} />
+        <meta property="og:type" content="website" />
+        <meta property="og:description" content="Scheme Alpha" />
+        <meta
+          property="og:image"
+          content={`${process.env.NEXT_PUBLIC_VERCEL_URL}/scheme-link-preview.png`}
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@scheme_app" />
+        <meta name="twitter:title" content="Scheme - Alpha." />
+        <meta name="twitter:description" content="Join the Waitlist" />
+        <meta
+          name="twitter:image"
+          content={`${process.env.NEXT_PUBLIC_VERCEL_URL}/scheme-link-preview.png`}
+        />
+      </Head>
       <div className="flex h-screen flex-row items-center justify-center gap-x-48 pl-12">
         <div className="flex flex-col">
           <div className="flex flex-col gap-y-4">

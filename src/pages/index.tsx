@@ -1,6 +1,7 @@
 // React
 import type { NextPage } from "next";
 import { useEffect, useContext } from "react";
+import Head from "next/head";
 
 //Context
 import RouteContext from "@/context/Route.context";
@@ -56,7 +57,30 @@ const Home: NextPage<{ routeIdProp: string }> = ({ routeIdProp }) => {
     }
   }, []);
 
-  return <Layout>{routeId === "" ? <CreateRoute /> : <Route />}</Layout>;
+  return (
+    <>
+      <Head>
+        <title>Scheme⠀-⠀Alpha.</title>
+        <meta property="og:title" content="Scheme⠀-⠀Alpha." key="title" />
+        <meta property="og:url" content={process.env.NEXT_PUBLIC_VERCEL_URL} />
+        <meta property="og:type" content="website" />
+        <meta property="og:description" content="Scheme Alpha" />
+        <meta
+          property="og:image"
+          content={`${process.env.NEXT_PUBLIC_VERCEL_URL}/scheme-link-preview.png`}
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@scheme_app" />
+        <meta name="twitter:title" content="Scheme - Alpha." />
+        <meta name="twitter:description" content="Join the Waitlist" />
+        <meta
+          name="twitter:image"
+          content={`${process.env.NEXT_PUBLIC_VERCEL_URL}/scheme-link-preview.png`}
+        />
+      </Head>
+      <Layout>{routeId === "" ? <CreateRoute /> : <Route />}</Layout>
+    </>
+  );
 };
 
 export default Home;
