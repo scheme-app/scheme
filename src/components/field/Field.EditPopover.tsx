@@ -56,7 +56,10 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
       name: string;
       format: FieldFormat;
     }) => {
-      return axios.post("http://localhost:3000/api/field/edit.field", data);
+      return axios.post(
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/field/edit.field`,
+        data
+      );
     },
     {
       onSuccess: () => {
@@ -67,7 +70,10 @@ const EditFieldPopover: FC<EditFieldPopoverPropTypes> = ({
 
   const deleteField = useMutation(
     (data: { fieldId: string }) => {
-      return axios.post("http://localhost:3000/api/field/delete.field", data);
+      return axios.post(
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/field/delete.field`,
+        data
+      );
     },
     {
       onSuccess: () => {

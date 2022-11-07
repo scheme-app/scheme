@@ -56,7 +56,9 @@ const RouteHeader: FC<PropTypes> = ({ id, name, type }) => {
           <button
             className="flex h-7 w-7 items-center justify-center rounded-md border-[1px] border-[#E4E4E4] hover:bg-[#F2F2F2]"
             onClick={() => {
-              copyToClipboard(`http://localhost:3000/route/${id}/share`);
+              copyToClipboard(
+                `${process.env.NEXT_PUBLIC_VERCEL_URL}/route/${id}/share`
+              );
             }}
           >
             <ShareIos className="h-[1.1rem] w-[1.1rem] text-[#747474]" />

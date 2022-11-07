@@ -26,11 +26,11 @@ const Share: NextPage<{
         />
         <meta
           property="og:image"
-          content={`http://localhost:3000/api/og?routeId=${route.id}`}
+          content={`${process.env.NEXT_PUBLIC_VERCEL_URL}/api/og?routeId=${route.id}`}
         />
       </Head>
       <h1>
-        Error you don't have the permissions to view this route. Please request
+        Error you do not have the permissions to view this route. Please request
         that the owner of the project add you.
       </h1>
     </>
@@ -42,7 +42,7 @@ export async function getServerSideProps(context: any) {
   let valid = false;
 
   const route = await axios.get(
-    `http://localhost:3000/api/route/getPreview.route?routeId=${routeId}`
+    `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/route/getPreview.route?routeId=${routeId}`
   );
 
   const session = await unstable_getServerSession(
@@ -61,7 +61,7 @@ export async function getServerSideProps(context: any) {
     }
 
     const user = await axios.get(
-      `http://localhost:3000/api/user/get.user?userId=${session.user.id}`
+      `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/user/get.user?userId=${session.user.id}`
     );
 
     user.data.projects.map((project: { id: string }) => {

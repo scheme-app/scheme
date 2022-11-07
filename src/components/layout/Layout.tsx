@@ -18,7 +18,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
 
   const { data: projectData } = useQuery(["projects"], async () => {
     const response = await axios.get(
-      `http://localhost:3000/api/project/get.projects?userId=${session?.user.id}`
+      `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/project/get.projects?userId=${session?.user.id}`
     );
 
     return response.data;
@@ -30,7 +30,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
 
   const { data, status } = useQuery([project.id], async () => {
     const response = await axios.get(
-      `http://localhost:3000/api/project/get.project?projectId=${project.id}`
+      `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/project/get.project?projectId=${project.id}`
     );
 
     return response.data;

@@ -46,7 +46,8 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
       format: FieldFormat;
     }) => {
       return axios.post(
-        "http://localhost:3000/api/field/createScalar.field",
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/field/createScalar.field`,
+
         data
       );
     },
@@ -67,7 +68,7 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
       name: string;
     }) => {
       return axios.post(
-        "http://localhost:3000/api/field/createComplex.field",
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/field/createComplex.field`,
         data
       );
     },

@@ -24,10 +24,13 @@ const Folders: FC<PropTypes> = ({ folders }) => {
 
   const createFolder = useMutation(
     ({ name }: { name: string }) => {
-      return axios.post("http://localhost:3000/api/folder/create.folder", {
-        name,
-        projectId: project.id,
-      });
+      return axios.post(
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/folder/create.folder`,
+        {
+          name,
+          projectId: project.id,
+        }
+      );
     },
     {
       onSuccess: () => {

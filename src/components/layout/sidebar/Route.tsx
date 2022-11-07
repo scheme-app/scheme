@@ -39,14 +39,14 @@ const Route: FC<RoutePropTypes> = ({ id, name, type }) => {
     const prefetch = async () => {
       await queryClient.prefetchQuery([id], async () => {
         const response = await axios.get(
-          `http://localhost:3000/api/route/get.route?routeId=${id}`
+          `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/route/get.route?routeId=${id}`
         );
 
         return response.data;
       });
     };
     prefetch();
-  }, []);
+  }, [id, queryClient]);
 
   return (
     <div

@@ -50,12 +50,15 @@ const Folder: FC<PropTypes> = ({ id, name, routes }) => {
         | "DIGEST"
         | "OAUTH";
     }) => {
-      return axios.post("http://localhost:3000/api/route/create.route", {
-        name,
-        type,
-        authorization,
-        projectId: project.id,
-      });
+      return axios.post(
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/route/create.route`,
+        {
+          name,
+          type,
+          authorization,
+          projectId: project.id,
+        }
+      );
     },
     {
       onSuccess: () => {
@@ -66,10 +69,13 @@ const Folder: FC<PropTypes> = ({ id, name, routes }) => {
 
   const editFolder = useMutation(
     ({ name }: { name: string }) => {
-      return axios.post("http://localhost:3000/api/folder/edit.folder", {
-        name,
-        folderId: id,
-      });
+      return axios.post(
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/folder/edit.folder`,
+        {
+          name,
+          folderId: id,
+        }
+      );
     },
     {
       onSuccess: () => {
@@ -80,9 +86,12 @@ const Folder: FC<PropTypes> = ({ id, name, routes }) => {
 
   const deleteFolder = useMutation(
     () => {
-      return axios.post("http://localhost:3000/api/folder/delete.folder", {
-        folderId: id,
-      });
+      return axios.post(
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/folder/delete.folder`,
+        {
+          folderId: id,
+        }
+      );
     },
     {
       onSuccess: () => {

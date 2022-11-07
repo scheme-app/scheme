@@ -30,7 +30,7 @@ const handler = async (req: NextRequest) => {
   const routeId = searchParams.get("routeId");
 
   const response = await fetch(
-    `http://localhost:3000/api/route/getPreview.route?routeId=${routeId}`
+    `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/route/getPreview.route?routeId=${routeId}`
   );
 
   const data = await response.json();
@@ -57,7 +57,7 @@ const handler = async (req: NextRequest) => {
             <img
               width="60"
               height="60"
-              src={`http://localhost:3000/scheme-icon-black.svg`}
+              src={`${process.env.NEXT_PUBLIC_VERCEL_URL}/scheme-icon-black.svg`}
             />
             <h1 tw="text-3xl pl-4">View on Scheme</h1>
           </div>

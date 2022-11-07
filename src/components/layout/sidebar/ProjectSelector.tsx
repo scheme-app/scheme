@@ -29,7 +29,7 @@ const ProjectSelector: FC<PropTypes> = ({ session }) => {
 
   const { data: projectData } = useQuery(["projects"], async () => {
     const response = await axios.get(
-      `http://localhost:3000/api/project/get.projects?userId=${session?.user.id}`
+      `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/project/get.projects?userId=${session?.user.id}`
     );
 
     return response.data;

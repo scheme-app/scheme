@@ -57,7 +57,7 @@ const Settings: NextPage = () => {
 
   const { data: projectData, status } = useQuery([projectId], async () => {
     const response = await axios.get(
-      `http://localhost:3000/api/project/get.project?projectId=${projectId}`
+      `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/project/get.project?projectId=${projectId}`
     );
 
     return response.data;

@@ -77,9 +77,9 @@ const PopoverOptions: FC<PopoverOptionsPropTypes> = ({
           {options.map((option, i) => {
             if (i !== options.length - 1) {
               return (
-                <div className="flex flex-row">
+                <div className="flex flex-row" key={i}>
                   <PopoverOption
-                    key={option.name}
+                    // key={i}
                     icon={option.icon}
                     name={option.name}
                     value={option.value}
@@ -94,7 +94,7 @@ const PopoverOptions: FC<PopoverOptionsPropTypes> = ({
             }
             return (
               <PopoverOption
-                key={option.name}
+                key={i}
                 icon={option.icon}
                 name={option.name}
                 value={option.value}

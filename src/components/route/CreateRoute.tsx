@@ -32,13 +32,16 @@ const CreateRoute: FC = () => {
         | "OAUTH";
       folderId?: string;
     }) => {
-      return axios.post("http://localhost:3000/api/route/create.route", {
-        name,
-        type,
-        authorization,
-        projectId: project.id,
-        folderId: folder.id,
-      });
+      return axios.post(
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/route/create.route`,
+        {
+          name,
+          type,
+          authorization,
+          projectId: project.id,
+          folderId: folder.id,
+        }
+      );
     },
     {
       onSuccess: () => {
@@ -285,9 +288,7 @@ const CreateRoute: FC = () => {
                   </div>
                   <div>
                     <h1 className="mb-2 text-sm">Parsed JSON</h1>
-                    <div className="h-[24rem] w-[24rem] rounded-lg border-[1px] border-[#E4E4E4]">
-                      {}/////
-                    </div>
+                    <div className="h-[24rem] w-[24rem] rounded-lg border-[1px] border-[#E4E4E4]"></div>
                   </div>
                 </div>
               </Form>
