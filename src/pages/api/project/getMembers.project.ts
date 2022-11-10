@@ -1,21 +1,22 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../../../utils/prisma";
+import { prisma, handleError } from "@utils";
+import { StatusCodes } from "http-status-codes";
+
+type RequestQuery = {
+  projectId?: string;
+};
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { projectId }: { projectId?: string } = req.query;
+  try {
+    const { projectId }: RequestQuery = req.query;
 
-  if (!projectId) {
-    return res.status(400).send({
-      error: "You must provide a project id",
-    });
-  }
-
-  const members = await prisma.project.findUnique({
-    where: {
-      id: projectId,
-    },
-    select: {
-      roles: {
+    const members = await prisma.project
+      .findUnique({
+        where: {
+          id: projectId,
+        },
+      })
+      .roles({
         select: {
           type: true,
           users: {
@@ -26,28 +27,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             },
           },
         },
-      },
-      // members: {
-      //   select: {
-      //     id: true,
-      //     name: true,
-      //     username: true,
-      //     email: true,
-      //     roles: {
-      //       where: {
-      //         projectId: projectId,
-      //       },
-      //       select: {
-      //         type: true,
-      //       },
-      //     },
-      //     // role: true,
-      //   },
-      // },
-    },
-  });
+      });
 
-  res.json(members);
+    return res.status(StatusCodes.OK).json(members);
+  } catch (error) {
+    handleError(error, res);
+  }
 };
 
 export default handler;

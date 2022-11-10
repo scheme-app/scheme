@@ -1,51 +1,77 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../../../utils/prisma";
+import { prisma, handleError, validateSession } from "@utils";
+import { StatusCodes } from "http-status-codes";
+
+type RequestBody = {
+  username: string;
+  projectId: string;
+};
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { username, projectId }: { username: string; projectId: string } =
-    req.body;
+  try {
+    const session = await validateSession(req, res);
+    const { username, projectId }: RequestBody = req.body;
 
-  const roles = await prisma.role.findMany({
-    where: {
-      projectId: projectId,
-    },
-    select: {
-      id: true,
-      type: true,
-    },
-  });
+    const roleWeight = {
+      OWNER: 2,
+      ADMIN: 1,
+      MEMBER: 0,
+    };
 
-  if (!roles) {
-    return res.status(400).send({
-      error: "Project roles not found",
-    });
-  }
-
-  const user = await prisma.user.update({
-    where: {
-      username: username,
-    },
-    data: {
-      projects: {
-        disconnect: { id: projectId },
+    const roles = await prisma.role.findMany({
+      where: {
+        projectId: projectId,
       },
-      roles: {
-        disconnect: [
-          { id: roles[0]!.id },
-          { id: roles[1]!.id },
-          { id: roles[2]!.id },
-        ],
+      select: {
+        id: true,
+        type: true,
+        users: {
+          select: {
+            username: true,
+            id: true,
+          },
+        },
       },
-    },
-  });
-
-  if (!user) {
-    return res.status(500).send({
-      error: "Internal server error",
     });
-  }
 
-  return res.status(200).send(user);
+    const meRole = roles.find((role) => {
+      return role.users.some((user) => user.id === session.user.id);
+    });
+
+    const userRole = roles.find((role) => {
+      return role.users.some((user) => user.username === username);
+    });
+
+    if (!meRole || !userRole) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({
+        message: "Role not found",
+      });
+    }
+
+    if (roleWeight[meRole.type] <= roleWeight[userRole.type]) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({
+        message: "You can't remove this user",
+      });
+    }
+
+    const user = await prisma.user.update({
+      where: {
+        username: username,
+      },
+      data: {
+        projects: {
+          disconnect: { id: projectId },
+        },
+        roles: {
+          disconnect: roles.map((role) => ({ id: role.id })),
+        },
+      },
+    });
+
+    return res.status(200).send(user);
+  } catch (error) {
+    handleError(error, res);
+  }
 };
 
 export default handler;

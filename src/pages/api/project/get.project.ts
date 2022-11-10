@@ -1,45 +1,37 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../../../utils/prisma";
+import { prisma, handleError } from "@utils";
+import { StatusCodes } from "http-status-codes";
+
+type RequestType = {
+  projectId?: string;
+};
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { projectId }: { projectId?: string } = req.query;
+  try {
+    const { projectId }: RequestType = req.query;
 
-  if (!projectId) {
-    return res.status(400).send({
-      error: "Project id is required.",
-    });
-  }
-
-  const project = await prisma.project.findUnique({
-    where: {
-      id: projectId,
-    },
-    include: {
-      folders: {
-        include: {
-          routes: true,
-          _count: {
-            select: {
-              routes: true,
-            },
+    const project = await prisma.project.findUnique({
+      where: {
+        id: projectId,
+      },
+      include: {
+        folders: {
+          include: {
+            routes: true,
+          },
+        },
+        routes: {
+          where: {
+            folderId: null,
           },
         },
       },
-      routes: {
-        where: {
-          folderId: null,
-        },
-      },
-    },
-  });
-
-  if (!project) {
-    return res.status(400).send({
-      error: "Project does not exist.",
     });
-  }
 
-  return res.status(200).send(project);
+    return res.status(StatusCodes.OK).send(project);
+  } catch (error) {
+    handleError(error, res);
+  }
 };
 
 export default handler;

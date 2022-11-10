@@ -4,10 +4,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 //Utils
 import { prisma, handleError, validateSession } from "@utils";
 
-//Auth
-// import { unstable_getServerSession } from "next-auth/next";
-// import { authOptions } from "@auth/[...nextauth]";
-
 // HTTP error codes
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 
@@ -24,12 +20,10 @@ type RequestBody = {
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  // const session = validateSession(req, res);
-
-  const { modelId, name, type, optional, array, format }: RequestBody =
-    req.body;
-
   try {
+    const { modelId, name, type, optional, array, format }: RequestBody =
+      req.body;
+
     const model = await prisma.model.update({
       where: {
         id: modelId,

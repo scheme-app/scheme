@@ -1,91 +1,71 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../../../utils/prisma";
-import { getToken } from "next-auth/jwt";
+import { prisma, handleError, validateSession } from "@utils";
+import { StatusCodes } from "http-status-codes";
+
+type RequestBody = {
+  name: string;
+};
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const token = await getToken({ req });
-  const { integrationToken, name } = req.body;
+  try {
+    const session = await validateSession(req, res);
 
-  if (!token && !integrationToken) {
-    return res.status(401).send({
-      error: "You must be sign in to view the protected content on this page.",
-    });
-  }
+    const { name }: RequestBody = req.body;
 
-  // const project = await prisma.project.findMany({
-  //   where: {
-
-  //     ownerId: token!.userId,
-  //     name: name,
-  //   },
-  // });
-
-  // if (project.length > 0) {
-  //   return res.status(400).send({
-  //     error: "Project already exists.",
-  //   });
-  // }
-
-  let userId: string | undefined = "";
-
-  if (integrationToken) {
-    const token = await prisma.token.findUnique({
-      where: {
-        id: integrationToken,
-      },
-      select: {
-        user: {
-          select: {
-            id: true,
+    const roles = await prisma.user
+      .findUnique({
+        where: {
+          id: session.user.id,
+        },
+      })
+      .roles({
+        select: {
+          project: {
+            select: {
+              name: true,
+            },
           },
+        },
+      });
+
+    if (!roles) {
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "No projects" });
+    }
+
+    if (roles.some((role) => role.project.name === name)) {
+      return res
+        .status(StatusCodes.CONFLICT)
+        .json({ message: `Already part of a project named ${name}` });
+    }
+
+    const createdProject = await prisma.project.create({
+      data: {
+        name: name,
+        roles: {
+          create: [
+            {
+              type: "OWNER",
+              users: {
+                connect: {
+                  id: session.user.id,
+                },
+              },
+            },
+            {
+              type: "ADMIN",
+            },
+            {
+              type: "MEMBER",
+            },
+          ],
         },
       },
     });
 
-    userId = token?.user.id;
+    return res.status(StatusCodes.OK).json(createdProject);
+  } catch (error) {
+    handleError(error, res);
   }
-
-  if (token) {
-    userId = token.userId;
-  }
-
-  const createdProject = await prisma.project.create({
-    data: {
-      name: name,
-      roles: {
-        create: [
-          {
-            type: "OWNER",
-            users: {
-              connect: {
-                id: userId,
-              },
-            },
-          },
-          {
-            type: "MEMBER",
-          },
-        ],
-      },
-      // ...(token && { owner: { connect: { id: token!.userId } } }),
-      // ...(integrationToken && {
-
-      // }),
-      // owner: {
-      //   connect: {
-      //     id: userId,
-      //   },
-      // },
-    },
-  });
-
-  if (!createdProject) {
-    res.status(500).send({
-      error: "Something went wrong",
-    });
-  }
-
-  return res.status(200).send(createdProject);
 };
 
 export default handler;

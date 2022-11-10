@@ -12,8 +12,8 @@ type RequestBody = {
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { fieldId, ...data }: RequestBody = req.body;
   try {
+    const { fieldId, ...data }: RequestBody = req.body;
     const field = await prisma.field.update({
       where: {
         id: fieldId,

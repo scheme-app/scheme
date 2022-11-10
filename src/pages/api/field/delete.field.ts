@@ -6,9 +6,9 @@ type RequestBody = {
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { fieldId }: RequestBody = req.body;
-
   try {
+    const { fieldId }: RequestBody = req.body;
+
     const field = await prisma.field.delete({
       where: {
         id: fieldId,
