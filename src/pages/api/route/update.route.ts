@@ -8,7 +8,7 @@ type RequestBody = {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const session = await validateSession(req, res);
+    // const session = await validateSession(req, res);
 
     const { routeId, folderId, ...data }: RequestBody = req.body;
 

@@ -8,7 +8,7 @@ type RequestQuery = {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const session = validateSession(req, res);
+    // const session = validateSession(req, res);
 
     const { routeId }: RequestQuery = req.query;
 

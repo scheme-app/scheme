@@ -9,7 +9,7 @@ type RequestQuery = {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const session = await validateSession(req, res);
+    // const session = await validateSession(req, res);
 
     const { userId, username, projectId }: RequestQuery = req.query;
 
