@@ -1,32 +1,24 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../../../utils/prisma";
-import { z } from "zod";
+import { prisma, handleError } from "@utils";
 
-const ArgTypes = z.object({
-  fieldId: z.string().cuid(),
-});
+type RequestBody = {
+  fieldId: string;
+};
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { fieldId }: z.infer<typeof ArgTypes> = req.body;
+  const { fieldId }: RequestBody = req.body;
 
-  const field = await prisma.field.findUnique({
-    where: {
-      id: fieldId,
-    },
-  });
+  try {
+    const field = await prisma.field.delete({
+      where: {
+        id: fieldId,
+      },
+    });
 
-  if (!field) return res.status(404).json({ error: "Field not found" });
-
-  const deletedField = await prisma.field.delete({
-    where: {
-      id: fieldId,
-    },
-  });
-
-  if (!deletedField)
-    return res.status(500).json({ error: "Field not deleted" });
-
-  return res.status(200).json(deletedField);
+    return res.status(200).json(field);
+  } catch (error) {
+    handleError(error, res);
+  }
 };
 
 export default handler;
