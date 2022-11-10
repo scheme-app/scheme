@@ -1,51 +1,32 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../../../utils/prisma";
+import { prisma, handleError, validateSession } from "@utils";
+import { StatusCodes } from "http-status-codes";
+import type { AuthorizationType } from "@prisma/client";
 
-type ArgTypes = {
+type RequestBody = {
   routeId: string;
-  authorization: "NONE" | "API_KEY" | "BEARER" | "BASIC" | "DIGEST" | "OAUTH";
+  authorization: AuthorizationType;
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { routeId, authorization }: ArgTypes = req.body;
+  try {
+    const session = await validateSession(req, res);
 
-  if (!routeId) {
-    return res.status(400).send({
-      error: "Route id is required.",
-    });
-  }
+    const { routeId, authorization }: RequestBody = req.body;
 
-  const route = await prisma.route.findUnique({
-    where: {
-      id: routeId,
-    },
-    include: {
-      models: {
-        include: {
-          fields: {
-            include: { models: true },
-          },
-        },
+    const updatedRoute = await prisma.route.update({
+      where: {
+        id: routeId,
       },
-    },
-  });
-
-  if (!route) {
-    return res.status(400).send({
-      error: "Route does not exist.",
+      data: {
+        authorization: authorization,
+      },
     });
+
+    return res.status(StatusCodes.OK).json(updatedRoute);
+  } catch (error) {
+    handleError(error, res);
   }
-
-  const updatedRoute = await prisma.route.update({
-    where: {
-      id: routeId,
-    },
-    data: {
-      authorization: authorization,
-    },
-  });
-
-  return res.status(200).json(updatedRoute);
 };
 
 export default handler;

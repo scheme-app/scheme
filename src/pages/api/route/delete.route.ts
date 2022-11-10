@@ -1,22 +1,57 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../../../utils/prisma";
+import { prisma, handleError, validateSession } from "@utils";
+import { StatusCodes } from "http-status-codes";
+
+type RequestBody = {
+  routeId: string;
+};
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { routeId } = req.body;
+  try {
+    const session = await validateSession(req, res);
 
-  const route = await prisma.route.delete({
-    where: {
-      id: routeId,
-    },
-  });
+    const { routeId }: RequestBody = req.body;
 
-  if (!route) {
-    return res.status(400).send({
-      error: "Route does not exist.",
+    const project = await prisma.route
+      .findUniqueOrThrow({
+        where: {
+          id: routeId,
+        },
+      })
+      .project({
+        select: {
+          id: true,
+        },
+      });
+
+    const roles = await prisma.user
+      .findUnique({
+        where: {
+          id: session.user.id,
+        },
+      })
+      .roles({
+        where: {
+          projectId: project.id,
+        },
+      });
+
+    if (!roles) {
+      return res.status(StatusCodes.FORBIDDEN).json({
+        error: "You are not a member of this project",
+      });
+    }
+
+    const route = await prisma.route.delete({
+      where: {
+        id: routeId,
+      },
     });
-  }
 
-  res.status(200).json(route);
+    res.status(StatusCodes.OK).json(route);
+  } catch (error) {
+    handleError(error, res);
+  }
 };
 
 export default handler;

@@ -9,11 +9,11 @@ type RequestBody = {
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { username, projectId, type }: RequestBody = req.body;
-
-  const session = await validateSession(req, res);
-
   try {
+    const { username, projectId, type }: RequestBody = req.body;
+
+    const session = await validateSession(req, res);
+
     const roles = await prisma.role.findMany({
       where: { projectId: projectId },
     });
@@ -43,7 +43,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       });
     }
 
-    if (user.roles[0]!.type == "MEMBER" && type == "ADMIN") {
+    //user cannot add member and adming can only add members not admins
+    if (
+      user.roles[0]!.type == "MEMBER" ||
+      (user.roles[0]!.type == "ADMIN" && type == "ADMIN")
+    ) {
       return res.status(StatusCodes.UNAUTHORIZED).send({
         error: "You are not authorized to add an admin to this project.",
       });

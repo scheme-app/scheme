@@ -2,14 +2,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 //Utils
-import { prisma, handleError } from "@utils";
+import { prisma, handleError, validateSession } from "@utils";
 
 //Types
 import type { RouteType, AuthorizationType } from "@prisma/client";
-
-//Auth
-import { unstable_getServerSession } from "next-auth/next";
-import { authOptions } from "@auth/[...nextauth]";
 
 // HTTP error codes
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
@@ -23,24 +19,16 @@ type RequestBody = {
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = await unstable_getServerSession(req, res, authOptions);
-
-  if (!session) {
-    return res.status(StatusCodes.UNAUTHORIZED).send({
-      error: ReasonPhrases.UNAUTHORIZED,
-    });
-  }
-
-  const userId = session.user.id;
-
-  const { projectId, name, type, authorization, folderId }: RequestBody =
-    req.body;
-
   try {
+    const session = await validateSession(req, res);
+
+    const { projectId, name, type, authorization, folderId }: RequestBody =
+      req.body;
+
     const roles = await prisma.user
       .findUnique({
         where: {
-          id: userId,
+          id: session.user.id,
         },
       })
       .roles({
@@ -82,7 +70,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }),
         owner: {
           connect: {
-            id: userId,
+            id: session.user.id,
           },
         },
         project: {
