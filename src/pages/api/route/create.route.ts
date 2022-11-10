@@ -1,7 +1,7 @@
 //Next
 import { NextApiRequest, NextApiResponse } from "next";
 
-//Prisma
+//Utils
 import { prisma, handleError } from "@utils";
 
 //Types
