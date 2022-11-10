@@ -75,7 +75,7 @@ const Model: FC<ModelPropTypes> = ({ id, name, fields }) => {
 
       {showCreateFieldPopover && (
         <CreateFieldPopover
-          parentModelId={id}
+          modelId={id}
           setCreateFieldPopover={setShowCreateFieldPopover}
         />
       )}

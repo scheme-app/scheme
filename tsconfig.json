@@ -18,7 +18,10 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@components/*": ["src/components/*"]
+      "@components/*": ["src/components/*"],
+      "@utils/*": ["src/utils/*"],
+      "@utils": ["src/utils"],
+      "@auth/*": ["src/pages/api/auth/*"]
     },
     "typeRoots": ["node_modules/@types", "src/@types"]
   },

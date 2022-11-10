@@ -1,40 +1,48 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../../../utils/prisma";
+import { prisma, handleError, validateSession } from "@utils";
+
+type RequestQuery = {
+  userId?: string;
+  username?: string;
+  projectId?: string;
+};
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { userId, username, projectId } = req.query;
+  try {
+    // const session = await validateSession(req, res);
 
-  const user = await prisma.user.findUnique({
-    where: {
-      ...(userId && { id: userId as string }),
-      ...(username && { username: username as string }),
-      // ...(projectId && { projects: { some: { id: projectId as string } } }),
-    },
-    select: {
-      id: true,
-      name: true,
-      username: true,
-      projects: {
-        select: {
-          id: true,
+    const { userId, username, projectId }: RequestQuery = req.query;
+
+    const user = await prisma.user.findUniqueOrThrow({
+      where: {
+        ...(userId && { id: userId }),
+        ...(username && { username: username }),
+      },
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        projects: {
+          select: {
+            id: true,
+          },
         },
       },
-    },
-  });
-
-  if (!user) {
-    return res.status(400).send({
-      error: "User not found",
     });
-  }
 
-  if (projectId && !user.projects.some((project) => project.id === projectId)) {
-    return res.status(400).send({
-      error: "User does not have access to this project.",
-    });
-  }
+    if (
+      projectId &&
+      !user.projects.some((project) => project.id === projectId)
+    ) {
+      return res.status(400).send({
+        error: "User not in project. Add to project before adding to route.",
+      });
+    }
 
-  return res.status(200).send(user);
+    return res.status(200).send(user);
+  } catch (error) {
+    handleError(error, res);
+  }
 };
 
 export default handler;

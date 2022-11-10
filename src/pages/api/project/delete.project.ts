@@ -1,40 +1,56 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../../../utils/prisma";
+import { prisma, handleError, validateSession } from "@utils";
+import { StatusCodes, ReasonPhrases } from "http-status-codes";
+
+type RequestBody = {
+  projectId: string;
+};
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { projectId } = req.body;
+  try {
+    const session = await validateSession(req, res);
 
-  if (!projectId) {
-    return res.status(400).send({
-      error: "Project id is required.",
+    const { projectId }: RequestBody = req.body;
+
+    const roles = await prisma.project
+      .findUnique({
+        where: {
+          id: projectId,
+        },
+      })
+      .roles({
+        where: {
+          type: "OWNER",
+        },
+        select: {
+          users: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
+
+    if (
+      !roles!.find((role) =>
+        role.users.find((user) => user.id === session.user.id)
+      )
+    ) {
+      return res
+        .status(StatusCodes.FORBIDDEN)
+        .json({ message: "You are not the owner of this project" });
+    }
+
+    const deletedProject = await prisma.project.delete({
+      where: {
+        id: projectId,
+      },
     });
+
+    return res.status(StatusCodes.OK).send(deletedProject);
+  } catch (error) {
+    handleError(error, res);
   }
-
-  const project = await prisma.project.findUnique({
-    where: {
-      id: projectId as string,
-    },
-  });
-
-  if (!project) {
-    return res.status(400).send({
-      error: "Project does not exist.",
-    });
-  }
-
-  const deletedProject = await prisma.project.delete({
-    where: {
-      id: projectId as string,
-    },
-  });
-
-  if (!deletedProject) {
-    return res.status(500).send({
-      error: "Failed to delete project",
-    });
-  }
-
-  return res.status(200).send(deletedProject);
 };
 
 export default handler;

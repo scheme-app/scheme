@@ -1,57 +1,56 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../../../utils/prisma";
+import { prisma, handleError, validateSession } from "@utils";
+import { StatusCodes } from "http-status-codes";
+
+type RequestQuery = {
+  routeId?: string;
+};
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { routeId }: { routeId?: string } = req.query;
+  try {
+    // const session = validateSession(req, res);
 
-  if (!routeId) {
-    return res.status(400).send({
-      error: "Route id is required.",
-    });
-  }
+    const { routeId }: RequestQuery = req.query;
 
-  const route = await prisma.route.findUnique({
-    where: {
-      id: routeId,
-    },
-    include: {
-      models: {
-        include: {
-          fields: {
-            include: { models: true },
+    const route = await prisma.route.findUnique({
+      where: {
+        id: routeId,
+      },
+      include: {
+        models: {
+          include: {
+            fields: {
+              include: { models: true },
+            },
+          },
+        },
+        folder: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        owner: {
+          select: {
+            id: true,
+            name: true,
+            username: true,
+          },
+        },
+        assignedTo: {
+          select: {
+            id: true,
+            name: true,
+            username: true,
           },
         },
       },
-      folder: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-      owner: {
-        select: {
-          id: true,
-          name: true,
-          username: true,
-        },
-      },
-      assignedTo: {
-        select: {
-          id: true,
-          name: true,
-          username: true,
-        },
-      },
-    },
-  });
-
-  if (!route) {
-    return res.status(400).send({
-      error: "Route does not exist.",
     });
-  }
 
-  return res.status(200).send(route);
+    return res.status(StatusCodes.OK).send(route);
+  } catch (error) {
+    handleError(error, res);
+  }
 };
 
 export default handler;

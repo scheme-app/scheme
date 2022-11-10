@@ -19,12 +19,12 @@ import type { FieldFormat, FieldType } from "@prisma/client";
 import { useClickAway } from "react-use";
 
 type CreateFieldPopoverPropTypes = {
-  parentModelId: string;
+  modelId: string;
   setCreateFieldPopover: (show: boolean) => void;
 };
 
 const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
-  parentModelId,
+  modelId,
   setCreateFieldPopover,
 }) => {
   const ref = useRef(null);
@@ -38,37 +38,16 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
 
   const createField = useMutation(
     (data: {
-      parentModelId: string;
-      type: "STRING" | "INT" | "BOOLEAN";
+      modelId: string;
+      type: FieldType;
       array: boolean;
       optional: boolean;
       name: string;
       format: FieldFormat;
     }) => {
       return axios.post(
-        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/field/createScalar.field`,
+        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/field/create.field`,
 
-        data
-      );
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries([routeId]);
-      },
-    }
-  );
-
-  const createComplexField = useMutation(
-    (data: {
-      routeId: string;
-      parentModelId: string;
-      type: "COMPLEX";
-      array: boolean;
-      optional: boolean;
-      name: string;
-    }) => {
-      return axios.post(
-        `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/field/createComplex.field`,
         data
       );
     },
@@ -95,25 +74,14 @@ const CreateFieldPopover: FC<CreateFieldPopoverPropTypes> = ({
         }
         values.submit = false;
 
-        if (values.type !== "COMPLEX") {
-          createField.mutate({
-            parentModelId: parentModelId,
-            type: values.type,
-            array: values.array,
-            optional: values.optional,
-            name: values.name,
-            format: values.format,
-          });
-        } else {
-          createComplexField.mutate({
-            routeId: routeId,
-            parentModelId: parentModelId,
-            type: values.type,
-            array: values.array,
-            optional: values.optional,
-            name: values.name,
-          });
-        }
+        createField.mutate({
+          modelId: modelId,
+          type: values.type,
+          array: values.array,
+          optional: values.optional,
+          name: values.name,
+          format: values.format,
+        });
 
         setCreateFieldPopover(false);
       }}

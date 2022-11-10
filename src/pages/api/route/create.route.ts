@@ -1,161 +1,100 @@
+//Next
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../../../utils/prisma";
-// import { getToken } from "next-auth/jwt";
-import { unstable_getServerSession } from "next-auth/next";
-import { authOptions } from "../auth/[...nextauth]";
-import { AuthorizationType } from "@prisma/client";
-import { z } from "zod";
 
-const ArgTypes = z.object({
-  projectId: z.string().cuid(),
-  name: z.string().min(1).max(255),
-  type: z.enum(["GET", "POST"]),
-  authorization: z
-    .enum(["NONE", "API_KEY", "BEARER", "BASIC", "DIGEST", "OAUTH"])
-    .optional()
-    .default("NONE"),
-  folderId: z.string().cuid().optional(),
-});
+//Utils
+import { prisma, handleError, validateSession } from "@utils";
+
+//Types
+import type { RouteType, AuthorizationType } from "@prisma/client";
+
+// HTTP error codes
+import { ReasonPhrases, StatusCodes } from "http-status-codes";
+
+type RequestBody = {
+  projectId: string;
+  name: string;
+  type: RouteType;
+  authorization: AuthorizationType;
+  folderId?: string;
+};
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  // const token = await getToken({ req });
-  const session = await unstable_getServerSession(req, res, authOptions);
-  const { integrationToken } = req.body;
+  try {
+    const session = await validateSession(req, res);
 
-  // if (!token && !integrationToken) {
-  if (!session && !integrationToken) {
-    return res.status(401).send({
-      error: "You must be sign in to view the protected content on this page.",
-    });
-  }
+    const { projectId, name, type, authorization, folderId }: RequestBody =
+      req.body;
 
-  let userId: string | undefined = "";
-
-  if (integrationToken) {
-    const token = await prisma.token.findUnique({
-      where: {
-        id: integrationToken,
-      },
-      select: {
-        user: {
-          select: {
-            id: true,
-          },
-        },
-      },
-    });
-
-    userId = token?.user.id;
-  }
-
-  if (session) {
-    userId = session.user.id;
-  }
-
-  const {
-    projectId,
-    name,
-    type,
-    authorization,
-    folderId,
-  }: z.infer<typeof ArgTypes> = req.body;
-
-  const project = await prisma.project.findUnique({
-    where: {
-      id: projectId,
-    },
-    select: {
-      // ownerId: true,
-      roles: {
+    const roles = await prisma.user
+      .findUnique({
         where: {
-          type: "OWNER",
+          id: session.user.id,
         },
-        select: {
-          users: {
-            select: {
-              id: true,
+      })
+      .roles({
+        where: {
+          projectId: projectId,
+        },
+      });
+
+    if (!roles) {
+      return res.status(StatusCodes.FORBIDDEN).json({
+        error: "You are not a member of this project",
+      });
+    }
+
+    const route = await prisma.route.findMany({
+      where: {
+        folderId: folderId,
+        projectId: projectId,
+        name: name,
+      },
+    });
+
+    if (route.length > 0) {
+      return res.status(409).send({
+        error: "Route already exists here",
+      });
+    }
+
+    const createdRoute = await prisma.route.create({
+      data: {
+        name: name,
+        type: type,
+        ...(folderId && {
+          folder: {
+            connect: {
+              id: folderId,
             },
           },
-        },
-      },
-    },
-  });
-
-  if (!project) {
-    return res.status(400).send({
-      error: "Project does not exist.",
-    });
-  }
-
-  // if (project.ownerId !== userId) {
-  //   return res.status(403).send({
-  //     error: "You are not authorized to add a route to this project.",
-  //   });
-  // }
-
-  if (
-    !project.roles.some((role) => role.users.some((user) => user.id === userId))
-  ) {
-    return res.status(403).send({
-      error: "You are not authorized to add a route to this project.",
-    });
-  }
-
-  const route = await prisma.route.findMany({
-    where: {
-      folderId: folderId,
-      projectId: projectId,
-      name: name,
-    },
-  });
-
-  if (route.length > 0) {
-    return res.status(400).send({
-      error: "Route already exists in this folder",
-    });
-  }
-
-  const createdRoute = await prisma.route.create({
-    data: {
-      name: name,
-      type: type,
-      ...(folderId && {
-        folder: {
+        }),
+        owner: {
           connect: {
-            id: folderId,
+            id: session.user.id,
           },
         },
-      }),
-      owner: {
-        connect: {
-          id: userId,
+        project: {
+          connect: {
+            id: projectId,
+          },
         },
-      },
-      project: {
-        connect: {
-          id: projectId,
+        models: {
+          create: [
+            { name: "Arguments", type: "PARENT" },
+            { name: "Response", type: "PARENT" },
+          ],
         },
+        authorization: authorization || "NONE",
       },
-      models: {
-        create: [
-          { name: "Arguments", type: "PARENT" },
-          { name: "Response", type: "PARENT" },
-        ],
+      include: {
+        models: true,
       },
-      authorization: authorization || AuthorizationType.NONE,
-    },
-    include: {
-      models: true,
-    },
-  });
-
-  if (!createdRoute) {
-    res.status(500).send({
-      error: "Something went wrong",
     });
-  }
 
-  return res.status(200).send(createdRoute);
+    return res.status(200).send(createdRoute);
+  } catch (error) {
+    handleError(error, res);
+  }
 };
 
 export default handler;
