@@ -1,25 +1,27 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../../../utils/prisma";
+import { prisma, handleError, validateSession } from "@utils";
+import { StatusCodes } from "http-status-codes";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { userId, ...data } = req.body;
+  try {
+    // const { userId, ...data }: RequestBody = req.body;
+    const session = await validateSession(req, res);
 
-  const user = await prisma.user.update({
-    where: {
-      id: userId,
-    },
-    data: {
-      ...data,
-    },
-  });
+    const { ...data } = req.body;
 
-  if (!user) {
-    return res.status(400).send({
-      error: "User not found",
+    const user = await prisma.user.update({
+      where: {
+        id: session.user.id,
+      },
+      data: {
+        ...data,
+      },
     });
-  }
 
-  return res.status(200).send(user);
+    return res.status(StatusCodes.OK).send(user);
+  } catch (error) {
+    handleError(error, res);
+  }
 };
 
 export default handler;

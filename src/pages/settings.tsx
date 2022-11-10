@@ -81,7 +81,7 @@ const Settings: NextPage = () => {
   const updateProfile = useMutation(
     ({ name, username }: { name?: string; username?: string }) => {
       return axios.post("/api/user/update.user", {
-        userId: session?.user.id,
+        // userId: session?.user.id,
         name,
         username,
       });
