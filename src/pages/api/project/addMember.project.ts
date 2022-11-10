@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma, handleError, validateSession } from "@utils";
-import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
 
 type RequestBody = {
   username: string;
