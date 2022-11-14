@@ -11,15 +11,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     // validateSession(session, res);
 
-    const session = validateSession(
-      await unstable_getServerSession(req, res, authOptions),
-      res
-    );
+    // const session = validateSession(
+    //   await unstable_getServerSession(req, res, authOptions),
+    //   res
+    // );
+
+    const session = await unstable_getServerSession(req, res, authOptions);
 
     const projects = await prisma.user
       .findUnique({
         where: {
-          id: session.user.id,
+          id: session!.user.id,
         },
       })
       .projects({
