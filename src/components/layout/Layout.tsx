@@ -49,6 +49,7 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
     <></> //implement loading state
   ) : (
     <div className="flex h-screen overflow-hidden">
+      {/* <h1>Projects: {JSON.stringify(projectData)}</h1> */}
       <div className="relative w-[24rem] flex-col items-center justify-center border-r-[1px] border-[#E4E4E4] p-8">
         <ScrollArea.Root>
           <ScrollArea.Viewport className="h-[43.5rem] w-full">
