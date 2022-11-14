@@ -36,8 +36,17 @@ const formattedFormat = {
 };
 
 const Tags: FC<TagsPropTypes> = ({ array, optional, format }) => {
+  const parent = useRef(null);
+  useEffect(() => {
+    parent.current &&
+      autoAnimate(parent.current, {
+        duration: 200,
+        easing: "ease-in-out",
+      });
+  }, [parent]);
+
   return (
-    <div className="mr-8 flex flex-row gap-x-3">
+    <div className="mr-8 flex flex-row gap-x-3" ref={parent}>
       {format && format !== "NONE" && (
         <div className="flex items-center justify-center gap-x-2 rounded-md bg-[#F2F2F2] px-2 py-0.5">
           <div className="h-1.5 w-1.5  rounded-full bg-[#969696]" />
