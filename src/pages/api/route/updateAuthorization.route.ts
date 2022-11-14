@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { prisma, handleError, validateSession } from "@utils";
+import { prisma, handleError } from "@utils";
 import { StatusCodes } from "http-status-codes";
 import type { AuthorizationType } from "@prisma/client";
 
@@ -10,8 +10,6 @@ type RequestBody = {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    // const session = await validateSession(req, res);
-
     const { routeId, authorization }: RequestBody = req.body;
 
     const updatedRoute = await prisma.route.update({

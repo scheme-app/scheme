@@ -4,15 +4,15 @@ import { authOptions } from "@auth/[...nextauth]";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import type { Session } from "next-auth";
 
-const validateSession = async (
-  req: NextApiRequest,
+const validateSession = (
+  session: Session | null,
   res: NextApiResponse
-): Promise<Session> => {
-  const session: Session | null = await unstable_getServerSession(
-    req,
-    res,
-    authOptions
-  );
+): Session => {
+  // const session: Session | null = await unstable_getServerSession(
+  //   req,
+  //   res,
+  //   authOptions
+  // );
 
   if (!session) {
     return res.status(StatusCodes.UNAUTHORIZED).send({

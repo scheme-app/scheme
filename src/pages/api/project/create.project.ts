@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { prisma, handleError, validateSession } from "@utils";
 import { StatusCodes } from "http-status-codes";
+import { unstable_getServerSession } from "next-auth";
+import { authOptions } from "@auth/[...nextauth]";
 
 type RequestBody = {
   name: string;
@@ -8,14 +10,19 @@ type RequestBody = {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const session = await validateSession(req, res);
+    // const session = await unstable_getServerSession(req, res, authOptions);
+
+    const session = validateSession(
+      await unstable_getServerSession(req, res, authOptions),
+      res
+    );
 
     const { name }: RequestBody = req.body;
 
     const roles = await prisma.user
       .findUnique({
         where: {
-          id: session.user.id,
+          id: session!.user.id,
         },
       })
       .roles({
@@ -47,7 +54,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
               type: "OWNER",
               users: {
                 connect: {
-                  id: session.user.id,
+                  id: session!.user.id,
                 },
               },
             },
