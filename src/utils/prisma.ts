@@ -38,7 +38,7 @@ const cacheMiddleware: Prisma.Middleware = createPrismaRedisCache({
   },
 });
 
-prisma.$use(cacheMiddleware);
+// prisma.$use(cacheMiddleware);
 
 if (process.env.NODE_ENV !== "production") {
   global.prisma = prisma;
