@@ -8,6 +8,9 @@ import RouteContext from "@/context/Route.context";
 
 //auth
 import { unstable_getServerSession } from "next-auth/next";
+// import { authOptions } from "./api/auth/[...nextauth]";
+// import {authOptions} from "@auth"
+// import {validateSession} from "@utils"
 import { authOptions } from "./api/auth/[...nextauth]";
 
 //components
@@ -78,7 +81,8 @@ const Home: NextPage<{ routeIdProp: string }> = ({ routeIdProp }) => {
           content={`${process.env.NEXT_PUBLIC_VERCEL_URL}/scheme-link-preview.png`}
         />
       </Head>
-      <Layout>{routeId === "" ? <CreateRoute /> : <Route />}</Layout>
+      {/* <Layout>{routeId === "" ? <CreateRoute /> : <Route />}</Layout> */}
+      <h1>Hello</h1>
     </>
   );
 };
