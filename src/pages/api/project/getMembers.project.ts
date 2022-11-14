@@ -29,6 +29,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       });
 
+    console.log("members: ", members);
+
     return res.status(StatusCodes.OK).json(members);
   } catch (error) {
     handleError(error, res);

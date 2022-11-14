@@ -241,13 +241,13 @@ const Settings: NextPage = () => {
                         className="w-28 text-sm font-light focus:outline-none"
                       />
                       {membersData &&
-                        (membersData.roles[0].users.find(
+                        (membersData[0].users.find(
                           (user: any) => user.username === username
                         ) ||
-                          membersData.roles[1].users.find(
+                          membersData[1].users.find(
                             (user: any) => user.username === username
                           ) ||
-                          membersData.roles[2].users.find(
+                          membersData[2].users.find(
                             (user: any) => user.username === username
                           )) && (
                           <MdOutlineErrorOutline className="h-5 w-5 text-red-500" />
@@ -256,13 +256,13 @@ const Settings: NextPage = () => {
                     {userData &&
                       membersData &&
                       !(
-                        membersData.roles[0].users.find(
+                        membersData[0].users.find(
                           (user: any) => user.username === username
                         ) ||
-                        membersData.roles[1].users.find(
+                        membersData[1].users.find(
                           (user: any) => user.username === username
                         ) ||
-                        membersData.roles[2].users.find(
+                        membersData[2].users.find(
                           (user: any) => user.username === username
                         )
                       ) && (
@@ -332,29 +332,28 @@ const Settings: NextPage = () => {
         {tab === "MEMBERS" ? (
           <ScrollArea.Root>
             <ScrollArea.Viewport className="h-[20rem] w-full">
-              {membersData &&
-                membersData.roles.map((role: any, roleKey: number) => {
-                  return role.users.map((user: any, key: number) => {
-                    return (
-                      <>
-                        {key + roleKey !== 0 && (
-                          <Separator.Root
-                            decorative
-                            orientation="horizontal"
-                            className="h-[1px] bg-[#E4E4E4]"
-                          />
-                        )}
-                        <Member
-                          key={key}
-                          id={user.id}
-                          name={user.name}
-                          username={user.username}
-                          role={role.type}
+              {membersData?.map((role: any, roleKey: number) => {
+                return role.users.map((user: any, key: number) => {
+                  return (
+                    <>
+                      {key + roleKey !== 0 && (
+                        <Separator.Root
+                          decorative
+                          orientation="horizontal"
+                          className="h-[1px] bg-[#E4E4E4]"
                         />
-                      </>
-                    );
-                  });
-                })}
+                      )}
+                      <Member
+                        key={key}
+                        id={user.id}
+                        name={user.name}
+                        username={user.username}
+                        role={role.type}
+                      />
+                    </>
+                  );
+                });
+              })}
               <ScrollArea.Scrollbar orientation="vertical">
                 <ScrollArea.Thumb />
               </ScrollArea.Scrollbar>
